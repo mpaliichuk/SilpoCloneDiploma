@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1706.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilpoCloneDiploma", "SilpoCloneDiploma\SilpoCloneDiploma.csproj", "{4DAF29E4-F3FF-4B73-ABCB-5D00811D9456}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "OrderService\OrderService.csproj", "{506B60DC-B5A6-4777-90EC-8B5FC0EDE476}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4DAF29E4-F3FF-4B73-ABCB-5D00811D9456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DAF29E4-F3FF-4B73-ABCB-5D00811D9456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DAF29E4-F3FF-4B73-ABCB-5D00811D9456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{506B60DC-B5A6-4777-90EC-8B5FC0EDE476}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{506B60DC-B5A6-4777-90EC-8B5FC0EDE476}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{506B60DC-B5A6-4777-90EC-8B5FC0EDE476}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{506B60DC-B5A6-4777-90EC-8B5FC0EDE476}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

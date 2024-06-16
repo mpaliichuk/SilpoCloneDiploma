@@ -1,4 +1,26 @@
-﻿<Properties StartupConfiguration="{4DAF29E4-F3FF-4B73-ABCB-5D00811D9456}|https">
-  <MonoDevelop.Ide.ItemProperties.SilpoCloneDiploma FirstBuild="True" />
+﻿<Properties StartupConfiguration="{506B60DC-B5A6-4777-90EC-8B5FC0EDE476}|https">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.OrderService FirstBuild="True" PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.Workbench ActiveDocument="SilpoCloneDiploma/Controllers/HomeController.cs">
+    <Files>
+      <File FileName="SilpoCloneDiploma/Controllers/HomeController.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SilpoCloneDiploma">
+            <Node name="SilpoCloneDiploma" expanded="True">
+              <Node name="Controllers" expanded="True">
+                <Node name="HomeController.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.SilpoCloneDiploma PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>
