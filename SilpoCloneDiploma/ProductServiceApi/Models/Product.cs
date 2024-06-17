@@ -16,11 +16,31 @@ namespace ProductServiceApi.Models
         [Required(ErrorMessage = "Product title is required")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Title length must be between 3 and 100 characters")]
         public string Title { get; set; }
-        // Опис продукту (необов'язкове поле)
+
+        // Опис продукту
         [StringLength(500, ErrorMessage = "Description length cannot exceed 500 characters")]
         public string? Description { get; set; }
+
+        //Product Info
         [StringLength(50, ErrorMessage = "Country length cannot exceed 50 characters")]
         public string? Country { get; set; }
+        [Range(1, 1000, ErrorMessage = "Quantity must be a positive number and less than 1000 units")]
+        public int? Quantity {  get; set; }
+        [StringLength(50, ErrorMessage = "Country length cannot exceed 50 characters")]
+        public string? Trademark { get; set; }
+        [StringLength(50, ErrorMessage = "Taste length cannot exceed 50 characters")]
+        public string? Taste { get; set; }
+        //
+        // Add more....!!!
+        //
+
+        //Nutritional value per 100 g
+        [Range(0, 100, ErrorMessage = "Proteins must be a positive number and less than 1000 units")]
+        public double? Proteins { get; set; }
+        [Range(0, 100, ErrorMessage = "Fats must be a positive number and less than 1000 units")]
+        public double? Fats { get; set; }
+        [Range(0, 100, ErrorMessage = "Carbohydrates must be a positive number and less than 1000 units")]
+        public double? Carbohydrates { get; set; }
 
         // URL-адреса зображення продукту (необов'язкове поле)
         public string? ImageUrl { get; set; }
@@ -31,10 +51,12 @@ namespace ProductServiceApi.Models
 
         // Показник, що вказує, чи є продукт на розпродажу
         public bool? Sale { get; set; }
+        [Range(5, 99, ErrorMessage = "Discount must be a positive number and less than 100 units and greater than 5")]
+        public int? Discount {  get; set; }
 
         // Ціна продукту
         [Required(ErrorMessage = "Price is required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number")]
+        [Range(0.5, double.MaxValue, ErrorMessage = "Price must be a positive number")]
         public double Price { get; set; }
 
         // Зовнішній ключ для зв'язку з категорією
