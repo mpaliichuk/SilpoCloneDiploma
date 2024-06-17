@@ -26,7 +26,7 @@ namespace ProductServiceApi.Models
         public string? Country { get; set; }
         [Range(1, 1000, ErrorMessage = "Quantity must be a positive number and less than 1000 units")]
         public int? Quantity {  get; set; }
-        [StringLength(50, ErrorMessage = "Country length cannot exceed 50 characters")]
+        [StringLength(50, ErrorMessage = "Trademark length cannot exceed 50 characters")]
         public string? Trademark { get; set; }
         [StringLength(50, ErrorMessage = "Taste length cannot exceed 50 characters")]
         public string? Taste { get; set; }
