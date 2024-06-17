@@ -11,8 +11,12 @@ namespace ProductServiceApi.Models
         // Таблиця категорій
         public DbSet<Category> Categories { get; set; }
 
+        // Таблиця оцінок
+        public DbSet<Rating> Ratings { get; set; }
         // Таблиця продуктів
         public DbSet<Product> Products { get; set; }
+
+     
 
         // Конструктор контексту бази даних
         public ProductCategoryContext(DbContextOptions<ProductCategoryContext> options)
@@ -34,16 +38,22 @@ namespace ProductServiceApi.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>()
-                .HasMany(c => c.Products)
-                .WithOne(p => p.Category)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+                 .HasMany(c => c.Products)
+                 .WithOne(p => p.Category)
+                 .HasForeignKey(p => p.CategoryId)
+                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Rating>()
+            .HasOne(r => r.Product)
+             .WithMany(p => p.Ratings) // Додано, щоб вказати, що у продукта може бути багато рейтингів
+             .HasForeignKey(r => r.IdProduct)
+             .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,37 +1,50 @@
-﻿using ProductServiceApi.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductServiceApi.Contracts;
 
 namespace ProductServiceApi.Models
 {
     public class ProductRepository : IProductRepository
     {
-        public Task AddProduct(Product product)
+        private readonly ProductCategoryContext _context;
+        public ProductRepository(ProductCategoryContext context)
         {
-            throw new NotImplementedException();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+        public async Task AddProduct(Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            throw new NotImplementedException();
+            return await _context.Products.ToListAsync();
         }
 
-        public Task<Product> GetProductById(int id)
+        public async Task<Product> GetProductById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Products.FindAsync(id);
         }
 
-        public Task<IEnumerable<Product>> GetProductsByCategory(int categoryId)
+        public async Task<IEnumerable<Product>> GetProductsByCategory(int categoryId)
         {
-            throw new NotImplementedException();
+            return await _context.Products.Where(p => p.CategoryId == categoryId).ToListAsync();
         }
 
-        public Task RemoveProduct(int id)
+        public async Task RemoveProduct(int id)
         {
-            throw new NotImplementedException();
+            var product = await GetProductById(id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task UpdateProduct(Product product)
+        public async Task UpdateProduct(Product product)
         {
-            throw new NotImplementedException();
+            _context.Entry(product).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

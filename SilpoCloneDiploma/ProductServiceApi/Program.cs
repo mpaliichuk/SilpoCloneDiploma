@@ -1,29 +1,27 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using ProductServiceApi.Models;
-using ProductServiceApi.Contracts;
 using Microsoft.OpenApi.Models;
-
-
+using ProductServiceApi.Models; // Це має бути імпорт вашого контексту і моделей
+using ProductServiceApi.Contracts; // Інтерфейси і репозиторії
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ProductCategoryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<RatingRepository>();
+
+// Реєструємо репозиторії та Swagger
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-// Register Swagger generator
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductService API", Version = "v1" });
-});
-
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
+// Якщо ми в режимі розробки, включаємо Swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -33,10 +31,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Редирект HTTPS і налаштування авторизації (якщо потрібно)
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
+// Мапування контролерів
 app.MapControllers();
 
+// Запуск додатку
 app.Run();

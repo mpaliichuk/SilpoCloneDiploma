@@ -1,32 +1,45 @@
-﻿using ProductServiceApi.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductServiceApi.Contracts;
 
 namespace ProductServiceApi.Models
 {
     public class CategoryRepository : ICategoryRepository
     {
-        public Task AddCategory(Category category)
+        private readonly ProductCategoryContext _context;
+        public CategoryRepository(ProductCategoryContext context)
         {
-            throw new NotImplementedException();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+        public async Task AddCategory(Category category)
+        {
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Category>> GetAllCategory()
+        public async Task<IEnumerable<Category>> GetAllCategory()
         {
-            throw new NotImplementedException();
+            return await _context.Categories.Include(c => c.Products).ToListAsync();
         }
 
-        public Task<Category> GetCategoryById(int id)
+        public async Task<Category> GetCategoryById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Categories.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public Task RemoveCategory(int id)
+        public async Task RemoveCategory(int id)
         {
-            throw new NotImplementedException();
+            var category = await GetCategoryById(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task UpdateCategory(Category category)
+        public async Task UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
         }
     }
 }
