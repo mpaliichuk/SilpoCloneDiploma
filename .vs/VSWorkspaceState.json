@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\SilpoCloneDiploma",
+    "\\SilpoCloneDiploma\\ProductServiceApi",
+    "\\SilpoCloneDiploma\\ProductServiceApi\\Controllers"
   ],
-  "SelectedNode": "\\SilpoCloneDiploma.sln",
+  "SelectedNode": "\\SilpoCloneDiploma",
   "PreviewInSolutionExplorer": false
 }
