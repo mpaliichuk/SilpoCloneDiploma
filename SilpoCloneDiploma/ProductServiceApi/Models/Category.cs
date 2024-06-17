@@ -16,5 +16,14 @@ namespace ProductServiceApi.Models
         // Навігаційна властивість для зв'язку з продуктами
         [JsonIgnore]
         public ICollection<Product> Products { get; set; }
+
+        // Nullable for root categories
+        public int? ParentCategoryId { get; set; }
+        // Navigation property for parent category
+        [JsonIgnore]
+        public Category ParentCategory { get; set; }
+        // Navigation property for subcategories
+        [JsonIgnore]
+        public ICollection<Category> Subcategories { get; set; }
     }
 }
