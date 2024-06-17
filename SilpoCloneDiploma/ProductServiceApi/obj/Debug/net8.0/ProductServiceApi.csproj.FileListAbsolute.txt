@@ -1,0 +1,8 @@
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.csproj.AssemblyReference.cache
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.GeneratedMSBuildEditorConfig.editorconfig
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.AssemblyInfoInputs.cache
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.AssemblyInfo.cs
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.csproj.CoreCompileInputs.cache
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.MvcApplicationPartsAssemblyInfo.cs
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.MvcApplicationPartsAssemblyInfo.cache
+D:\SilpoCloneDiploma\SilpoCloneDiploma\ProductServiceApi\obj\Debug\net8.0\ProductServiceApi.sourcelink.json
