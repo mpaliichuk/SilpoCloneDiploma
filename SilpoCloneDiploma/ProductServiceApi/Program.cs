@@ -5,8 +5,6 @@ using ProductServiceApi.Models;
 using ProductServiceApi.Contracts;
 using Microsoft.OpenApi.Models;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SilpoCloneDiploma")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea00b5f5951f28cc8dea1fa42ecc3dad9aa57aee")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db5b5852142d851c6e70a8bddbdcade1bbdb7c84")]
 [assembly: System.Reflection.AssemblyProductAttribute("SilpoCloneDiploma")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SilpoCloneDiploma")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

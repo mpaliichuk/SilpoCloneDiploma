@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductServiceApi.Models;
 
 namespace ProductServiceApi.Controllers
@@ -7,9 +8,9 @@ namespace ProductServiceApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductContext _context;
+        private readonly ProductCategoryContext _context;
 
-        public ProductsController(ProductContext context)
+        public ProductsController(ProductCategoryContext context)
         {
             _context = context;
         }
