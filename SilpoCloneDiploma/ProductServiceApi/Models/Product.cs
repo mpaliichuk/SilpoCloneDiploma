@@ -30,6 +30,12 @@ namespace ProductServiceApi.Models
         public string? Trademark { get; set; }
         [StringLength(50, ErrorMessage = "Taste length cannot exceed 50 characters")]
         public string? Taste { get; set; }
+        [StringLength(30, ErrorMessage = "Color length cannot exceed 30 characters")]
+        public string? Color { get; set; }
+        [Range(1, 100, ErrorMessage = "AlcoholContent value must be a positive number and less than 100 units")]
+        public double? AlcoholContent { get; set; }
+        [Range(1, 1000000, ErrorMessage = "Volume value must be a positive number and less than 1000000 units")]
+        public double? Volume { get; set; }
         //
         // Add more....!!!
         //

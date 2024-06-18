@@ -12,12 +12,15 @@ namespace ProductServiceApi.Models
         [Range(1, 5, ErrorMessage = "Rating value must be between 1 and 5")]
         public int Value { get; set; }
 
-        // Коментар до рейтингу
-        public string? Comment { get; set; }
         // Зовнішній ключ для зв'язку з продуктом
-        [Required(ErrorMessage = "Product is required")]
+        [Required]
         public int? IdProduct { get; set; }
 
+        // Зовнішній ключ для зв'язку з юзером
+        [Required]
+        public int? IdUser { get; set; }
+
         public Product Product { get; set; } // Продукт, до якого належить рейтинг
+        //public User User { get; set; } // Юзер, який встановив рейтинг (Майбутня фіча)
     }
 }

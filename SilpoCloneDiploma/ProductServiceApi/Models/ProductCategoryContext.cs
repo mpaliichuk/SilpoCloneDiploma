@@ -54,6 +54,7 @@ namespace ProductServiceApi.Models
              .WithMany(p => p.Ratings) // Додано, щоб вказати, що у продукта може бути багато рейтингів
              .HasForeignKey(r => r.IdProduct)
              .OnDelete(DeleteBehavior.Cascade);
+                //ПІЗНІШЕ ДОДАТИ ЗВ'ЯЗОК З ЮЗЕРОМ(ЗА ПОТРЕБИ)
 
             base.OnModelCreating(modelBuilder);
         }
