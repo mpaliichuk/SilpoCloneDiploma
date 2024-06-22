@@ -18,17 +18,18 @@ namespace ProductServiceApi.Models
         public string Title { get; set; }
         // Опис продукту (необов'язкове поле)
         [StringLength(500, ErrorMessage = "Description length cannot exceed 500 characters")]
-        public string? Description { get; set; }
-        [StringLength(50, ErrorMessage = "Country length cannot exceed 50 characters")]
-        public string? Country { get; set; }
+        public string? product_Composition { get; set; }
+        [StringLength(500, ErrorMessage = "Country length cannot exceed 50 characters")]
+        public string? general_Information { get; set; }
 
-        // URL-адреса зображення продукту (необов'язкове поле)
-        public string? ImageUrl { get; set; }
+        // Масив URL-адрес зображень продукту
+        public List<string?> ImageUrls { get; set; }
 
         // Статус наявності продукту
         [Required(ErrorMessage = "Availability status is required")]
         public Availability Availability { get; set; }
-
+        //Кількість штук
+        public int Count {  get; set; }
         // Показник, що вказує, чи є продукт на розпродажу
         public bool? Sale { get; set; }
 

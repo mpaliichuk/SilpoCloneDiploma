@@ -14,7 +14,7 @@ namespace ProductServiceApi.Models
         public string Name { get; set; }
 
         // Навігаційна властивість для зв'язку з продуктами
-        [JsonIgnore]
+       
         public ICollection<Product> Products { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using ProductServiceApi.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProductServiceApi.Contracts
 {
@@ -10,5 +12,6 @@ namespace ProductServiceApi.Contracts
         Task UpdateProduct(Product product);
         Task RemoveProduct(int id);
         Task<IEnumerable<Product>> GetProductsByCategory(int categoryId);
+        Task<(IEnumerable<Product>, int)> GetProductsByPage(int pageNumber, int pageSize);
     }
 }
