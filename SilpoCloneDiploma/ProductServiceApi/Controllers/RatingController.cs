@@ -12,7 +12,7 @@ namespace ProductServiceApi.Controllers
         private readonly RatingRepository _service;
         public RatingController(RatingRepository service)
         {
-            _service = service;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         // Методи для роботи з рейтингами
         [HttpGet]

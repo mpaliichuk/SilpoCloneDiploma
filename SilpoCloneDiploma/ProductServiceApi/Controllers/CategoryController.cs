@@ -8,18 +8,16 @@ namespace ProductServiceApi.Controllers
         [Route("api/[controller]")]
         [ApiController]
       //  [Authorize]
-    // [OpenApiTag("Category", Description = "Operations related to categories")]
     public class CategoryController : ControllerBase
         {
             private readonly CategoryRepository _service;
 
             public CategoryController(CategoryRepository service)
             {
-                _service = service;
+                 _service = service ?? throw new ArgumentNullException(nameof(service));
             }
 
             [HttpGet]
-           // [OpenApiOperation("GetAllCategoriesAsync", "Retrieve all categories")]
             [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Category>))]
             public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
             {
@@ -27,7 +25,6 @@ namespace ProductServiceApi.Controllers
             }
 
             [HttpGet("{id}")]
-           // [OpenApiOperation("GetCategoryByIdAsync", "Retrieve a category by its ID")]
             [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
             [ProducesResponseType(StatusCodes.Status404NotFound)]
             public async Task<ActionResult<Category>> GetCategoryByIdAsync(int id)
@@ -41,7 +38,6 @@ namespace ProductServiceApi.Controllers
             }
 
             [HttpPost]
-            //[OpenApiOperation("AddCategory", "Add a new category")]
             [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Category))]
             public ActionResult<Category> AddCategory([FromBody] Category category)
             {
@@ -50,7 +46,6 @@ namespace ProductServiceApi.Controllers
             }
 
             [HttpPut("{id}")]
-            //[OpenApiOperation("UpdateCategory", "Update a category")]
             [ProducesResponseType(StatusCodes.Status204NoContent)]
             [ProducesResponseType(StatusCodes.Status400BadRequest)]
             public IActionResult UpdateCategory(int id, [FromBody] Category category)
@@ -65,7 +60,6 @@ namespace ProductServiceApi.Controllers
             }
 
             [HttpDelete("{id}")]
-            //[OpenApiOperation("DeleteCategory", "Delete a category")]
             [ProducesResponseType(StatusCodes.Status204NoContent)]
             public IActionResult DeleteCategory(int id)
             {
