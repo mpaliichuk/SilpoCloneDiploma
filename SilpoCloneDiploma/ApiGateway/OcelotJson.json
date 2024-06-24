@@ -1,5 +1,80 @@
 {
   "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/products",
+      "UpstreamHttpMethod": [ "POST", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/products/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/products/{id}",
+      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/categories",
+      "UpstreamHttpMethod": [ "POST", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/categories/{id}",
+      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/rating",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/rating",
+      "UpstreamHttpMethod": [ "POST", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/rating/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/rating/{id}",
+      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
+    }
+
 
   ]
+
 }
+

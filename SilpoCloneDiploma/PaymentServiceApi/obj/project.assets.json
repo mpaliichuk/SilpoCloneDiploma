@@ -2920,19 +2920,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SlipariK\\.nuget\\packages\\": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\PaymentServiceApi\\PaymentServiceApi.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\NewPage\\SilpoCloneDiploma\\SilpoCloneDiploma\\PaymentServiceApi\\PaymentServiceApi.csproj",
       "projectName": "PaymentServiceApi",
-      "projectPath": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\PaymentServiceApi\\PaymentServiceApi.csproj",
-      "packagesPath": "C:\\Users\\SlipariK\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\PaymentServiceApi\\obj\\",
+      "projectPath": "C:\\Users\\User\\Desktop\\NewPage\\SilpoCloneDiploma\\SilpoCloneDiploma\\PaymentServiceApi\\PaymentServiceApi.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\NewPage\\SilpoCloneDiploma\\SilpoCloneDiploma\\PaymentServiceApi\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\SlipariK\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2952,6 +2957,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -2994,7 +3004,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
