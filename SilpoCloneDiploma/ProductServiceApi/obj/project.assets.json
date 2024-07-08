@@ -3008,19 +3008,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SlipariK\\.nuget\\packages\\": {}
+    "C:\\Users\\veret\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
+      "projectUniqueName": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
       "projectName": "ProductServiceApi",
-      "projectPath": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
-      "packagesPath": "C:\\Users\\SlipariK\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\obj\\",
+      "projectPath": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
+      "packagesPath": "C:\\Users\\veret\\.nuget\\packages\\",
+      "outputPath": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\SlipariK\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\veret\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3028,6 +3028,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
