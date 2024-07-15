@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj": {}
+    "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj": {}
   },
   "projects": {
-    "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj": {
+    "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj",
+        "projectUniqueName": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj",
         "projectName": "OrderServiceApi",
-        "projectPath": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj",
-        "packagesPath": "C:\\Users\\veret\\.nuget\\packages\\",
-        "outputPath": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\obj\\",
+        "projectPath": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\OrderServiceApi.csproj",
+        "packagesPath": "C:\\Users\\And1\\.nuget\\packages\\",
+        "outputPath": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\OrderServiceApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\veret\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\And1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -35,6 +35,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -83,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

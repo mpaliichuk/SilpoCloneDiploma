@@ -1,100 +1,192 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProductServiceApi.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    [Authorize]
+    public class ProductController : ControllerBase
     {
-        private readonly ProductCategoryContext _context;
+        private readonly IProductRepository _service;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductsController(ProductCategoryContext context)
+        public ProductController(IProductRepository service, ILogger<ProductController> logger)
         {
-            _context = context;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        // GET: api/Products
+        /// <summary>
+        /// Gets all product
+        /// </summary>
+       
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _service.GetAllProducts();
+            return Ok(products);
         }
 
-        // GET: api/Products/5
+        /// <summary>
+        /// Gets product bt Id
+        /// </summary>
+       
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<Product>> GetProductByIdAsync(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-
+            var product = await _service.GetProductById(id);
             if (product == null)
             {
+                _logger.LogWarning($"Product with ID {id} not found.");
                 return NotFound();
             }
-
-            return product;
+            return Ok(product);
         }
 
-        // PUT: api/Products/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        /// <summary>
+        /// Gets product by Name
+        /// </summary>
+        
+        [HttpGet("title/{title}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
+        public async Task<ActionResult<Product>> GetProductByNameAsync(string title)
         {
-            if (id != product.Id)
+            var product = await _service.GetProductByName(title);
+            if (product == null)
             {
-                return BadRequest();
+                _logger.LogWarning($"Product with title '{title}' not found.");
+                return NotFound();
             }
+            return Ok(product);
+        }
 
-            _context.Entry(product).State = EntityState.Modified;
+        /// <summary>
+        /// Paggination
+        /// </summary>
+        
+        [HttpGet("page/{pageNumber}/size/{pageSize}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<(IEnumerable<Product>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize)
+        {
+            var (products, totalCount) = await _service.GetProductsByPage(pageNumber, pageSize);
+            _logger.LogInformation($"Retrieved page {pageNumber} of products with page size {pageSize}");
+            return Ok(new { Products = products, TotalCount = totalCount });
+        }
+
+        /// <summary>
+        /// Add new Product
+        /// return new product;
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<Product>> AddProductAsync([FromBody] Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid product model state.");
+                return BadRequest(ModelState);
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.AddProduct(product);
+                return  product;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!ProductExists(id))
+                _logger.LogError(ex, "Error occurred while adding a new product.");
+                return BadRequest("Error occurred while adding a new product.");
+            }
+        }
+
+        /// <summary>
+        /// Update product by id
+        /// return NoContent();
+        /// </summary>
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> UpdateProductAsync(int id, [FromBody] Product product)
+        {
+            if (id != product.Id)
+            {
+                _logger.LogWarning("Product ID mismatch in update request.");
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid product model state in update request.");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _service.UpdateProduct(product);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating the product.");
+                return BadRequest("Error occurred while updating the product.");
+            }
+        }
+
+        /// <summary>
+        /// Delete product by Id
+        /// return NoContent();
+        /// </summary>
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Administrator")]
+
+        public async Task<IActionResult> DeleteProductAsync(int id)
+        {
+            try
+            {
+                var product = await _service.GetProductById(id);
+                if (product == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                await _service.RemoveProduct(id);
+                return NoContent();
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Products
-        [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
-        {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
-        }
-
-        // DELETE: api/Products/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            catch (DbUpdateException ex)
             {
-                return NotFound();
+                _logger.LogError(ex, "Error occurred while removing product with ID {ProductId}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while removing product with ID " + id + ". The DELETE statement conflicted with the REFERENCE constraint.");
             }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while deleting product with ID {id}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while deleting the product.");
+            }
         }
 
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
-        }
     }
 }

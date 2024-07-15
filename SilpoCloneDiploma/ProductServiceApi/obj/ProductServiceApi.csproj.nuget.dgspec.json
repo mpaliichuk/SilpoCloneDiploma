@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj": {}
+    "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj": {}
   },
   "projects": {
-    "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj": {
+    "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
+        "projectUniqueName": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
         "projectName": "ProductServiceApi",
-        "projectPath": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
-        "packagesPath": "C:\\Users\\veret\\.nuget\\packages\\",
-        "outputPath": "D:\\Programming\\Asp\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\obj\\",
+        "projectPath": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\ProductServiceApi.csproj",
+        "packagesPath": "C:\\Users\\And1\\.nuget\\packages\\",
+        "outputPath": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\ProductServiceApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\veret\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\And1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -35,12 +35,21 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.6, )"
@@ -60,6 +69,10 @@
             "Swashbuckle.AspNetCore.SwaggerUI": {
               "target": "Package",
               "version": "[6.6.2, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[7.6.2, )"
             }
           },
           "imports": [
@@ -81,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

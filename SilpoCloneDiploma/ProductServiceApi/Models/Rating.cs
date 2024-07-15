@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ProductServiceApi.Models
 {
@@ -7,20 +8,18 @@ namespace ProductServiceApi.Models
         [Key]
         public int Id { get; set; } 
 
-        // Значення рейтингу
+        
         [Required(ErrorMessage = "Rating value is required")]
         [Range(1, 5, ErrorMessage = "Rating value must be between 1 and 5")]
         public int Value { get; set; }
 
-        // Зовнішній ключ для зв'язку з продуктом
-        [Required]
-        public int? IdProduct { get; set; }
+        [StringLength(500, ErrorMessage = "Comment length Max 500 characters")]
+        public string? Comment { get; set; }
+        
+        [Required(ErrorMessage = "Product id is required")]
+        public int IdProduct { get; set; }
 
-        // Зовнішній ключ для зв'язку з юзером
-        [Required]
-        public int? IdUser { get; set; }
-
-        public Product Product { get; set; } // Продукт, до якого належить рейтинг
-        //public User User { get; set; } // Юзер, який встановив рейтинг (Майбутня фіча)
+        [JsonIgnore]
+        public Product? Product { get; set; } 
     }
 }
