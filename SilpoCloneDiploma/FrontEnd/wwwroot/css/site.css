@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 html {
   font-size: 14px;
 }
@@ -19,4 +21,334 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+nav {
+    height: 84px;
+}
+
+#mainDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 22px 60px 22px 122px;
+    gap: 80px;
+    position: absolute;
+    width: 94%;
+    height: 84px;
+    left: 3%;
+    top: 0px;
+    background: #FFFFFF;
+    border-width: 0px 3px 3px 3px;
+    border-style: solid;
+    border-color: #4E9B51;
+    border-radius: 0px 0px 36px 36px;
+}
+
+@media (max-width: 1440px) {
+    #mainDiv {
+        padding: 22px 30px;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    #mainDiv {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px 20px;
+        gap: 20px;
+        height: 150px;
+    }
+}
+
+#headerDiv1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 50px;
+    height: 40px;
+    /*flex: 1; /* Растягивание элементов до равной ширины */
+    /*gap: 20px; /* Общее значение для адаптивности */
+    flex: 1;
+    order: 0;
+    flex-grow: 0;
+}
+
+
+#headerDiv2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    gap: 25px;
+    height: 40px;
+    /*flex: 1; /* Растягивание элементов до равной ширины */
+    /*gap: 20px; /* Общее значение для адаптивности */
+    flex: 1;
+    order: 0;
+    flex-grow: 0;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    #headerDiv1, #headerDiv2 {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%; /* Полная ширина на мобильных устройствах */
+        gap: 10px; /* Меньший промежуток на мобильных устройствах */
+    }
+}
+
+#catalogDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 70px;
+    width: 314.87px;
+    height: 40px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#catalogDiv:hover {
+    
+    border-color: rgba(255, 87, 34, 1)
+}
+
+#logo {
+    width: 90.87px;
+    height: 37px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#list {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#categoriesText {
+    /* Каталог */
+    width: 62px;
+    height: 22px;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+/*///////*/
+.dropdown-menu-fullscreen {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 343px;
+    height: 500px;
+    overflow-y: auto;
+    z-index: 1050;
+    display: none;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 4px;
+    background: #FFFFFF;
+    border: 3px solid #4CAF50;
+}
+
+.dropdown-menu-fullscreen.show {
+    display: block; 
+}
+
+.dropdown-menu-fullscreen .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+}
+
+.category-list {
+    padding: 20px;
+}
+
+.category-item {
+    margin: 10px 0;
+}
+
+#navbarDropdownMenuLink {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 134px;
+    height: 40px;
+    background: #4E9B51;
+    border-radius: 30px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+/*///////*/
+#searchDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px 10px 20px;
+    gap: 10px;
+    width: 330px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 3px solid #4E9B51;
+    border-radius: 30px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    /*background: url(../icons/Search.png) no-repeat scroll 5px 5px;*/
+}
+#searchIcon {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#searchText {
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #626262;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    border: 0;
+    height: 30px;
+    outline: none; 
+}
+
+/*///////*/
+#deliveryDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 15px;
+    gap: 8px;
+    width: 261px;
+    height: 40px;
+    border: 3px solid #4E9B51;
+    border-radius: 30px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#deliveryIcon {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#deliveryText {
+    width: 195px;
+    height: 22px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #585858;
+    flex: none;
+    order: 0;
+    border: 0;
+    flex-grow: 0;
+    outline: none;
+}
+
+#profile {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 64px;
+    height: 40px;
+    border: 3px solid #4E9B51;
+    border-radius: 30px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+#profileIcon {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#basketDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 152px;
+    height: 40px;
+    background: #FF5722;
+    border-radius: 30px;
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+#basketIcon {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#basketText {
+    width: 52px;
+    height: 22px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
 }

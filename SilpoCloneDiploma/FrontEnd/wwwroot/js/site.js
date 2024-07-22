@@ -1,4 +1,15 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener('DOMContentLoaded', function () {
+    var dropdownToggle = document.getElementById('navbarDropdownMenuLink');
+    var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
 
-// Write your JavaScript code.
+    dropdownToggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!dropdownMenu.contains(event.target) && !dropdownToggle.contains(event.target)) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+});
