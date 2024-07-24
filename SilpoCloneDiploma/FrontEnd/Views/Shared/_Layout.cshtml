@@ -10,22 +10,44 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FrontEnd</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3">
+            <div id="mainDiv" class="container-fluid">
+                <div id="headerDiv1" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div id="catalogDiv">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            <img id="logo" src="~/icons/Logo.png" />
+                        </a>
+                        <div>
+                            <a id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="categoriesLogo" src="~/icons/List.png"/>
+                                <span id="categoriesText">Каталог</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-fullscreen" aria-labelledby="navbarDropdownMenuLink">
+                                <div class="category-list">
+                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon" src="~/icons/Fruit.png"/>Фрукти</a>
+                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon" src="~/icons/Vegetables.png" />Овочі</a>
+                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon" src="~/icons/Fish.png" />Риба</a>
+                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon" src="~/icons/Meat.png" />М'ясо</a>
+                                </div>
+                            </div>
+                            <div id="categoryPanel"></div>
+                        </div>
+                    </div>
+                    <div id="searchDiv">
+                        <img id="searchIcon" src="~/icons/Search.png" />
+                        <input id="searchText" placeholder="Шукати..." />
+                    </div>
+                </div>
+                <div id="headerDiv2" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div id="deliveryDiv">
+                        <img id="deliveryIcon" src="~/icons/Delivery.png" />
+                        <input id="deliveryText" placeholder="Введіть адресу доставки" />
+                    </div>
+                    <button id="profile" type="button"><img id="profileIcon" src="~/icons/Person.png" /></button>
+                    <div id="basketDiv">
+                        <img id="basketIcon" src="~/icons/Cart.png" />
+                        <span id="basketText">Кошик</span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -35,10 +57,100 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FrontEnd - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer">
+        <div class="footer">
+            <div id="infoDiv">
+                <div class="columnDiv">
+                    <span class="headerSpan">Онлайн супермаркет</span>
+                    <span class="bodySpan">Замовлення</span>
+                    <span class="bodySpan">Формування замовлення</span>
+                    <span class="bodySpan">Отримання замовлення</span>
+                    <span class="bodySpan">Зміни у замовленні</span>
+                    <span class="bodySpan">Правила інтернет- продажів</span>
+                </div>
+                <div class="columnDiv">
+                    <span class="headerSpan">Для гостей</span>
+                    <span class="bodySpan">Про “Власний рахунок”</span>
+                    <span class="bodySpan">Супермаркети</span>
+                    <span class="bodySpan">Події</span>
+                    <span class="bodySpan">Подарункові сертифікати</span>
+                    <span class="bodySpan">Доставка для бізнесу</span>
+                </div>
+                <div class="columnDiv">
+                    <span class="headerSpan">Цікавинки</span>
+                    <span class="bodySpan">Екодружність</span>
+                    <span class="bodySpan">Соціальна турбота</span>
+                    <span class="bodySpan">Фермерська продукція</span>
+                    <span class="bodySpan">Власна кондитерська</span>
+                    <span class="bodySpan">“Наша марка”</span>
+                    <span class="bodySpan">Друзі “Goodmeal”</span>
+                </div>
+                <div class="columnDiv">
+                    <span class="headerSpan">Про компанію</span>
+                    <span class="bodySpan">Робота в “Good meal”</span>
+                    <span class="bodySpan">Новини</span>
+                    <span class="bodySpan">Контакти</span>
+                    <span class="bodySpan">Правила безпеки</span>
+                    <span class="bodySpan">Правила інтернет- продажів</span>
+                </div>
+            </div>
+            <div id="mainFooterDiv">
+                <div id="contactsDiv" class="container-fluid">
+                    <div id="mainContactsDiv" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            <img id="logoFooter" src="~/icons/Logo.png" />
+                        </a>
+                        <div id="socialDiv">
+                            <a role="button" >
+                                <img class="socialIcons" src="~/icons/Facebook.png" />
+                            </a>
+                            <a role="button">
+                                <img class="socialIcons" src="~/icons/Instagram.png" />
+                            </a>
+                            <a role="button">
+                                <img class="socialIcons" src="~/icons/Viber.png" />
+                            </a>
+                            <a role="button">
+                                <img class="socialIcons" src="~/icons/Telegram.png" />
+                            </a>
+                        </div>
+                    </div>
+                    <div id="communicationDiv">
+                        <div id="communicationSubDiv1">
+                            <div class="communicationTextDiv">
+                                <span class="communicationMainText">Гаряча лінія у межах України</span>
+                            </div>
+                            <div class="communicationPhoneDiv">
+                                <img class="communicationIcon" src="~/icons/Phone.png" />
+                                <span class="communicationText">0800 301 707</span>
+                            </div>
+                            <div class="communicationIconDiv">
+                                <img class="communicationIcon" src="~/icons/Clock.png" />
+                                <span class="communicationText">7.00-23.00</span>
+                            </div>
+                        </div>
+                        <div id="communicationSubDiv2">
+                            <div class="communicationTextDiv">
+                                <span class="communicationMainText">Для дзвінків з-за кордону</span>
+                            </div>
+                            <div class="communicationPhoneDiv">
+                                <img class="communicationIcon" src="~/icons/Phone.png" />
+                                <span class="communicationText"> 0800 301 707</span>
+                            </div>
+                            <div class="communicationIconDiv">
+                                <img class="communicationIcon" src="~/icons/Clock.png" />
+                                <span class="communicationText">7.00-23.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="privacyDiv">
+                    <div id="privacyTextDiv">
+                        <img id="copyrightIcon" src="~/icons/Copyright.png" />
+                        <span id="copyrightText"><b>Goodmeal</b>, 2024. Всі права захищено</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
