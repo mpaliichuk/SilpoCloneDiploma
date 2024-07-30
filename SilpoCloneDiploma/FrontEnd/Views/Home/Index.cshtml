@@ -1,13 +1,70 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<link rel="stylesheet" href="@Url.Content("~/css/pagesStyles/mainPage.css")" />
+<link rel="stylesheet" href="~/css/pagesStyles/mainPage.css" />
 
-<div class="container">
-    <main role="main" class="pb-3">
-        <div id="logoDiv">
-            <img class="rot" src="~/icons/carots.png" width="300" height="300"/>
+<div class="content">
+    <div id="logoDiv">
+        <img id="panelImg" src="~/icons/LogoPanel.png" />
+    </div>
+    <div id="topCategories">
+        <span id="topCategoriesHaderText">Популярні категорії</span>
+        <div id="topCategoriesButtonsDiv">
+            <div class="panel">
+                <img src="~/icons/FruitsPanel.png"/>
+                <span class="panelText">Фрукти</span>
+            </div>
+            <div class="panel">
+                <img src="~/icons/VegetablesPanel.png" />
+                <span class="panelText">Овочі</span>
+            </div>
+            <div class="panel">
+                <img src="~/icons/MeatPanel.png" />
+                <span class="panelText">М’ясо</span>
+            </div>
+            <div class="panel">
+                <img src="~/icons/FishPanel.png" />
+                <span class="panelText">Риба</span>
+            </div>
+            <div class="panel">
+                <img src="~/icons/MilkPanel.png" />
+                <span class="panelText">Молочне</span>
+            </div>
+            <div class="panel">
+                <img src="~/icons/BreadPanel.png" />
+                <span class="panelText">Хліб</span>
+            </div>
         </div>
-    </main>
-</div>
+    </div>
+    <div class="selectorDiv"></div>
 
+
+    <div class="selectorDiv"></div>
+
+    <div id="certificateMainDiv">
+        <div id="leftHand"><img class="hand" src="~/icons/LeftHand.png"/></div>
+        <div id="certificateMainSection">
+            <span id="certificateMainText">Сертифікати</span>
+            <div id="certificateSubSection">
+                <span id="certificateSubText">Оберіть суму сертифікату</span>         
+                <div id="options">
+                    <div class="certificateBtnDiv">
+                        <button>100 грн</button>
+                        <button>200 грн</button>
+                        <button>500 грн</button>
+                    </div>
+                    <div class="certificateBtnDiv">
+                        <button>1000 грн</button>
+                        <button>2000 грн</button>
+                        <button>5000 грн</button>
+                    </div>
+                </div>
+                <button class="addToCart">Додати в кошик</button>               
+            </div>
+        </div>
+        <div id="rightHand"><img class="hand" src="~/icons/RightHand.png" /></div>
+    </div>
+
+    <div class="selectorDiv"></div>
+</div>
+<script src="~/js/pagesScripts/mainPage.js"></script>

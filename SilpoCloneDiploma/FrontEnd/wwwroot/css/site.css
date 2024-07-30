@@ -65,7 +65,6 @@ nav {
         padding: 15px 20px;
         gap: 20px;
         height: 150px;
-        left:1%;
         bottom: 100%;
     }
 }
@@ -142,7 +141,7 @@ nav {
 /*///////*/
 .dropdown-menu-fullscreen {
     top: 90px;
-    left: 0;
+    left: -1.5px;
     min-width: 280px;
     width: 24.2%;
     height: 500px;
@@ -229,7 +228,7 @@ nav {
 
 #categoryPanel {
     margin-top: 29px;
-    left: 350px;
+    left: 24.3%;
     overflow-y: auto;
     z-index: 1050;
     justify-content: center;
@@ -422,6 +421,9 @@ footer {
     #infoDiv {
         display: none;
     }
+    footer {
+        height: 300px;
+    }
 }
 
 /*Adapting*/
@@ -518,16 +520,16 @@ footer {
 
 #contactsDiv {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
-    flex-wrap: wrap;
     padding: 20px 0px 20px 82px;
     gap: 12%;
     width: 100%;
     height:auto;
     background: #FFFFFF;
-    flex: none;
 }
+
 
 #mainContactsDiv {
     display: flex;
@@ -535,7 +537,7 @@ footer {
     align-items: center;
     padding: 0px;
     gap: 10%;
-    width: 40%;
+    width: 528px;
     height: 67px;
     flex: none;
 }
@@ -578,7 +580,7 @@ footer {
     padding: 0px;
     height: 129px;
     gap: 16%;
-    width: 40%;
+    width: 613px;
     flex: none;
     order: 1;
     flex-grow: 0;
@@ -593,7 +595,7 @@ footer {
     flex: none;
     order: 1;
     flex-grow: 0;
-
+    width:45%;
 }
 
 .communicationTextDiv {
@@ -625,7 +627,7 @@ footer {
     align-items: center;
     padding: 0px;
     gap: 5px;
-    width: 125px;
+    width: 100%;
     height: 22px;
 }
 
@@ -635,13 +637,13 @@ footer {
     align-items: flex-start;
     padding: 0px;
     gap: 5px;
-    width: 104px;
+    width: 100%;
     height: 22px;
 }
 
 .communicationText {
     font-family: "Noto Sans", sans-serif;
-    width: 100px;
+    width: 100%;
     height: 22px;
     font-weight: 600;
     font-size: 16px;
