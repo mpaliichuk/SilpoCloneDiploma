@@ -84,3 +84,51 @@
         }
     }
 });
+
+//LoginRegister popUp
+
+document.addEventListener("DOMContentLoaded", function() {
+    const profileButton = document.getElementById("profile");
+    const loginPopup = document.getElementById("loginPopup");
+    const closePopupButton = document.getElementById("closePopup");
+    const showRegisterLink = document.getElementById("showRegister");
+    const showLoginLink = document.getElementById("showLogin");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+
+    profileButton.addEventListener("click", function() {
+        console.log("Profile button clicked");
+        loginPopup.style.display = "flex";
+    });
+
+    closePopupButton.addEventListener("click", function() {
+        console.log("Close button clicked");
+        loginPopup.style.display = "none";
+    });
+
+    showRegisterLink.addEventListener("click", function(event) {
+        event.preventDefault();
+        console.log("Show Register link clicked");
+        loginForm.style.display = "none";
+        registerForm.style.display = "flex";
+    });
+
+    showLoginLink.addEventListener("click", function(event) {
+        event.preventDefault();
+        console.log("Show Login link clicked");
+        registerForm.style.display = "none";
+        loginForm.style.display = "flex";
+    });
+
+    window.addEventListener("click", function(event) {
+        if (event.target === loginPopup) {
+            console.log("Clicked outside the popup");
+            loginPopup.style.display = "none";
+        }
+    });
+
+    window.addEventListener("scroll", function() {
+        const scrollY = window.scrollY;
+        loginPopup.style.top = `${330 + scrollY}px`;
+    });
+});
