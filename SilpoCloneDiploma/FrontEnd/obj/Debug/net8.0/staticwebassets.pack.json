@@ -89,6 +89,14 @@
       "PackagePath": "staticwebassets\\icons\\HoverMilkPanel.png"
     },
     {
+      "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\HoverMinus.png",
+      "PackagePath": "staticwebassets\\icons\\HoverMinus.png"
+    },
+    {
+      "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\HoverPlus.png",
+      "PackagePath": "staticwebassets\\icons\\HoverPlus.png"
+    },
+    {
       "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\HoverVegetablesPanel.png",
       "PackagePath": "staticwebassets\\icons\\HoverVegetablesPanel.png"
     },
@@ -133,6 +141,10 @@
       "PackagePath": "staticwebassets\\icons\\MilkPanel.png"
     },
     {
+      "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\Minus.png",
+      "PackagePath": "staticwebassets\\icons\\Minus.png"
+    },
+    {
       "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\Nuts.png",
       "PackagePath": "staticwebassets\\icons\\Nuts.png"
     },
@@ -147,6 +159,10 @@
     {
       "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\Phone.png",
       "PackagePath": "staticwebassets\\icons\\Phone.png"
+    },
+    {
+      "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\Plus.png",
+      "PackagePath": "staticwebassets\\icons\\Plus.png"
     },
     {
       "Id": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\wwwroot\\icons\\RightHand.png",
