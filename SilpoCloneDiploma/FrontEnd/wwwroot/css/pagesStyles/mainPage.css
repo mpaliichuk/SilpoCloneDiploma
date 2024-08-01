@@ -7,13 +7,17 @@
     width: 98.9vw;
 }
 #logoDiv {
-    width: 98.9vw;
+    /*width: 98.9vw;*/
+    width:100%;
     height: 580px;
     left: 0px;
     margin-top: 50px;
     margin-bottom: 60px;
-    border: 80px solid #FF5722;
+    box-sizing: border-box;
+    border: 8px solid #FFFFFF;
     border-radius: 36px;
+
+    align-self: stretch;
 }
 #panelImg {
     width: 100%;
@@ -76,9 +80,239 @@
     margin-top: 3%;
     margin-bottom: 3%;
 }
-
 /*//////////////////////////////////////////////////////////////*/
 
+#mainProductsDiv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 28px;
+    width: 100%;
+    height: auto;
+}
+
+#mainProductsTagText {
+    width: 100%;
+    height: 54px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 54px;
+    text-align: center;
+    color: #4E9B51;
+}
+
+#subProductsDiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:center;
+    padding: 0px;
+    gap: 20px 22px;
+    width: 80%;
+    height: auto;
+}
+
+.cardDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 8px;
+    isolation: isolate;
+    width: 202px;
+    height: 301px;
+    background: #FFFFFF;
+    border: 3px solid #53B06C;
+    border-radius: 20px;
+    font-family: 'Noto Sans';
+}
+
+.productIconDiv {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 162px;
+    height: 100px;
+}
+
+.productIcon {
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 80px/2);
+    top: calc(50% - 80px/2);
+}
+
+.productInfoDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+    width: 162px;
+    height: 153px;
+}
+
+.productNameDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 5px;
+    width: 162px;
+    height: 62px;
+}
+
+.productName {
+    width: 162px;
+    height: 25px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.productFullName {
+    width: 162px;
+    height: 32px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    color: #1E1E1E;
+}
+
+.priceDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 13px;
+    width: 127px;
+    height: 25px;
+}
+
+.subPriceDiv {
+    display: flex;
+    flex-direction: row;
+    width: 66px;
+    height: 25px;
+    gap: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.crossTextDiv {
+    display: flex;
+    flex-direction: row;
+    width: 100px;
+    height: 20px;
+    gap: 5px;
+}
+
+.crossTextDiv span {
+    padding-top:4px;
+    width: 80px;
+    height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    text-decoration-line: line-through;
+    color: #888888;
+}
+
+.productControlDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 50px;
+    width: 162px;
+    height: 34px;
+}
+
+.productCountDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 12px;
+    width: 74px;
+    height: 22px;
+}
+
+.productBuyDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4.6%;
+    gap: 10px;
+    width: 34px;
+    height: 34px;
+    background: #53B06C;
+    border-radius: 30px;
+    border: none;
+}
+
+.productCartIcon {
+    width: 19px;
+    height: 19px;
+}
+
+.productCountButton {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #DBDADA;
+    border-radius: 3px;
+}
+
+.productCount {
+    width: 10px;
+    height: 22px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #7A7A7A;
+}
+
+.discountIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; 
+    width: 40px; 
+    height: 40px;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.no-drag {
+    -webkit-user-drag: none;
+}
+
+/*//////////////////////////////////////////////////////////////*/
 #certificateMainDiv {
     display: flex;
     flex-direction: row;
@@ -210,7 +444,18 @@
 
     cursor: pointer;
     transition: background-color 0.3s;
+    transition: width 1s;
 }
+
+.selectedCertificate {
+    background-color: #53B06C !important;
+    color: #FFFFFF !important;
+}
+
+.selectedCertificate:hover {
+    width: 255px !important;
+    color: #FFFFFF !important;
+} 
 
 #options button:hover {
     background-color: #FFFFFF;
@@ -278,7 +523,6 @@
     line-height: 41px;
     color: #FFFFFF;
 
-    cursor: pointer;
     text-align: left;
     outline: none;
 }
@@ -323,10 +567,8 @@
     flex-direction: column;
     align-items: center;
     padding: 0px;
-    gap: 36px;
     width: 80%;
     height: auto;
-    top: 214.44px;
 }
 
 #accordionSubDiv {
@@ -386,10 +628,113 @@
     border-radius: 12px;
 }
 
-.no-select {
-    user-select: none;
-    -webkit-user-select: none; 
+#accordionCarrots{
+    width:50%;
+    min-width: 300px;
 }
-.no-drag {
-    -webkit-user-drag: none; 
+
+#shopMainDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 36px;
+    width: 80%;
+    height: auto;
+}
+
+#shopTextDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 20px;
+    gap: 10px;
+    width: 100%;
+    height: 70px;
+    border-radius: 12px;
+
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 54px;
+    text-align: center;
+    color: #4E9B51;
+}
+
+#shopSubDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 15px;
+    width: 100%;
+    height: 344px;
+}
+
+.shopElement {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+    width: 100%;
+    height: 65px;
+
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 41px;
+    color: #FFFFFF;
+}
+
+@media (max-width: 700px) {
+    .shopElement {
+        font-size: 15px;
+        gap: 18px;
+    }
+}
+
+.shopSubElementRight {
+    padding: 0px 20px 0px 30%;
+}
+
+.shopSubElementLeft {
+    padding: 0px 10%;
+}
+
+@media (max-width: 1200px) {
+    .shopSubElementRight, shopSubElementLeft {
+        padding: 0px 10%;
+    }
+}
+
+.carrotPointer {
+    height: 57px;
+    width: 133px;
+}
+
+@media (max-width: 1000px) {
+    .shopElement {
+        font-size: 20px;
+    }
+
+    .carrotPointer {
+        height: 45px;
+        width: 100px;
+    }
+}
+
+.locationDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 12px;
+    width: 665px;
+    height: 65px;
+    background: #FF5722;
+    border-radius: 28px;
+    min-width:300px;
 }

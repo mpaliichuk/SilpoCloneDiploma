@@ -5,7 +5,7 @@
 
 <div class="content">
     <div id="logoDiv">
-        <img id="panelImg" src="~/icons/LogoPanel.png" />
+        <img class="no-select no-drag" id="panelImg" src="~/icons/LogoPanel.png" />
     </div>
     <div id="topCategories">
         <span id="topCategoriesHaderText">Популярні категорії</span>
@@ -37,12 +37,59 @@
         </div>
     </div>
     <div class="selectorDiv"></div>
+    <div id="mainProductsDiv">
+        <span id="mainProductsTagText">Акції</span>
+        <div id="subProductsDiv">
+            @* <div class="cardDiv">
+                <div class="productIconDiv">
+                    <img class="discountIcon" src="~/icons/Discount.png" />
+                    <img class="productIcon" src="~/icons/ProductIcon.png" />
+                </div>
+                <div class="productInfoDiv">
+                    <div class="productNameDiv">
+                        <div class="productName">Сьомга Norven</div>
+                        <div class="productFullName">Сьомга Norven слабосолена в/у, 120г</div>
+                    </div>
+                    <div class="priceDiv">
+                        <div class="subPriceDiv"><b>256 </b><span>грн</span></div>
+                        <div class="crossTextDiv">
+                            <span>315 грн</span>
+                        </div>
+                    </div>
+                    <div class="productControlDiv">
+                        <div class="productCountDiv">
+                            <button class="productCountButton"><img class="no-select no-drag" src="~/icons/PlusMiniIcon.png" /></button>
+                            <div class="productCount">0</div>
+                            <button class="productCountButton"><img class="no-select no-drag" src="~/icons/MinusMiniIcon.png" /></button>
+                        </div>
 
+                        <button class="productBuyDiv">
+                            <img class="productCartIcon" src="~/icons/Cart.png" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div>
+            <div class="cardDiv"></div> *@
+        </div>
+    </div>
 
     <div class="selectorDiv"></div>
 
     <div id="certificateMainDiv">
-        <div id="leftHand"><img class="hand" src="~/icons/LeftHand.png"/></div>
+        <div id="leftHand"><img class="hand no-select no-drag" src="~/icons/LeftHand.png" /></div>
         <div id="certificateMainSection">
             <span id="certificateMainText">Сертифікати</span>
             <div id="certificateSubSection">
@@ -62,18 +109,19 @@
                 <button class="addToCart">Додати в кошик</button>               
             </div>
         </div>
-        <div id="rightHand"><img class="hand" src="~/icons/RightHand.png" /></div>
+        <div id="rightHand"><img class="hand no-select no-drag" src="~/icons/RightHand.png" /></div>
     </div>
 
     <div id="bottomDiv">
         <div id="accordionDiv">
+            <img class="no-select no-drag" id="accordionCarrots" src="~/icons/AccordionCarrots.png" />
             <div id="accordionSubDiv">
                 <div id="accordionSubTextDiv">
                     <span>Поширені запитання</span>
                 </div>
                 <div id="accordionFAQTextDiv">
                     <div class="custonAccordion">
-                        <span class="no-select no-drag">“Власний рахунок”</span>
+                        <span>“Власний рахунок”</span>
                         <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
@@ -85,7 +133,7 @@
                         <p>На сторінці входу натисніть "Забули пароль?" та дотримуйтесь інструкцій для відновлення пароля.</p>
                     </div>
                     <div class="custonAccordion">
-                        <span class="no-select no-drag">Мобільний застосунок “Good meal””</span>
+                        <span>Мобільний застосунок “Good meal””</span>
                         <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
@@ -95,7 +143,7 @@
                         <p>У мобільному застосунку ви можете робити замовлення, переглядати історію покупок, зберігати улюблені продукти та отримувати спеціальні пропозиції та знижки.</p>
                     </div>
                     <div class="custonAccordion">
-                        <span class="no-select no-drag">Картки та брелоки</span>
+                        <span>Картки та брелоки</span>
                         <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
@@ -107,7 +155,7 @@
                         <p>Просто пред'явіть картку або брелок на касі під час оплати, і ваші бонуси автоматично будуть нараховані на рахунок.</p>
                     </div>
                     <div class="custonAccordion">
-                        <span class="no-select no-drag">Про "Good Meal"</span>
+                        <span>Про "Good Meal"</span>
                         <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
@@ -117,7 +165,7 @@
                         <p>Ви можете зв'язатися з нами через форму зворотного зв'язку на сайті або зателефонувати на нашу гарячу лінію. Всі контактні дані ви знайдете у розділі "Контакти".</p>
                     </div>
                     <div class="custonAccordion">
-                        <span class="no-select no-drag">Робота в "Good Meal"</span>
+                        <span>Робота в "Good Meal"</span>
                         <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
@@ -132,8 +180,41 @@
             </div>
         </div>
         <div class="selectorDiv"></div>
-        <div id="shopsDiv">
-
+        <div id="shopMainDiv">
+            <div id="shopTextDiv">
+                <span>Адреси найближчих маркетів</span>
+            </div>
+            <div id="shopSubDiv">
+                @*Брати назви з бази*@
+                <div class="shopElement shopSubElementLeft">
+                    <img class="carrotPointer" src="~/icons/CarrotPointer.png" />
+                    <div class="locationDiv">
+                        <img src="~/icons/LocationMarker.png"/>
+                        <span>Good meal вул. Кульпарківська 139</span>
+                    </div>
+                </div>
+                <div class="shopElement shopSubElementRight">
+                    <img class="carrotPointer" src="~/icons/CarrotPointer.png" />
+                    <div class="locationDiv">
+                        <img src="~/icons/LocationMarker.png" />
+                        <span>Good meal вул. Антоновича, 176</span>
+                    </div>
+                </div>
+                <div class="shopElement shopSubElementLeft">
+                    <img class="carrotPointer" src="~/icons/CarrotPointer.png" />
+                    <div class="locationDiv">
+                        <img src="~/icons/LocationMarker.png" />
+                        <span>Good meal вул. Берковецька 49</span>
+                    </div>
+                </div>
+                <div class="shopElement shopSubElementRight">
+                    <img class="carrotPointer" src="~/icons/CarrotPointer.png" />
+                    <div class="locationDiv">
+                        <img src="~/icons/LocationMarker.png" />
+                        <span>Good meal вул. Брікнера, 16</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -417,12 +417,14 @@ footer {
     border-radius: 36px;
     align-self: stretch;
 }
+
 @media (max-width: 1060px) {
     #infoDiv {
         display: none;
     }
     footer {
-        height: 300px;
+        height: 270px;
+        border-top: solid 32px #4E9B51;
     }
 }
 
@@ -523,6 +525,7 @@ footer {
     flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
+    justify-content:center;
     padding: 20px 0px 20px 82px;
     gap: 12%;
     width: 100%;
@@ -530,6 +533,13 @@ footer {
     background: #FFFFFF;
 }
 
+@media (max-width: 1000px) {
+    #contactsDiv {
+        padding: 0;
+        gap: 5%;
+        width: 100%;
+    }
+}
 
 #mainContactsDiv {
     display: flex;
