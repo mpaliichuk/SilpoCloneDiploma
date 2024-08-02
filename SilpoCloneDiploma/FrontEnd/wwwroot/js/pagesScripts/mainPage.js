@@ -47,6 +47,11 @@
         });
     });
     categoryPanels.forEach(panel => {
+        panel.addEventListener('click', function () {
+            var categoryId = 0; //З бази 
+            window.location = "/Home/Category/" + categoryId;
+        });
+
         panel.addEventListener('mouseenter', function () {
             const img = panel.querySelector('img');
             if (img) {
@@ -79,34 +84,27 @@
         oldPrice = '0 грн',
         productId = ''
     }) {
-        // Создание главного контейнера карточки
         const cardDiv = document.createElement('div');
         cardDiv.id = `cardDiv_${productId}`;
         cardDiv.className = 'cardDiv';
 
-        // Создание контейнера для иконок
         const productIconDiv = document.createElement('div');
         productIconDiv.className = 'productIconDiv';
 
-        // Создание иконки скидки
         const discountIcon = document.createElement('img');
         discountIcon.className = 'discountIcon';
         discountIcon.src = discountIconSrc;
 
-        // Создание иконки продукта
         const productIcon = document.createElement('img');
         productIcon.className = 'productIcon';
         productIcon.src = productIconSrc;
 
-        // Добавление иконок в контейнер
         productIconDiv.appendChild(discountIcon);
         productIconDiv.appendChild(productIcon);
 
-        // Создание контейнера для информации о продукте
         const productInfoDiv = document.createElement('div');
         productInfoDiv.className = 'productInfoDiv';
 
-        // Создание блока с названием продукта
         const productNameDiv = document.createElement('div');
         productNameDiv.className = 'productNameDiv';
 
@@ -121,7 +119,6 @@
         productNameDiv.appendChild(productNameElement);
         productNameDiv.appendChild(productFullNameElement);
 
-        // Создание блока с ценой
         const priceDiv = document.createElement('div');
         priceDiv.className = 'priceDiv';
 
@@ -136,7 +133,6 @@
         priceDiv.appendChild(subPriceDiv);
         priceDiv.appendChild(crossTextDiv);
 
-        // Создание блока управления продуктом
         const productControlDiv = document.createElement('div');
         productControlDiv.className = 'productControlDiv';
 
@@ -144,7 +140,7 @@
         productCountDiv.className = 'productCountDiv';
 
         const plusButton = document.createElement('button');
-        plusButton.className = 'productCountButton';
+        plusButton.className = 'productCountButton plus';
         const plusIcon = document.createElement('img');
         plusIcon.className = 'no-select no-drag';
         plusIcon.src = 'icons/PlusMiniIcon.png';
@@ -155,7 +151,7 @@
         productCount.textContent = '0';
 
         const minusButton = document.createElement('button');
-        minusButton.className = 'productCountButton';
+        minusButton.className = 'productCountButton minus';
         const minusIcon = document.createElement('img');
         minusIcon.className = 'no-select no-drag';
         minusIcon.src = 'icons/MinusMiniIcon.png';
@@ -165,7 +161,6 @@
         productCountDiv.appendChild(productCount);
         productCountDiv.appendChild(plusButton);
 
-        // Создание кнопки покупки продукта
         const productBuyDiv = document.createElement('button');
         productBuyDiv.className = 'productBuyDiv';
         const cartIcon = document.createElement('img');
@@ -176,7 +171,6 @@
         productControlDiv.appendChild(productCountDiv);
         productControlDiv.appendChild(productBuyDiv);
 
-        // Добавление всех частей в главный контейнер
         productInfoDiv.appendChild(productNameDiv);
         productInfoDiv.appendChild(priceDiv);
         productInfoDiv.appendChild(productControlDiv);
@@ -184,11 +178,10 @@
         cardDiv.appendChild(productIconDiv);
         cardDiv.appendChild(productInfoDiv);
 
-        // Возвращаем готовый элемент карточки
         return cardDiv;
     }
 
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 18; i++) {
         const productCard = createProductCard({
             discountIconSrc: 'icons/Discount.png',
             productIconSrc: 'icons/ProductIcon.png',
@@ -199,6 +192,68 @@
             productId: '123'
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
+        
     }
 
+    const cardDivs = document.querySelectorAll('.cardDiv');
+    const productCountDivs = document.querySelectorAll('.productCountDiv');
+    const productBuyDivs = document.querySelectorAll('.productBuyDiv');
+
+    cardDivs.forEach(item => {
+        item.addEventListener('click', function () {
+            var productId = 0; //З бази 
+            window.location = "/Home/Product/" + productId;
+        });
+        item.addEventListener('mouseenter', function () {
+            item.style.border = '3px solid #FF5722';
+
+            const button = item.getElementsByClassName('productBuyDiv')[0];
+            if (button) {
+                button.style.background = '#FF5722';
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            item.style.border = '3px solid #53B06C';
+
+            const button = item.getElementsByClassName('productBuyDiv')[0];
+            if (button) {
+                button.style.background = '#53B06C';
+            }
+        });
+    })
+
+    productCountDivs.forEach(item => {
+        const minus = item.getElementsByClassName('minus')[0];
+        const plus = item.getElementsByClassName('plus')[0];
+        const count = item.getElementsByClassName('productCount')[0];
+        minus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            if (currentCount > 0) {
+                count.innerHTML = `${currentCount - 1}`;
+            }
+        });
+
+        plus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            count.innerHTML = `${currentCount + 1}`;
+        });
+    });
+
+    productBuyDivs.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const cardDiv = item.closest('.cardDiv');
+            const count = cardDiv.querySelector('.productCount');
+            if (count) {
+                let currentCount = parseInt(count.innerHTML);
+                if (currentCount > 0) {
+                    count.innerHTML = '0';
+                }
+            }
+            alert("Товар додано в кошик!");
+        });
+    });
 });
