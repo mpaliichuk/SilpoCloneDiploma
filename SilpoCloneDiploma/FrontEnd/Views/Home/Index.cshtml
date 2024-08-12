@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<link rel="stylesheet" href="~/css/pagesStyles/mainPage.css" />
+<link rel="stylesheet" href="~/css/pagesStyles/mainPage.css" asp-append-version="true" />
 
 <div class="content">
     <div id="logoDiv">
@@ -11,7 +11,7 @@
         <span id="topCategoriesHaderText">Популярні категорії</span>
         <div id="topCategoriesButtonsDiv">
             <div class="panel">
-                <img src="~/icons/FruitsPanel.png"/>
+                <img src="~/icons/FruitsPanel.png" />
                 <span class="panelText">Фрукти</span>
             </div>
             <div class="panel">
@@ -39,35 +39,38 @@
     <div class="selectorDiv"></div>
     <div id="mainProductsDiv">
         <span id="mainProductsTagText">Акції</span>
+
         <div id="subProductsDiv">
             @* <div class="cardDiv">
-                <div class="productIconDiv">
-                    <img class="discountIcon" src="~/icons/Discount.png" />
-                    <img class="productIcon" src="~/icons/ProductIcon.png" />
-                </div>
-                <div class="productInfoDiv">
-                    <div class="productNameDiv">
-                        <div class="productName">Сьомга Norven</div>
-                        <div class="productFullName">Сьомга Norven слабосолена в/у, 120г</div>
-                    </div>
-                    <div class="priceDiv">
-                        <div class="subPriceDiv"><b>256 </b><span>грн</span></div>
-                        <div class="crossTextDiv">
-                            <span>315 грн</span>
-                        </div>
-                    </div>
-                    <div class="productControlDiv">
-                        <div class="productCountDiv">
-                            <button class="productCountButton plus"><img class="no-select no-drag" src="~/icons/PlusMiniIcon.png" /></button>
-                            <div class="productCount">0</div>
-                            <button class="productCountButton minus"><img class="no-select no-drag" src="~/icons/MinusMiniIcon.png" /></button>
-                        </div>
+            <div class="productIconDiv">
+            <img class="discountIcon" src="~/icons/Discount.png" />
+            <img class="productIcon" src="~/icons/ProductIcon.png" />
+            </div>
+            <div class="productInfoDiv">
+            <div class="productNameDiv">
+            <div class="productName">Сьомга Norven</div>
+            <div class="productFullName">Сьомга Norven слабосолена в/у, 120г</div>
+            </div>
+            <div class="priceDiv">
+            <div class="subPriceDiv"><b>256 </b><span>грн</span></div>
+            <div class="crossTextDiv">
+            <span>315 грн</span>
+            </div>
+            </div>
+            <div class="productControlDiv">
+            <div class="productCountDiv">
+            <button class="productCountButton plus"><img class="no-select no-drag" src="~/icons/PlusMiniIcon.png"
+            /></button>
+            <div class="productCount">0</div>
+            <button class="productCountButton minus"><img class="no-select no-drag" src="~/icons/MinusMiniIcon.png"
+            /></button>
+            </div>
 
-                        <button class="productBuyDiv">
-                            <img class="productCartIcon" src="~/icons/Cart.png" />
-                        </button>
-                    </div>
-                </div>
+            <button class="productBuyDiv">
+            <img class="productCartIcon" src="~/icons/Cart.png" />
+            </button>
+            </div>
+            </div>
             </div> *@
         </div>
     </div>
@@ -79,7 +82,7 @@
         <div id="certificateMainSection">
             <span id="certificateMainText">Сертифікати</span>
             <div id="certificateSubSection">
-                <span id="certificateSubText">Оберіть суму сертифікату</span>         
+                <span id="certificateSubText">Оберіть суму сертифікату</span>
                 <div id="options">
                     <div class="certificateBtnDiv">
                         <button>100 грн</button>
@@ -92,7 +95,7 @@
                         <button>5000 грн</button>
                     </div>
                 </div>
-                <button class="addToCart">Додати в кошик</button>               
+                <button class="addToCart">Додати в кошик</button>
             </div>
         </div>
         <div id="rightHand"><img class="hand no-select no-drag" src="~/icons/RightHand.png" /></div>
@@ -108,59 +111,79 @@
                 <div id="accordionFAQTextDiv">
                     <div class="custonAccordion">
                         <span>“Власний рахунок”</span>
-                        <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
+                        <button class="accordionButton"><img class="no-select no-drag"
+                                src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
                         <h3>Як створити власний рахунок?</h3>
-                        <p>Щоб створити власний рахунок, натисніть на кнопку Акаунта у верхньому правому куті сайту та заповніть необхідні поля. Після цього ви зможете використовувати всі функції нашого онлайн-магазину.</p>
+                        <p>Щоб створити власний рахунок, натисніть на кнопку Акаунта у верхньому правому куті сайту та
+                            заповніть необхідні поля. Після цього ви зможете використовувати всі функції нашого
+                            онлайн-магазину.</p>
                         <h3>Як змінити свої персональні дані?</h3>
-                        <p>Ви можете змінити свої персональні дані у розділі "Мій профіль" після входу в систему. Просто натисніть на кнопку Акаунта у верхньому правому куті і виберіть "Налаштування".</p>
+                        <p>Ви можете змінити свої персональні дані у розділі "Мій профіль" після входу в систему. Просто
+                            натисніть на кнопку Акаунта у верхньому правому куті і виберіть "Налаштування".</p>
                         <h3>Що робити, якщо забув пароль?</h3>
-                        <p>На сторінці входу натисніть "Забули пароль?" та дотримуйтесь інструкцій для відновлення пароля.</p>
+                        <p>На сторінці входу натисніть "Забули пароль?" та дотримуйтесь інструкцій для відновлення
+                            пароля.</p>
                     </div>
                     <div class="custonAccordion">
                         <span>Мобільний застосунок “Good meal””</span>
-                        <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
+                        <button class="accordionButton"><img class="no-select no-drag"
+                                src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
                         <h3>Де можна завантажити мобільний застосунок "Good Meal"?</h3>
-                        <p>Наш мобільний застосунок доступний для завантаження в App Store та Google Play. Просто знайдіть "Good Meal" і завантажте застосунок на свій смартфон.</p>
+                        <p>Наш мобільний застосунок доступний для завантаження в App Store та Google Play. Просто
+                            знайдіть "Good Meal" і завантажте застосунок на свій смартфон.</p>
                         <h3>Які функції доступні в мобільному застосунку?</h3>
-                        <p>У мобільному застосунку ви можете робити замовлення, переглядати історію покупок, зберігати улюблені продукти та отримувати спеціальні пропозиції та знижки.</p>
+                        <p>У мобільному застосунку ви можете робити замовлення, переглядати історію покупок, зберігати
+                            улюблені продукти та отримувати спеціальні пропозиції та знижки.</p>
                     </div>
                     <div class="custonAccordion">
                         <span>Картки та брелоки</span>
-                        <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
+                        <button class="accordionButton"><img class="no-select no-drag"
+                                src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
                         <h3>Що таке картки та брелоки "Good Meal"?</h3>
-                        <p>Картки та брелоки "Good Meal" – це ваші персональні ідентифікатори, які дозволяють швидко та легко робити покупки у наших фізичних магазинах та отримувати бонуси.</p>
+                        <p>Картки та брелоки "Good Meal" – це ваші персональні ідентифікатори, які дозволяють швидко та
+                            легко робити покупки у наших фізичних магазинах та отримувати бонуси.</p>
                         <h3>Як отримати картку або брелок?</h3>
-                        <p>Ви можете отримати картку або брелок у будь-якому нашому магазині або замовити онлайн у розділі "Мій профіль".</p>
+                        <p>Ви можете отримати картку або брелок у будь-якому нашому магазині або замовити онлайн у
+                            розділі "Мій профіль".</p>
                         <h3>Як використовувати картку або брелок?</h3>
-                        <p>Просто пред'явіть картку або брелок на касі під час оплати, і ваші бонуси автоматично будуть нараховані на рахунок.</p>
+                        <p>Просто пред'явіть картку або брелок на касі під час оплати, і ваші бонуси автоматично будуть
+                            нараховані на рахунок.</p>
                     </div>
                     <div class="custonAccordion">
                         <span>Про "Good Meal"</span>
-                        <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
+                        <button class="accordionButton"><img class="no-select no-drag"
+                                src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
                         <h3>Що таке "Good Meal"?</h3>
-                        <p>"Good Meal" – це онлайн-магазин їжі, який пропонує широкий асортимент свіжих продуктів, готових страв та екологічно чистих продуктів. Ми прагнемо забезпечити наших клієнтів високоякісною їжею та зручними умовами для покупок.</p>
+                        <p>"Good Meal" – це онлайн-магазин їжі, який пропонує широкий асортимент свіжих продуктів,
+                            готових страв та екологічно чистих продуктів. Ми прагнемо забезпечити наших клієнтів
+                            високоякісною їжею та зручними умовами для покупок.</p>
                         <h3>Як зв'язатися з нами?</h3>
-                        <p>Ви можете зв'язатися з нами через форму зворотного зв'язку на сайті або зателефонувати на нашу гарячу лінію. Всі контактні дані ви знайдете у розділі "Контакти".</p>
+                        <p>Ви можете зв'язатися з нами через форму зворотного зв'язку на сайті або зателефонувати на
+                            нашу гарячу лінію. Всі контактні дані ви знайдете у розділі "Контакти".</p>
                     </div>
                     <div class="custonAccordion">
                         <span>Робота в "Good Meal"</span>
-                        <button class="accordionButton"><img class="no-select no-drag" src="~/icons/Plus.png" /></button>
+                        <button class="accordionButton"><img class="no-select no-drag"
+                                src="~/icons/Plus.png" /></button>
                     </div>
                     <div class="textAccordion">
                         <h3>Як подати заявку на роботу в "Good Meal"?</h3>
-                        <p>Щоб подати заявку на роботу, перейдіть у розділ "Кар'єра" на нашому сайті та заповніть анкету. Ми завжди шукаємо талановитих та мотивованих людей для нашої команди.</p>
+                        <p>Щоб подати заявку на роботу, перейдіть у розділ "Кар'єра" на нашому сайті та заповніть
+                            анкету. Ми завжди шукаємо талановитих та мотивованих людей для нашої команди.</p>
                         <h3>Які вакансії зараз відкриті?</h3>
-                        <p>Актуальні вакансії ви можете переглянути у розділі "Кар'єра". Ми регулярно оновлюємо список відкритих позицій.</p>
+                        <p>Актуальні вакансії ви можете переглянути у розділі "Кар'єра". Ми регулярно оновлюємо список
+                            відкритих позицій.</p>
                         <h3>Які переваги роботи в "Good Meal"?</h3>
-                        <p>Робота в "Good Meal" – це стабільна зарплата, дружній колектив, можливість кар'єрного росту та участь у цікавих проектах.</p>
+                        <p>Робота в "Good Meal" – це стабільна зарплата, дружній колектив, можливість кар'єрного росту
+                            та участь у цікавих проектах.</p>
                     </div>
                 </div>
             </div>
@@ -175,7 +198,7 @@
                 <div class="shopElement shopSubElementLeft">
                     <img class="carrotPointer" src="~/icons/CarrotPointer.png" />
                     <div class="locationDiv">
-                        <img src="~/icons/LocationMarker.png"/>
+                        <img src="~/icons/LocationMarker.png" />
                         <span>Good meal вул. Кульпарківська 139</span>
                     </div>
                 </div>
