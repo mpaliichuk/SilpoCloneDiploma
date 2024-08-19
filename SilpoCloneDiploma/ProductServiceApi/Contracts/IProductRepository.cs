@@ -6,13 +6,13 @@ namespace ProductServiceApi.Contracts
 {
     public interface IProductRepository
     {
-        Task AddProduct(Product product);
-        Task<IEnumerable<Product>> GetAllProducts();
-        Task<Product> GetProductById(int id);
-        Task<IEnumerable<Product>> GetProductsByCategory(int categoryId);
-        Task RemoveProduct(int id);
-        Task UpdateProduct(Product product);
-        Task<(IEnumerable<Product>, int)> GetProductsByPage(int pageNumber, int pageSize);
-        Task<Product> GetProductByName(string name); 
+        Task AddProductAsync(Product product); 
+        Task<IEnumerable<Product>> GetAllProductsAsync(); 
+        Task<Product> GetProductByIdAsync(int id); 
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId); 
+        Task RemoveProductAsync(int id); 
+        Task UpdateProductAsync(Product product); 
+        Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize); 
+        Task<Product> GetProductByNameAsync(string name); 
     }
 }

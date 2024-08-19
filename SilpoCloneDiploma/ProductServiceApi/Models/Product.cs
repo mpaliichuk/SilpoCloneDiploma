@@ -43,9 +43,12 @@ namespace ProductServiceApi.Models
         public int CategoryId { get; set; }
 
         [JsonIgnore]
-        public Category? Categorys { get; set; }  
+        public Category? Category { get; set; }
 
         [JsonIgnore]
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+
+        [JsonIgnore]
+        public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
     }
 }

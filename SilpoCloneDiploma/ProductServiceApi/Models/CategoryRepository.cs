@@ -18,7 +18,7 @@ namespace ProductServiceApi.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddCategory(Category category)
+        public async Task AddCategoryAsync(Category category) // Додано Async
         {
             if (category == null)
             {
@@ -43,7 +43,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategory()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync() // Додано Async
         {
             try
             {
@@ -56,7 +56,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Category> GetCategoryById(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id) // Додано Async
         {
             try
             {
@@ -69,7 +69,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Category> GetCategoryByName(string name)
+        public async Task<Category> GetCategoryByNameAsync(string name) // Додано Async
         {
             try
             {
@@ -82,7 +82,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task RemoveCategory(int id)
+        public async Task RemoveCategoryAsync(int id) // Додано Async
         {
             try
             {
@@ -104,7 +104,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task UpdateCategory(Category category)
+        public async Task UpdateCategoryAsync(Category category) // Додано Async
         {
             if (category == null)
             {

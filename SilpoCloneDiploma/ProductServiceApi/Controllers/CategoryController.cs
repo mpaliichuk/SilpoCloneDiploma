@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
+using ProductServiceApi.Dtos;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ProductServiceApi.Models
+namespace ProductServiceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,63 +25,82 @@ namespace ProductServiceApi.Models
         }
 
         /// <summary>
-        /// Gets all Category.
+        /// Get all categories.
         /// </summary>
-
         [HttpGet]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Category>))]
-        public async Task<IEnumerable<Category>> GetAllCategory()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoryDto>))]
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAllCategoriesAsync()
         {
-            return await _service.GetAllCategory();
+            var categories = await _service.GetAllCategoriesAsync();
+            var categoryDtos = categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                ParentCategoryId = c.ParentCategoryId
+            });
+            return Ok(categoryDtos);
         }
 
         /// <summary>
         /// Gets a category by ID.
         /// </summary>
         /// <param name="id">The ID of the category.</param>
-
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Category>> GetCategoryByIdAsync(int id)
+        public async Task<ActionResult<CategoryDto>> GetCategoryByIdAsync(int id)
         {
-            var category = await _service.GetCategoryById(id);
+            var category = await _service.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
-            return Ok(category);
+
+            var categoryDto = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                ParentCategoryId = category.ParentCategoryId
+            };
+            return Ok(categoryDto);
         }
 
         /// <summary>
-        /// Gets a category by name.
+        /// Get a category by name.
         /// </summary>
         /// <param name="name">The name of the category.</param>
-       
         [HttpGet("name/{name}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCategoryByName(string name)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CategoryDto>> GetCategoryByNameAsync(string name)
         {
-            var category = await _service.GetCategoryByName(name);
+            var category = await _service.GetCategoryByNameAsync(name);
             if (category == null)
             {
                 return NotFound();
             }
-            return Ok(category);
+
+            var categoryDto = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                ParentCategoryId = category.ParentCategoryId
+            };
+            return Ok(categoryDto);
         }
 
         /// <summary>
-        /// Adds a new category.
+        /// Add a new category.
         /// </summary>
-        /// <param name="category">The category to add.</param>
-        /// return new category
-
+        /// <param name="categoryDto">The category to add.</param>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Category))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
-
-        public async Task<ActionResult<Category>> AddCategoryAsync([FromBody] Category category)
+        public async Task<ActionResult<CategoryDto>> AddCategoryAsync([FromBody] CategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
             {
@@ -91,8 +109,23 @@ namespace ProductServiceApi.Models
 
             try
             {
-                await _service.AddCategory(category);
-                return category;
+                var category = new Category
+                {
+                    Name = categoryDto.Name,
+                    ParentCategoryId = categoryDto.ParentCategoryId
+                };
+
+                await _service.AddCategoryAsync(category);
+                _logger.LogInformation("Category added successfully: {@Category}", category);
+
+                var addedCategoryDto = new CategoryDto
+                {
+                    Id = category.Id, 
+                    Name = category.Name,
+                    ParentCategoryId = category.ParentCategoryId
+                };
+
+                return addedCategoryDto;
             }
             catch (InvalidOperationException ex)
             {
@@ -105,16 +138,15 @@ namespace ProductServiceApi.Models
         /// Updates an existing category.
         /// </summary>
         /// <param name="id">The ID of the category to update.</param>
-        /// <param name="category">The updated category.</param>
-
+        /// <param name="categoryDto">The updated category.</param>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-
-        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] Category category)
+        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] CategoryDto categoryDto)
         {
-            if (id != category.Id)
+            if (id != categoryDto.Id)
             {
                 return BadRequest();
             }
@@ -124,43 +156,61 @@ namespace ProductServiceApi.Models
                 return BadRequest(ModelState);
             }
 
-            await _service.UpdateCategory(category);
-            return NoContent();
+            try
+            {
+                var existingCategory = await _service.GetCategoryByIdAsync(id);
+                if (existingCategory == null)
+                {
+                    return NotFound();
+                }
+
+                // Оновлюємо властивості існуючої категорії з DTO
+                existingCategory.Name = categoryDto.Name;
+                existingCategory.ParentCategoryId = categoryDto.ParentCategoryId;
+
+                await _service.UpdateCategoryAsync(existingCategory);
+                _logger.LogInformation("Category updated successfully: {@Category}", existingCategory);
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating category with ID {CategoryId}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while updating category.");
+            }
         }
 
         /// <summary>
         /// Deletes an existing category.
         /// </summary>
         /// <param name="id">The ID of the category to delete.</param>
-        
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Roles = "Administrator")]
-
         public async Task<IActionResult> DeleteCategoryAsync(int id)
         {
             try
             {
-                var category = await _service.GetCategoryById(id);
+                var category = await _service.GetCategoryByIdAsync(id);
                 if (category == null)
                 {
                     return NotFound();
                 }
 
-                await _service.RemoveCategory(id);
+                await _service.RemoveCategoryAsync(id);
+                _logger.LogInformation("Category removed successfully: ID {CategoryId}", id);
                 return NoContent();
             }
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, "Error occurred while removing category with ID {CategoryId}", id);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while removing category with ID " + id + ". The DELETE statement conflicted with the REFERENCE constraint.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while removing category.");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unexpected error occurred while removing category with ID {CategoryId}", id);
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while removing category with ID " + id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while removing category.");
             }
         }
     }

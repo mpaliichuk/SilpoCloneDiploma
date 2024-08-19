@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
+using ProductServiceApi.Models.Dto;
+using ProductServiceApi.Models.Dto.ProductServiceApi.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProductServiceApi.Controllers
 {
-    
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -25,90 +27,172 @@ namespace ProductServiceApi.Controllers
         }
 
         /// <summary>
-        /// Gets all product
+        /// Get all products.
         /// </summary>
-       
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAllProductsAsync()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProductsAsync()
         {
-            var products = await _service.GetAllProducts();
-            return Ok(products);
+            var products = await _service.GetAllProductsAsync();
+            var productDtos = products.Select(p => new ProductDto
+            {
+                Title = p.Title,
+                ProductComposition = p.ProductComposition,
+                GeneralInformation = p.GeneralInformation,
+                ImageUrls = p.ImageUrls,
+                Availability = p.Availability,
+                Count = p.Count,
+                Sale = p.Sale,
+                Price = p.Price,
+                CategoryId = p.CategoryId
+            });
+
+            return Ok(productDtos);
         }
 
         /// <summary>
-        /// Gets product bt Id
+        /// Get a product by ID.
         /// </summary>
-       
+        /// <param name="id">The ID of the product.</param>
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Product>> GetProductByIdAsync(int id)
+        public async Task<ActionResult<ProductDto>> GetProductByIdAsync(int id)
         {
-            var product = await _service.GetProductById(id);
+            var product = await _service.GetProductByIdAsync(id);
             if (product == null)
             {
                 _logger.LogWarning($"Product with ID {id} not found.");
                 return NotFound();
             }
-            return Ok(product);
+
+            var productDto = new ProductDto
+            {
+                Title = product.Title,
+                ProductComposition = product.ProductComposition,
+                GeneralInformation = product.GeneralInformation,
+                ImageUrls = product.ImageUrls,
+                Availability = product.Availability,
+                Count = product.Count,
+                Sale = product.Sale,
+                Price = product.Price,
+                CategoryId = product.CategoryId
+            };
+
+            return Ok(productDto);
         }
 
         /// <summary>
-        /// Gets product by Name
+        /// Get a product by name.
         /// </summary>
-        
+        /// <param name="title">The name of the product.</param>
         [HttpGet("title/{title}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
-        public async Task<ActionResult<Product>> GetProductByNameAsync(string title)
+        public async Task<ActionResult<ProductDto>> GetProductByNameAsync(string title)
         {
-            var product = await _service.GetProductByName(title);
+            var product = await _service.GetProductByNameAsync(title);
             if (product == null)
             {
                 _logger.LogWarning($"Product with title '{title}' not found.");
                 return NotFound();
             }
-            return Ok(product);
+
+            var productDto = new ProductDto
+            {
+                Title = product.Title,
+                ProductComposition = product.ProductComposition,
+                GeneralInformation = product.GeneralInformation,
+                ImageUrls = product.ImageUrls,
+                Availability = product.Availability,
+                Count = product.Count,
+                Sale = product.Sale,
+                Price = product.Price,
+                CategoryId = product.CategoryId
+            };
+
+            return Ok(productDto);
         }
 
         /// <summary>
-        /// Paggination
+        /// Get products with pagination.
         /// </summary>
-        
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
         [HttpGet("page/{pageNumber}/size/{pageSize}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [AllowAnonymous]
-        public async Task<ActionResult<(IEnumerable<Product>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize)
+        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize)
         {
-            var (products, totalCount) = await _service.GetProductsByPage(pageNumber, pageSize);
+            var (products, totalCount) = await _service.GetProductsByPageAsync(pageNumber, pageSize);
+            var productDtos = products.Select(p => new ProductDto
+            {
+                Title = p.Title,
+                ProductComposition = p.ProductComposition,
+                GeneralInformation = p.GeneralInformation,
+                ImageUrls = p.ImageUrls,
+                Availability = p.Availability,
+                Count = p.Count,
+                Sale = p.Sale,
+                Price = p.Price,
+                CategoryId = p.CategoryId
+            });
+
             _logger.LogInformation($"Retrieved page {pageNumber} of products with page size {pageSize}");
-            return Ok(new { Products = products, TotalCount = totalCount });
+            return Ok(new { Products = productDtos, TotalCount = totalCount });
         }
 
         /// <summary>
-        /// Add new Product
-        /// return new product;
+        /// Add a new product.
         /// </summary>
+        /// <param name="productDto">The product to add.</param>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Product>> AddProductAsync([FromBody] Product product)
+        public async Task<ActionResult<ProductDto>> AddProductAsync([FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid product model state.");
+                _logger.LogWarning("Invalid product DTO state.");
                 return BadRequest(ModelState);
             }
 
             try
             {
-                await _service.AddProduct(product);
-                return  product;
+                var product = new Product
+                {
+                    Title = productDto.Title,
+                    ProductComposition = productDto.ProductComposition,
+                    GeneralInformation = productDto.GeneralInformation,
+                    ImageUrls = productDto.ImageUrls,
+                    Availability = productDto.Availability,
+                    Count = productDto.Count,
+                    Sale = productDto.Sale,
+                    Price = productDto.Price,
+                    CategoryId = productDto.CategoryId
+                };
+
+                await _service.AddProductAsync(product);
+                _logger.LogInformation("Product added successfully: {@Product}", product);
+
+                var addedProductDto = new ProductDto
+                {
+                    Title = product.Title,
+                    ProductComposition = product.ProductComposition,
+                    GeneralInformation = product.GeneralInformation,
+                    ImageUrls = product.ImageUrls,
+                    Availability = product.Availability,
+                    Count = product.Count,
+                    Sale = product.Sale,
+                    Price = product.Price,
+                    CategoryId = product.CategoryId
+                };
+
+                return addedProductDto;
             }
             catch (Exception ex)
             {
@@ -118,31 +202,45 @@ namespace ProductServiceApi.Controllers
         }
 
         /// <summary>
-        /// Update product by id
-        /// return NoContent();
+        /// Update an existing product.
         /// </summary>
-
+        /// <param name="id">The ID of the product to update.</param>
+        /// <param name="productDto">The updated product.</param>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> UpdateProductAsync(int id, [FromBody] Product product)
+        public async Task<IActionResult> UpdateProductAsync(int id, [FromBody] ProductDto productDto)
         {
-            if (id != product.Id)
-            {
-                _logger.LogWarning("Product ID mismatch in update request.");
-                return BadRequest();
-            }
-
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid product model state in update request.");
+                _logger.LogWarning("Invalid product DTO state in update request.");
                 return BadRequest(ModelState);
             }
 
             try
             {
-                await _service.UpdateProduct(product);
+                var existingProduct = await _service.GetProductByIdAsync(id);
+                if (existingProduct == null)
+                {
+                    _logger.LogWarning($"Product with ID {id} not found.");
+                    return NotFound();
+                }
+
+                // Оновлюємо властивості існуючого продукту з DTO
+                existingProduct.Title = productDto.Title;
+                existingProduct.ProductComposition = productDto.ProductComposition;
+                existingProduct.GeneralInformation = productDto.GeneralInformation;
+                existingProduct.ImageUrls = productDto.ImageUrls;
+                existingProduct.Availability = productDto.Availability;
+                existingProduct.Count = productDto.Count;
+                existingProduct.Sale = productDto.Sale;
+                existingProduct.Price = productDto.Price;
+                existingProduct.CategoryId = productDto.CategoryId;
+
+                await _service.UpdateProductAsync(existingProduct);
+                _logger.LogInformation("Product updated successfully: {@Product}", existingProduct);
                 return NoContent();
             }
             catch (Exception ex)
@@ -153,40 +251,39 @@ namespace ProductServiceApi.Controllers
         }
 
         /// <summary>
-        /// Delete product by Id
-        /// return NoContent();
+        /// Delete an existing product.
         /// </summary>
-
+        /// <param name="id">The ID of the product to delete.</param>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Roles = "Administrator")]
-
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
             try
             {
-                var product = await _service.GetProductById(id);
+                var product = await _service.GetProductByIdAsync(id);
                 if (product == null)
                 {
+                    _logger.LogWarning($"Product with ID {id} not found.");
                     return NotFound();
                 }
 
-                await _service.RemoveProduct(id);
+                await _service.RemoveProductAsync(id);
+                _logger.LogInformation("Product removed successfully: ID {ProductId}", id);
                 return NoContent();
             }
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, "Error occurred while removing product with ID {ProductId}", id);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while removing product with ID " + id + ". The DELETE statement conflicted with the REFERENCE constraint.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while removing product. The DELETE statement conflicted with the REFERENCE constraint.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting product with ID {id}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while deleting the product.");
+                _logger.LogError(ex, "An unexpected error occurred while removing product with ID {ProductId}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while removing the product.");
             }
         }
-
     }
 }

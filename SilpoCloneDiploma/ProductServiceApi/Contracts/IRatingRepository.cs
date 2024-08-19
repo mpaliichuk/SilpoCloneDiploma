@@ -1,13 +1,15 @@
 ﻿using ProductServiceApi.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProductServiceApi.Contracts
 {
     public interface IRatingRepository
     {
-        Task<IEnumerable<Rating>> GetAllRatings();
-        Task<Rating> GetRatingById(int id);
-        Task AddRating(Rating rating);
-        Task UpdateRating(Rating rating);
-        Task RemoveRating(int id);
+        Task<IEnumerable<Rating>> GetAllRatingsAsync(); 
+        Task<Rating> GetRatingByIdAsync(int id); 
+        Task AddRatingAsync(Rating rating); 
+        Task UpdateRatingAsync(Rating rating); 
+        Task RemoveRatingAsync(int id); 
     }
 }

@@ -20,7 +20,7 @@ namespace ProductServiceApi.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddProduct(Product product)
+        public async Task AddProductAsync(Product product) // Додано Async
         {
             if (product == null)
             {
@@ -28,7 +28,7 @@ namespace ProductServiceApi.Models
                 throw new ArgumentNullException(nameof(product));
             }
 
-            var existingProduct = await _context.Products.FirstOrDefaultAsync(c => c.Title == product.Title);
+            var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Title == product.Title);
             if (existingProduct != null)
             {
                 throw new InvalidOperationException($"Product with name '{product.Title}' already exists.");
@@ -44,6 +44,7 @@ namespace ProductServiceApi.Models
             {
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("Product added successfully: {@Product}", product);
             }
             catch (DbUpdateException ex)
             {
@@ -52,8 +53,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync() // Додано Async
         {
             try
             {
@@ -66,7 +66,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Product> GetProductById(int id)
+        public async Task<Product> GetProductByIdAsync(int id) // Додано Async
         {
             try
             {
@@ -79,7 +79,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategory(int categoryId)
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId) // Додано Async
         {
             try
             {
@@ -92,9 +92,9 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task RemoveProduct(int id)
+        public async Task RemoveProductAsync(int id) // Додано Async
         {
-            var product = await GetProductById(id);
+            var product = await GetProductByIdAsync(id);
             if (product != null)
             {
                 try
@@ -116,7 +116,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Product> GetProductByName(string title)
+        public async Task<Product> GetProductByNameAsync(string title) // Додано Async
         {
             try
             {
@@ -124,11 +124,12 @@ namespace ProductServiceApi.Models
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error occurred while retrieving product with name {title}");
                 throw new Exception($"Error occurred while retrieving product with name {title}", ex);
             }
         }
 
-        public async Task UpdateProduct(Product product)
+        public async Task UpdateProductAsync(Product product) // Додано Async
         {
             if (product == null)
             {
@@ -149,7 +150,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<(IEnumerable<Product>, int)> GetProductsByPage(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize) // Додано Async
         {
             try
             {

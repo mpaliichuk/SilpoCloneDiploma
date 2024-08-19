@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "8VNfubT5VAeZ5pIqhjAYMhWAqYxUVTabH1khAppAqno=",
+  "Source": "ShippingServiceApi",
+  "BasePath": "_content/ShippingServiceApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
