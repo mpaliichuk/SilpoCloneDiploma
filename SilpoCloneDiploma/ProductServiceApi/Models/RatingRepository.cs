@@ -4,7 +4,6 @@ using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProductServiceApi.Models
@@ -20,10 +19,11 @@ namespace ProductServiceApi.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddRating(Rating rating)
+        public async Task AddRatingAsync(Rating rating) // Додано Async
         {
             if (rating == null)
             {
+                _logger.LogWarning("Attempted to add a null rating");
                 throw new ArgumentNullException(nameof(rating));
             }
 
@@ -31,6 +31,7 @@ namespace ProductServiceApi.Models
             {
                 _context.Ratings.Add(rating);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("Rating added successfully: {@Rating}", rating);
             }
             catch (DbUpdateException ex)
             {
@@ -39,7 +40,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Rating>> GetAllRatings()
+        public async Task<IEnumerable<Rating>> GetAllRatingsAsync() // Додано Async
         {
             try
             {
@@ -52,7 +53,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Rating> GetRatingById(int id)
+        public async Task<Rating> GetRatingByIdAsync(int id) // Додано Async
         {
             try
             {
@@ -65,16 +66,16 @@ namespace ProductServiceApi.Models
             }
         }
 
-
-        public async Task RemoveRating(int id)
+        public async Task RemoveRatingAsync(int id) // Додано Async
         {
-            var rating = await GetRatingById(id);
+            var rating = await GetRatingByIdAsync(id);
             if (rating != null)
             {
                 try
                 {
                     _context.Ratings.Remove(rating);
                     await _context.SaveChangesAsync();
+                    _logger.LogInformation("Rating removed successfully: {@Rating}", rating);
                 }
                 catch (DbUpdateException ex)
                 {
@@ -90,10 +91,11 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task UpdateRating(Rating rating)
+        public async Task UpdateRatingAsync(Rating rating) // Додано Async
         {
             if (rating == null)
             {
+                _logger.LogWarning("Attempted to update a null rating");
                 throw new ArgumentNullException(nameof(rating));
             }
 
@@ -101,6 +103,7 @@ namespace ProductServiceApi.Models
             {
                 _context.Ratings.Update(rating);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("Rating updated successfully: {@Rating}", rating);
             }
             catch (DbUpdateException ex)
             {

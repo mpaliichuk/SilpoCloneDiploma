@@ -1,53 +1,49 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-
-
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ProductServiceApi.Models
 {
     public class ProductCategoryContext : DbContext
     {
-        public DbSet<Category> Categories { get; set; }
-
-        public DbSet<Rating> Ratings { get; set; }
-
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public ProductCategoryContext(DbContextOptions<ProductCategoryContext> options)
             : base(options)
         {
-            InitializeDatabaseAsync().Wait();
-        }
 
-        private async Task InitializeDatabaseAsync() => await Database.EnsureCreatedAsync();
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await base.SaveChangesAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Category>()
-                 .HasMany(c => c.Products)
-                 .WithOne(p => p.Categorys)
-                 .HasForeignKey(p => p.CategoryId)
-                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(pc => new { pc.ProductId, pc.CategoryId });
 
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Categorys)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Category)
+                .WithMany(c => c.ProductCategories)
+                .HasForeignKey(pc => pc.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction); 
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Product)
+                .WithMany(p => p.ProductCategories)
+                .HasForeignKey(pc => pc.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.ParentCategory)
+                .WithMany(c => c.Subcategories)
+                .HasForeignKey(c => c.ParentCategoryId);
 
             modelBuilder.Entity<Rating>()
-            .HasOne(r => r.Product)
-             .WithMany(p => p.Ratings)
-             .HasForeignKey(r => r.IdProduct)
-             .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Ratings)
+                .HasForeignKey(r => r.IdProduct)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
     }
 }
-
