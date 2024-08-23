@@ -1,0 +1,304 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<link rel="stylesheet" href="~/css/pagesStyles/mainPage.css" asp-append-version="true" />
+<style>
+    .full-width-orange {
+        width: 100vw;
+        height: 664px;
+        background: #FF5722;
+        padding: 20px;
+        border-radius: 18px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+    }
+
+    .content-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        display: flex;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .photos {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 50%;
+    }
+
+    .photo.large {
+        width: 350px;
+        height: 350px;
+        margin-bottom: 10px;
+    }
+
+    .photo.small {
+        width: 110px;
+        height: 110px;
+    }
+
+    .photo.small-row {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 18px;
+    }
+
+    .content-info {
+        width: 50%;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .name {
+        color: white;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    .description {
+        color: white;
+        font-size: 18px;
+        line-height: 1.5;
+        text-align: left;
+        transition: opacity 0.3s;
+    }
+
+    .description-hidden {
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .info-section {
+        color: white;
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    .info-section-title {
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #F57C00;
+        padding: 10px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .info-section-title::after {
+        content: "▼";
+        font-size: 16px;
+        transition: transform 0.3s;
+        padding-left: 450px;
+    }
+
+    .info-section-content {
+        display: none;
+        background: #FFAB40;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .info-section-content.active {
+        display: block;
+    }
+
+    .price {
+        color: white;
+        font-size: 72px;
+        font-weight: 500;
+    }
+
+    .add-to-cart {
+        background: #4E9B51;
+        border-radius: 15px;
+        border: 2px white solid;
+        padding: 8px 20px;
+        color: white;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .quantity-selector button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border: 1.88946px solid #FFFFFF;
+        border-radius: 4px;
+        background: none;
+        cursor: pointer;
+        color: #FFFFFF;
+        font-size: 24px;
+        line-height: 36px;
+        box-sizing: border-box;
+    }
+
+    .quantity-selector .minus {
+        border-radius: 3.4955px;
+        padding: 0;
+        font-family: 'Noto Sans';
+    }
+
+    .quantity-selector .plus {
+        border-radius: 4px;
+        padding: 5.82583px;
+    }
+
+    .quantity-selector .quantity {
+        width: 26px;
+        height: 60px;
+        font-family: 'Noto Sans';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 44.4px;
+        line-height: 60px;
+        color: #FFFFFF;
+        text-align: center;
+    }
+
+    .quantity-cart-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .quantity-cart-row .add-to-cart {
+        margin-left: 20px;
+    }
+</style>
+<div class="content">
+
+    <div class="breadcrumb">
+        Головна > Фрукти > Всі > Папайя
+    </div>
+    <div class="full-width-orange">
+        <div class="content-inner">
+            <div class="photos">
+                <div class="photo large">
+                    <img src="https://via.placeholder.com/350x350" />
+                </div>
+                <div class="photo small-row">
+                    <div class="photo small">
+                        <img src="https://via.placeholder.com/110x110" />
+                    </div>
+                    <div class="photo small">
+                        <img src="https://via.placeholder.com/110x110" />
+                    </div>
+                    <div class="photo small">
+                        <img src="https://via.placeholder.com/110x110" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-info">
+                <div class="name">Папайя 100г</div>
+                <div class="description description-visible">
+                    <h3>Опис</h3>
+                    Має тверду шкірку і жовто-зелений колір. Плід м’який, з легким солодкуватим смаком та ароматом дині.
+                    Рекомендуємо їсти свіжою, разом з лаймом.
+                </div>
+                <div class="info-section">
+                    <div class="info-section-title" onclick="toggleDropdown()">Загальна інформація </div>
+                    <div class="info-section-content">
+                        <p><span>Країна:</span> <span>Іспанія</span></p>
+                        <p><span>Торгова марка:</span> <span>Без ТМ</span></p>
+                        <p><span>Кількість одиниць:</span> <span>1</span></p>
+                    </div>
+                </div>
+
+                <div class="price">18.90 грн</div>
+                <div class="quantity-cart-row">
+                    <div class="quantity-selector">
+                        <button class="plus">+</button>
+                        <div class="quantity">1</div>
+                        <button class="minus">-</button>
+                    </div>
+                    <div class="add-to-cart">Додати в кошик</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="selectorDiv"></div>
+    <div id="mainProductsDiv">
+        <span id="mainProductsTagText">Схожі товари</span>
+        <div id="subProductsDiv">
+            @* <div class="cardDiv">
+            <div class="productIconDiv">
+            <img class="discountIcon" src="~/icons/Discount.png" />
+            <img class="productIcon" src="~/icons/ProductIcon.png" />
+            </div>
+            <div class="productInfoDiv">
+            <div class="productNameDiv">
+            <div class="productName">Сьомга Norven</div>
+            <div class="productFullName">Сьомга Norven слабосолена в/у, 120г</div>
+            </div>
+            <div class="priceDiv">
+            <div class="subPriceDiv"><b>256 </b><span>грн</span></div>
+            <div class="crossTextDiv">
+            <span>315 грн</span>
+            </div>
+            </div>
+            <div class="productControlDiv">
+            <div class="productCountDiv">
+            <button class="productCountButton plus"><img class="no-select no-drag" src="~/icons/PlusMiniIcon.png"
+            /></button>
+            <div class="productCount">0</div>
+            <button class="productCountButton minus"><img class="no-select no-drag" src="~/icons/MinusMiniIcon.png"
+            /></button>
+            </div>
+
+            <button class="productBuyDiv">
+            <img class="productCartIcon" src="~/icons/Cart.png" />
+            </button>
+            </div>
+            </div>
+            </div> *@
+        </div>
+    </div>
+
+</div>
+<script src="~/js/pagesScripts/mainPage.js"></script>
+<script>
+    function toggleDropdown() {
+        var content = document.querySelector('.info-section-content');
+        var description = document.querySelector('.description');
+
+        content.classList.toggle('active');
+        description.classList.toggle('description-hidden');
+    }
+</script>
