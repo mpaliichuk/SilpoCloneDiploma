@@ -8,27 +8,24 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\And1\\.nuget\\packages\\": {}
+    "/Users/mpaliichuk/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\FrontEnd.csproj",
+      "projectUniqueName": "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/FrontEnd.csproj",
       "projectName": "FrontEnd",
-      "projectPath": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\FrontEnd.csproj",
-      "packagesPath": "C:\\Users\\And1\\.nuget\\packages\\",
-      "outputPath": "D:\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\obj\\",
+      "projectPath": "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/FrontEnd.csproj",
+      "packagesPath": "/Users/mpaliichuk/.nuget/packages/",
+      "outputPath": "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\And1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/mpaliichuk/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -70,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
