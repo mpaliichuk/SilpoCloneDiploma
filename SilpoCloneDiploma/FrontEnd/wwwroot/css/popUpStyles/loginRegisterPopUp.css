@@ -11,10 +11,10 @@
     width: 600px;
     height: 395px;
     left: calc(50% - 300px);
-    top: 330px;
+    top: 120px;
     background: #FFFFFF;
     border-radius: 10px;
-    z-index: 1000;
+    z-index: 9998;
 }
 
 #loginPopup .close-btn {

@@ -13,6 +13,7 @@
 
 <body>
     <header>
+        <div id="overlay"></div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3">
             <div id="mainDiv" class="container-fluid">
                 <div id="headerDiv1" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -53,41 +54,41 @@
                         <input id="deliveryText" placeholder="Введіть адресу доставки" />
                     </div>
                     <button id="profile" type="button"><img id="profileIcon" src="~/icons/Person.png" /></button>
-                    <div id="loginPopup" class="popup">
-                        <button id="closePopup" class="close-btn">&times;</button>
-                        <div id="loginForm" class="form-layout">
-                            <h2>Увійти</h2>
-                            <form>
-                                <label for="username">Логін</label>
-                                <input type="text" id="username" name="username" required>
-                                <label for="password">Пароль</label>
-                                <input type="password" id="password" name="password" required>
-                                <button type="submit">Увійти</button>
-                            </form>
-                            <p>У вас немає акаунту? <a href="#" id="showRegister">Зареєструватися</a></p>
-                        </div>
-                        <div id="registerForm" class="form-layout" style="display: none;">
-                            <h2>Реєстрація</h2>
-                            <form>
-                                <label for="email">Емейл</label>
-                                <input type="email" id="email" name="email" required>
-                                <label for="usernameReg">Логін</label>
-                                <input type="text" id="usernameReg" name="usernameReg" required>
-                                <label for="passwordReg">Пароль</label>
-                                <input type="password" id="passwordReg" name="passwordReg" required>
-                                <button type="submit">Зареєструватися</button>
-                            </form>
-                            <p>Вже є акаунт? <a href="#" id="showLogin">Увійти</a></p>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div id="basketDiv">
                     <img id="basketIcon" src="~/icons/Cart.png" />
                     <span id="basketText">Кошик</span>
                 </div>
             </div>
-            </div>
         </nav>
+        <div id="loginPopup" class="popup">
+            <button id="closePopup" class="close-btn">&times;</button>
+            <div id="loginForm" class="form-layout">
+                <h2>Увійти</h2>
+                <form>
+                    <label for="username">Логін</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Увійти</button>
+                </form>
+                <p>У вас немає акаунту? <a href="#" id="showRegister">Зареєструватися</a></p>
+            </div>
+            <div id="registerForm" class="form-layout" style="display: none;">
+                <h2>Реєстрація</h2>
+                <form>
+                    <label for="email">Емейл</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="usernameReg">Логін</label>
+                    <input type="text" id="usernameReg" name="usernameReg" required>
+                    <label for="passwordReg">Пароль</label>
+                    <input type="password" id="passwordReg" name="passwordReg" required>
+                    <button type="submit">Зареєструватися</button>
+                </form>
+                <p>Вже є акаунт? <a href="#" id="showLogin">Увійти</a></p>
+            </div>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

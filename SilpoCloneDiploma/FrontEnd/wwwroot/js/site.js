@@ -1,5 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
     var dropdownToggle = document.getElementById('navbarDropdownMenuLink');
+    const overlay = document.getElementById('overlay');
     var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
     var dropdownItems = document.getElementsByClassName('dropdown-item');
     var panel = document.getElementById('categoryPanel');
@@ -8,12 +9,13 @@
         event.preventDefault();
         dropdownMenu.classList.toggle('show');
         panel.classList.toggle('show');
-        if (panel.classList.contains('show'))
-        {
+        if (panel.classList.contains('show')) {
             generateCategoryInitialisator();
+            overlay.style.display = 'block';
         }
         else {
             panel.innerHTML = '';
+            overlay.style.display = 'none';
         }
     });
 
@@ -89,21 +91,30 @@
 
 document.addEventListener("DOMContentLoaded", function() {
     const profileButton = document.getElementById("profile");
+    const overlay = document.getElementById('overlay');
     const loginPopup = document.getElementById("loginPopup");
     const closePopupButton = document.getElementById("closePopup");
     const showRegisterLink = document.getElementById("showRegister");
     const showLoginLink = document.getElementById("showLogin");
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
+    var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
+    var panel = document.getElementById('categoryPanel');
 
-    profileButton.addEventListener("click", function() {
+    profileButton.addEventListener("click", function () {
+        dropdownMenu.classList.remove('show');
+        panel.classList.remove('show');
+        overlay.style.zIndex = 9998;
         console.log("Profile button clicked");
         loginPopup.style.display = "flex";
+        overlay.style.display = 'block';
     });
 
     closePopupButton.addEventListener("click", function() {
         console.log("Close button clicked");
         loginPopup.style.display = "none";
+        overlay.style.display = 'none';
+        overlay.style.zIndex = 9990;
     });
 
     showRegisterLink.addEventListener("click", function(event) {
@@ -129,6 +140,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.addEventListener("scroll", function() {
         const scrollY = window.scrollY;
-        loginPopup.style.top = `${330 + scrollY}px`;
+        loginPopup.style.top = `${120 + scrollY}px`;
+    });
+
+    overlay.addEventListener('click', () => {
+        panel.innerHTML = '';
+        overlay.style.display = 'none';
+        if (loginPopup.style.display != "flex") {
+            dropdownMenu.classList.toggle('show');
+            panel.classList.toggle('show');
+        }
+        overlay.style.zIndex = 9990;
+        loginPopup.style.display = "none";
     });
 });

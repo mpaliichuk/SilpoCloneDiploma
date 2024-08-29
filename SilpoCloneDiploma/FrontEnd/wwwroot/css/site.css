@@ -30,6 +30,20 @@ nav {
     height: 84px;
 }
 
+/*////////////////////////////////////*/
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    z-index: 9990; /* Overlay */
+}
+
+
 /*/////////////////////////NoSystem////////////////////////////*/
 
 #mainDiv {
@@ -38,7 +52,7 @@ nav {
     flex-direction: row;
     align-items: center;
     padding: 22px 60px 22px 92px;
-    margin-bottom:300px;
+    margin-bottom: 300px;
     gap: 6%;
     position: absolute;
     width: 100%;
@@ -49,6 +63,7 @@ nav {
     border-style: solid;
     border-color: #4E9B51;
     border-radius: 0px 0px 36px 36px;
+    z-index: 9991;
 }
 
 @media (max-width: 1440px) {
@@ -286,6 +301,7 @@ nav {
     border-radius: 30px;
     order: 1;
     /*background: url(../icons/Search.png) no-repeat scroll 5px 5px;*/
+    z-index: 9993;
 }
 #searchIcon {
     width: 24px;
