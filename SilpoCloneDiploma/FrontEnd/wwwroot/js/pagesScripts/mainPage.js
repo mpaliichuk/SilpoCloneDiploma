@@ -85,11 +85,12 @@
         productId = ''
     }) {
         const cardDiv = document.createElement('div');
-        cardDiv.id = `cardDiv_${productId}`;
+        cardDiv.id = `${productId}`;
         cardDiv.className = 'cardDiv';
+        //cardDiv.setAttribute("product-id", productId);
 
         const productIconDiv = document.createElement('div');
-        productIconDiv.className = 'productIconDiv';
+        productIconDiv.className = 'productIconDiv no-select';
 
         const discountIcon = document.createElement('img');
         discountIcon.className = 'discountIcon';
@@ -106,7 +107,7 @@
         productInfoDiv.className = 'productInfoDiv';
 
         const productNameDiv = document.createElement('div');
-        productNameDiv.className = 'productNameDiv';
+        productNameDiv.className = 'productNameDiv no-select';
 
         const productNameElement = document.createElement('div');
         productNameElement.className = 'productName';
@@ -120,7 +121,7 @@
         productNameDiv.appendChild(productFullNameElement);
 
         const priceDiv = document.createElement('div');
-        priceDiv.className = 'priceDiv';
+        priceDiv.className = 'priceDiv no-select';
 
         const subPriceDiv = document.createElement('div');
         subPriceDiv.className = 'subPriceDiv';
@@ -161,15 +162,15 @@
         productCountDiv.appendChild(productCount);
         productCountDiv.appendChild(plusButton);
 
-        const productBuyDiv = document.createElement('button');
-        productBuyDiv.className = 'productBuyDiv';
+        const productBuyBtn = document.createElement('button');
+        productBuyBtn.className = 'productBuyBtn';
         const cartIcon = document.createElement('img');
         cartIcon.className = 'productCartIcon';
         cartIcon.src = 'icons/Cart.png';
-        productBuyDiv.appendChild(cartIcon);
+        productBuyBtn.appendChild(cartIcon);
 
         productControlDiv.appendChild(productCountDiv);
-        productControlDiv.appendChild(productBuyDiv);
+        productControlDiv.appendChild(productBuyBtn);
 
         productInfoDiv.appendChild(productNameDiv);
         productInfoDiv.appendChild(priceDiv);
@@ -197,17 +198,21 @@
 
     const cardDivs = document.querySelectorAll('.cardDiv');
     const productCountDivs = document.querySelectorAll('.productCountDiv');
-    const productBuyDivs = document.querySelectorAll('.productBuyDiv');
+    const productBuyBtns = document.querySelectorAll('.productBuyBtn');
+    const certificateBuy = document.querySelectorAll('.addToCart');
 
     cardDivs.forEach(item => {
-        item.addEventListener('click', function () {
-            var productId = 0; //З бази 
-            window.location = "/Home/Product/" + productId;
+        item.addEventListener('click', function (event) {
+            const productControlDiv = item.querySelector('.productControlDiv');
+            if (productControlDiv && !productControlDiv.contains(event.target)) {
+                var productId = 0; //З базы 
+                window.location = "/Product/ProductPage/" + productId;
+            }
         });
         item.addEventListener('mouseenter', function () {
             item.style.border = '3px solid #FF5722';
 
-            const button = item.getElementsByClassName('productBuyDiv')[0];
+            const button = item.getElementsByClassName('productBuyBtn')[0];
             if (button) {
                 button.style.background = '#FF5722';
             }
@@ -216,7 +221,7 @@
         item.addEventListener('mouseleave', function () {
             item.style.border = '3px solid #53B06C';
 
-            const button = item.getElementsByClassName('productBuyDiv')[0];
+            const button = item.getElementsByClassName('productBuyBtn')[0];
             if (button) {
                 button.style.background = '#53B06C';
             }
@@ -242,7 +247,7 @@
         });
     });
 
-    productBuyDivs.forEach(item => {
+    productBuyBtns.forEach(item => {
         item.addEventListener('click', function (event) {
             event.stopPropagation();
             const cardDiv = item.closest('.cardDiv');
@@ -250,9 +255,29 @@
             if (count) {
                 let currentCount = parseInt(count.innerHTML);
                 if (currentCount > 0) {
-                    count.innerHTML = '0';
+                    if (currentCount > 0) {
+                        count.innerHTML = '0';
+                    }
+                    alert("Товар додано в кошик!");
+                }
+                else {
+                    alert("Спершу виберіть кількість товар (`U_U`)!");
                 }
             }
+        });
+    });
+
+    certificateBuy.forEach(item => {
+        item.addEventListener('click', function (event) {
+            //event.stopPropagation();
+            //const cardDiv = item.closest('.cardDiv');
+            //const count = cardDiv.querySelector('.productCount');
+            //if (count) {
+            //    let currentCount = parseInt(count.innerHTML);
+            //    if (currentCount > 0) {
+            //        count.innerHTML = '0';
+            //    }
+            //}
             alert("Товар додано в кошик!");
         });
     });

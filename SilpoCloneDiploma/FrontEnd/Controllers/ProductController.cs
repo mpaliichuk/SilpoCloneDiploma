@@ -13,6 +13,7 @@ namespace FrontEnd.Controllers
             _logger = logger;
         }
 
+        [Route("Product/ProductPage/{id}")]
         public IActionResult Index()
         {
             // You can pass any default data or simply return the view
