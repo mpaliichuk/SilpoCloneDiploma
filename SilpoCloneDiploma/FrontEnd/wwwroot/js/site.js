@@ -4,6 +4,7 @@
     var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
     var dropdownItems = document.getElementsByClassName('dropdown-item');
     var panel = document.getElementById('categoryPanel');
+    var basket = document.getElementById('basketDiv');
 
     dropdownToggle.addEventListener('click', function (event) {
         event.preventDefault();
@@ -85,6 +86,10 @@
             panel.innerHTML = 'Категорія не знайдена';
         }
     }
+
+    basket.addEventListener('click', function () {
+        window.location = '/ShoppingCart/Index';
+    });
 });
 
 //LoginRegister popUp
@@ -143,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
         loginPopup.style.top = `${120 + scrollY}px`;
     });
 
-    overlay.addEventListener('click', () => {
+    overlay.addEventListener('click', function () {
         panel.innerHTML = '';
         overlay.style.display = 'none';
         if (loginPopup.style.display != "flex") {

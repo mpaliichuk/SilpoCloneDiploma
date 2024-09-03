@@ -444,7 +444,6 @@
 
     cursor: pointer;
     transition: background-color 0.3s;
-    transition: width 1s;
 }
 
 .selectedCertificate {
@@ -453,7 +452,6 @@
 }
 
 .selectedCertificate:hover {
-    width: 255px !important;
     color: #FFFFFF !important;
 } 
 
@@ -482,11 +480,11 @@
     line-height: 38px;
     text-align: center;
     color: #FF5722;
-    transition: width 3s;
+    transition: width 2s;
 }
 
 .addToCart:hover {
-    width: 600px;
+    width: 560px;
 }
 
 /*/////////////////////////////////////////////////////*/

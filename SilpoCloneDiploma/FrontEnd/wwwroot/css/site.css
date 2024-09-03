@@ -386,6 +386,7 @@ nav {
     background: #FF5722;
     border-radius: 30px;
     order: 2;
+    cursor:pointer;
 }
 
 #basketIcon {
