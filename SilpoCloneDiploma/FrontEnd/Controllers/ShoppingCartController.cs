@@ -13,9 +13,15 @@ namespace FrontEnd.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [Route("Goodmeal/User/ShoppingCart")]
+        public IActionResult ShoppingCart()
         {
-            // You can pass any default data or simply return the view
+            return View();
+        }
+
+        [Route("Goodmeal/User/Order")]
+        public IActionResult Order()
+        {
             return View();
         }
 

@@ -1,136 +1,102 @@
-﻿var userStorage = JSON.parse(localStorage.getItem("certificates"));
+﻿//Шляхи для оцелота: /api/Products/ProductsByDiscount, /api/Products, /api/Cart/AddCertificates
+
+/////////////////////           PageSettings             ///////////////////
+
+var userStorage = JSON.parse(localStorage.getItem("certificates"));
+var initialCartString = JSON.stringify({});
+
+/////////////////////////////////////////////////////////////////////////////
+
 if (!Array.isArray(userStorage)) {
     userStorage = [];
 }
-var initialCartString = JSON.stringify({});
 localStorage.setItem("certificates", initialCartString); 
 
-const categoryPanels = document.querySelectorAll('.panel');
-const accordionButtons = document.querySelectorAll('.accordionButton');
-const certificateButtons = document.querySelectorAll('.certificate');
-const shopDivs = document.querySelectorAll('.shopElement');
-const certificateBuy = document.querySelectorAll('.addToCart');
+/////////////////////           ProgramStart             ///////////////////
 
-accordionButtons.forEach(item => {
-    const img = item.querySelector('img');
-    item.addEventListener('click', function () {
-        var parentDiv = this.parentElement;
-        parentDiv.classList.toggle('active');
-        var text = parentDiv.nextElementSibling;
-        if (text.style.maxHeight) {
-            text.style.maxHeight = null;
-            img.src = '/icons/Plus.png';
-        } else {
-            text.style.maxHeight = text.scrollHeight + "px";
-            img.src = '/icons/Minus.png';
-        }
-          
-    });
-    item.addEventListener('mouseenter', function () {
-        if (!img.dataset.originalSrc) {
-            img.dataset.originalSrc = img.src;
-        }
-        img.src = img.src.replace(/icons\//, 'icons/Hover');
-    });
-    item.addEventListener('mouseleave', function () {
-        var parentDiv = this.parentElement;
-        if (parentDiv.classList.contains('active')) {
-            img.src = '/icons/Minus.png';
-        } else {
-            img.src = img.dataset.originalSrc;
-        }
-    });
-});
+GetProducts();
 
-shopDivs.forEach(item => {
-    const img = item.querySelector('img');
-    item.addEventListener('mouseenter', function () {
-        if (!img.dataset.originalSrc) {
-            img.dataset.originalSrc = img.src;
-        }
-        img.src = img.src.replace(/icons\//, 'icons/Hover');
-    });
-    item.addEventListener('mouseleave', function () {
-        img.src = '/icons/CarrotPointer.png';
-    });
-});
+/////////////////////              DB_WORK              ////////////////////
 
-categoryPanels.forEach(panel => {
-    panel.addEventListener('click', function () {
-        var categoryId = 0; //З бази 
-        window.location = "/Home/Category/" + categoryId;
-    });
+async function GetProducts() {
+    var productsByDiscount = [];
 
-    panel.addEventListener('mouseenter', function () {
-        const img = panel.querySelector('img');
-        if (img) {
-            if (!img.dataset.originalSrc) {
-                img.dataset.originalSrc = img.src;
+    /*try {
+        const response = await fetch("/api/Products/ProductsByDiscount", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
             }
-            img.src = img.src.replace(/icons\//, 'icons/Hover');
-        }
-    });
-
-    panel.addEventListener('mouseleave', function () {
-        const img = panel.querySelector('img');
-        if (img && img.dataset.originalSrc) {
-            img.src = img.dataset.originalSrc;
-        }
-    });
-});
-
-certificateButtons.forEach(certificate => {
-    certificate.addEventListener('click', function (event) {
-        event.target.classList.toggle('selectedCertificate');
-        var items = JSON.parse(localStorage.getItem('certificates'));
-        if (event.target.classList.contains('selectedCertificate')){
-            if (!Array.isArray(items)) {
-                items = [];
-            }
-            /*items.push({ productId: productId, userId: userId });*/
-            items.push({ productId: event.target.id, userId: 0 });
-            localStorage.setItem('certificates', JSON.stringify(items));
-            alert('Сертифікат на суму ' + event.target.id + 'грн було збережено (´ ω `♡)');
-        }
-        else {
-            /*items.push({ productId: productId, userId: userId });*/
-            items = items.filter(element => element.productId !== event.target.id);
-            localStorage.setItem('certificates', JSON.stringify(items));
-            alert('Сертифікат на суму ' + event.target.id + 'грн було видалено зі збережених (>_<)');
-        }
-    });
-});
-
-certificateBuy.forEach(item => {
-    item.addEventListener('click', async function (event) {
-        let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
-        let message = '';
-
-        certificates.forEach(certificate => {
-            message += `Сертифікат на суму ${certificate.productId} грн було додано в кошик (*^ω^) \n`;
         });
-        if (message) {
-            alert(message);
+        if (response.ok) {
+            const productsByDiscount = await response.json();
+            productsByDiscount.forEach(product => {
+                const productCard = createProductCard(product);
+                document.getElementById('subProductsDiv').appendChild(productCard);
+            });
         }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }*/
 
-        await certificateButtons.forEach(certificateButton => {
-            certificateButton.classList.remove('selectedCertificate');
+    for (var i = 0; i < 18; i++) {
+        const productCard = createProductCard({
+            productIconSrc: 'icons/ProductIcon.png',
+            productName: 'Сьомга Norven',
+            productFullName: 'Сьомга Norven слабосолена в/у, 120г',
+            currentPrice: '256',
+            oldPrice: '315',
+            productId: '123'
         });
-        certificates = [];
-        localStorage.setItem('certificates', JSON.stringify(certificates));
-        alert("Сертифікати додано в кошик!");
-    });
-});
+        document.getElementById('subProductsDiv').appendChild(productCard);
 
-function createProductCard({
-    discountIconSrc = 'icons/Discount.png',
-    productIconSrc = 'icons/ProductIcon.png',
-    productName = 'Название продукта',
-    productFullName = 'Полное название продукта',
-    currentPrice = '0 грн',
-    oldPrice = '0 грн',
-    productId = ''
-}) {
+    }
+}
+async function AddProductInCart(productId, productCount, userId) {
+    try {
+        const response = await fetch("/api/Products", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                productId: productId,
+                productCount: productCount,
+                userId: userId
+            })
+        });
+        if (response.ok) {
+            alert("Товар додано в кошик!");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+async function addCertificatesToCart(certificates) {
+    try {
+        const response = await fetch('/api/Cart/AddCertificates', {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(certificates)
+        });
+        if (response.ok) {
+            alert("Сертифікати додано в кошик!");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+function createProductCard({ productIconSrc, productName, productFullName,
+    currentPrice, oldPrice, productId, discountIconSrc = 'icons/Discount.png' })
+{
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
     cardDiv.className = 'cardDiv';
@@ -229,30 +195,69 @@ function createProductCard({
     return cardDiv;
 }
 
-for (var i = 0; i < 18; i++) {
-    const productCard = createProductCard({
-        discountIconSrc: 'icons/Discount.png',
-        productIconSrc: 'icons/ProductIcon.png',
-        productName: 'Сьомга Norven',
-        productFullName: 'Сьомга Norven слабосолена в/у, 120г',
-        currentPrice: '256',
-        oldPrice: '315',
-        productId: '123'
-    });
-    document.getElementById('subProductsDiv').appendChild(productCard);
-        
-}
+/////////////////////              CONTROLS              ////////////////////
 
+const categoryPanels = document.querySelectorAll('.panel');
+const accordionButtons = document.querySelectorAll('.accordionButton');
+const certificateButtons = document.querySelectorAll('.certificate');
+const shopDivs = document.querySelectorAll('.shopElement');
+const certificateBuy = document.querySelectorAll('.addToCart');
 const cardDivs = document.querySelectorAll('.cardDiv');
 const productCountDivs = document.querySelectorAll('.productCountDiv');
 const productBuyBtns = document.querySelectorAll('.productBuyBtn');
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+categoryPanels.forEach(panel => {
+    panel.addEventListener('click', function (event) {
+        var categoryName = event.currentTarget.id;
+        window.location = "/Goodmeal/Category/" + categoryName;
+    });
+
+    panel.addEventListener('mouseenter', function () {
+        const img = panel.querySelector('img');
+        if (img) {
+            if (!img.dataset.originalSrc) {
+                img.dataset.originalSrc = img.src;
+            }
+            img.src = img.src.replace(/icons\//, 'icons/Hover');
+        }
+    });
+
+    panel.addEventListener('mouseleave', function () {
+        const img = panel.querySelector('img');
+        if (img && img.dataset.originalSrc) {
+            img.src = img.dataset.originalSrc;
+        }
+    });
+});
+
+productBuyBtns.forEach(item => {
+    item.addEventListener('click', function (event) {
+        event.stopPropagation();
+        const cardDiv = item.closest('.cardDiv');
+        const count = cardDiv.querySelector('.productCount');
+        if (count) {
+            let currentCount = parseInt(count.innerHTML);
+            if (currentCount > 0) {
+                //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
+                alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
+                count.innerHTML = '0';
+            }
+            else {
+                alert("Спершу виберіть кількість товар (`U_U`)!");
+            }
+        }
+    });
+});
 
 cardDivs.forEach(item => {
     item.addEventListener('click', function (event) {
         const productControlDiv = item.querySelector('.productControlDiv');
         if (productControlDiv && !productControlDiv.contains(event.target)) {
             var productId = 0; //З базы 
-            window.location = "/Product/ProductPage/" + productId;
+            window.location = "/Goodmeal/ProductPage/" + productId;
         }
     });
     item.addEventListener('mouseenter', function () {
@@ -274,6 +279,53 @@ cardDivs.forEach(item => {
     });
 })
 
+certificateButtons.forEach(certificate => {
+    certificate.addEventListener('click', function (event) {
+        event.target.classList.toggle('selectedCertificate');
+        var items = JSON.parse(localStorage.getItem('certificates'));
+        if (event.target.classList.contains('selectedCertificate')){
+            if (!Array.isArray(items)) {
+                items = [];
+            }
+            /*items.push({ productId: productId, productCount: 1, userId: userId });*/
+            items.push({ productId: event.target.id, productCount: 1, userId: 0 });
+            localStorage.setItem('certificates', JSON.stringify(items));
+            alert('Сертифікат на суму ' + event.target.id + 'грн було збережено (´ ω `♡)');
+        }
+        else {
+            items = items.filter(element => element.productId !== event.target.id);
+            localStorage.setItem('certificates', JSON.stringify(items));
+            alert('Сертифікат на суму ' + event.target.id + 'грн було видалено зі збережених (>_<)');
+        }
+    });
+});
+
+certificateBuy.forEach(item => {
+    item.addEventListener('click', async function (event) {
+        let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
+        let message = '';
+        if (certificates.length > 0) {
+            certificates.forEach(certificate => {
+                message += `Сертифікат на суму ${certificate.productId} грн ${certificate.userId} було додано в кошик (*^ω^) \n`;
+            });
+            if (message) {
+                alert(message);
+            }
+
+            //addCertificatesToCart(certificates);
+            await certificateButtons.forEach(certificateButton => {
+                certificateButton.classList.remove('selectedCertificate');
+            });
+            certificates = [];
+            localStorage.setItem('certificates', JSON.stringify(certificates));
+        }
+        else {
+            alert("Спершу виберіть сертифікати для покупки (*μ_μ)!");
+        }
+    });
+});
+
+
 productCountDivs.forEach(item => {
     const minus = item.getElementsByClassName('minus')[0];
     const plus = item.getElementsByClassName('plus')[0];
@@ -293,22 +345,46 @@ productCountDivs.forEach(item => {
     });
 });
 
-productBuyBtns.forEach(item => {
-    item.addEventListener('click', function (event) {
-        event.stopPropagation();
-        const cardDiv = item.closest('.cardDiv');
-        const count = cardDiv.querySelector('.productCount');
-        if (count) {
-            let currentCount = parseInt(count.innerHTML);
-            if (currentCount > 0) {
-                if (currentCount > 0) {
-                    count.innerHTML = '0';
-                }
-                alert("Товар додано в кошик!");
-            }
-            else {
-                alert("Спершу виберіть кількість товар (`U_U`)!");
-            }
+accordionButtons.forEach(item => {
+    const img = item.querySelector('img');
+    item.addEventListener('click', function () {
+        var parentDiv = this.parentElement;
+        parentDiv.classList.toggle('active');
+        var text = parentDiv.nextElementSibling;
+        if (text.style.maxHeight) {
+            text.style.maxHeight = null;
+            img.src = '/icons/Plus.png';
+        } else {
+            text.style.maxHeight = text.scrollHeight + "px";
+            img.src = '/icons/Minus.png';
         }
+
+    });
+    item.addEventListener('mouseenter', function () {
+        if (!img.dataset.originalSrc) {
+            img.dataset.originalSrc = img.src;
+        }
+        img.src = img.src.replace(/icons\//, 'icons/Hover');
+    });
+    item.addEventListener('mouseleave', function () {
+        var parentDiv = this.parentElement;
+        if (parentDiv.classList.contains('active')) {
+            img.src = '/icons/Minus.png';
+        } else {
+            img.src = img.dataset.originalSrc;
+        }
+    });
+});
+
+shopDivs.forEach(item => {
+    const img = item.querySelector('img');
+    item.addEventListener('mouseenter', function () {
+        if (!img.dataset.originalSrc) {
+            img.dataset.originalSrc = img.src;
+        }
+        img.src = img.src.replace(/icons\//, 'icons/Hover');
+    });
+    item.addEventListener('mouseleave', function () {
+        img.src = '/icons/CarrotPointer.png';
     });
 });

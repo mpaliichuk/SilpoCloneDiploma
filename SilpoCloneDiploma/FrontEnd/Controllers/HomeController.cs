@@ -12,8 +12,19 @@ namespace FrontEnd.Controllers
         {
             _logger = logger;
         }
+        public IActionResult Goodmeal()
+        {
+            return View();
+        }
 
-        public IActionResult Index()
+        [Route("Goodmeal/ProductPage/{id}")]
+        public IActionResult ProductPage()
+        {
+            return View();
+        }
+
+        [Route("Goodmeal/Category/{id}")]
+        public IActionResult CategoryPage()
         {
             return View();
         }

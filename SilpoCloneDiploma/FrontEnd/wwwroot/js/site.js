@@ -88,7 +88,7 @@
     }
 
     basket.addEventListener('click', function () {
-        window.location = '/ShoppingCart/Index';
+        window.location = '/Goodmeal/User/ShoppingCart';
     });
 });
 
