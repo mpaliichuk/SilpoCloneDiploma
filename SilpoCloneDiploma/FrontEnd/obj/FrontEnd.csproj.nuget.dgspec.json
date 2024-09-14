@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\FrontEnd.csproj": {}
+    "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/FrontEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\FrontEnd.csproj": {
+    "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/FrontEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\FrontEnd.csproj",
+        "projectUniqueName": "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/FrontEnd.csproj",
         "projectName": "FrontEnd",
-        "projectPath": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\FrontEnd.csproj",
-        "packagesPath": "C:\\Users\\SlipariK\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SlipariK\\source\\repos\\mpaliichuk\\SilpoCloneDiploma\\SilpoCloneDiploma\\FrontEnd\\obj\\",
+        "projectPath": "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/FrontEnd.csproj",
+        "packagesPath": "/Users/mpaliichuk/.nuget/packages/",
+        "outputPath": "/Users/mpaliichuk/Projects/SilpoCloneDiploma_/SilpoCloneDiploma/SilpoCloneDiploma/FrontEnd/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\SlipariK\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/mpaliichuk/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -58,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
