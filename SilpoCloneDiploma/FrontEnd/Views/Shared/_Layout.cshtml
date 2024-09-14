@@ -188,6 +188,19 @@
         text-align: center;
     }
 
+    .register-buttonLogin {
+        padding: 12px 48px;
+        border-radius: 30px;
+        border: 1px solid white;
+        color: white;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 600;
+        background: transparent;
+        cursor: pointer;
+        text-align: center;
+    }
+
     .decorative-shape-left,
     .decorative-shape-right {
         position: absolute;
@@ -213,6 +226,164 @@
         transform-origin: 0 0;
         border-color: #FFFEFE;
     }
+
+    /* Register Popup Styles */
+    .register-popup-container {
+        display: flex;
+        width: 1216px;
+        height: 624px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #FFFEFE;
+        border-radius: 36px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+    }
+
+    .register-left,
+    .register-right {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register-left {
+        width: 474px;
+        background: #4CAF50;
+        color: white;
+        border-top-left-radius: 36px;
+        border-bottom-left-radius: 36px;
+        border: 3px solid #4CAF50;
+        position: relative;
+        padding: 197px 68px;
+        box-sizing: border-box;
+        flex: 1;
+    }
+
+    .register-right {
+        width: 742px;
+        background: #FFFEFE;
+        color: #4CAF50;
+        border-top-right-radius: 36px;
+        border-bottom-right-radius: 36px;
+        border: 3px solid #4CAF50;
+        position: relative;
+        padding: 103px 171px;
+        box-sizing: border-box;
+        flex: 1;
+    }
+
+    .register-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .register-title {
+        color: #4CAF50;
+        font-size: 40px;
+        font-family: Noto Sans;
+        font-weight: 500;
+    }
+
+    .register-titleWelcome {
+        color: #FFFEFE;
+        font-size: 40px;
+        font-family: Noto Sans;
+        font-weight: 500;
+    }
+
+    .social-login {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-bottom: 24px;
+    }
+
+    .social-icon {
+        width: 43px;
+        height: 44px;
+        border-radius: 30px;
+        border: 1px solid #4CAF50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register-info {
+        color: #4CAF50;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 400;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .register-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        margin-bottom: 24px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .form-group label {
+        color: #757575;
+        font-size: 14px;
+        font-family: Noto Sans;
+        font-weight: 500;
+    }
+
+    .form-group input {
+        height: 43px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 1px solid #4CAF50;
+        background: #FFFEFE;
+        width: calc(100% - 40px);
+    }
+
+    .form-groupRegister input {
+        height: 43px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 1px solid #4CAF50;
+        background: #FFFEFE;
+        width: calc(100% - 5px);
+    }
+
+    .register-button {
+        padding: 12px 48px;
+        border-radius: 30px;
+        border: 1px solid #4CAF50;
+        color: #4CAF50;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 600;
+        background: transparent;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    @*.decorative-shape-left,.decorative-shape-right{position:absolute;border:3pxsolid;}.decorative-shape-left{width:201.84px;height:398.63px;left:0;top:50%;transform:rotate(155.17deg);transform-origin:00;border-color:#4CAF50;}.decorative-shape-right{width:179px;height:360px;right:0;top:50%;transform:rotate(169.60deg);transform-origin:00;border-color:#FFFEFE;}*@
 </style>
 
 <body>
@@ -304,61 +475,57 @@
                     <div class="greeting-info">
                         Якщо у вас немає аккауну ви можете <br>зареєструватись натиснувши на кнопку<br>“Зареєструватись”
                     </div>
-                    <button class="register-button">Зареєструватись</button>
+                    <button id="showRegister" class="register-buttonLogin">Зареєструватись</button>
                 </div>
                 <!-- <img class="decorative-shape-right" src="~/icons/loginRightVector.png" alt="Decorative Shape Right"> -->
             </div>
         </div>
         <!-- Register Popup -->
-        <div id="registerPopup" class="popup-container" style="display: none;">
-            <div class="popup-left">
-                <div class="left-content">
-                    <div class="left-header">
-                        <div class="header-title">З Поверненням!</div>
-                        <div class="header-info">
+        <div id="registerPopup" class="register-popup-container" style="display: none;">
+            <div class="register-left">
+                <div class="register-content">
+                    <div class="register-header">
+                        <div class="register-titleWelcome">З Поверненням!</div>
+                        <div class="register-infoWelcome">
                             Якщо у вас вже є аккаунт ви можете<br>увійти натиснувши на кнопку “Увійти”
                         </div>
-                        <button class="login-button">Увійти</button>
+                        <button class="register-buttonLogin">Увійти</button>
                     </div>
                 </div>
             </div>
-            <div class="popup-right">
-                <div class="right-content">
-                    <div class="right-header">
-                        <div class="header-title">Реєстрація</div>
+            <div class="register-right">
+                <div class="register-content">
+                    <div class="register-header">
+                        <div class="register-title">Реєстрація</div>
                         <div class="social-login">
-                            <div class="social-icon facebook"></div>
-                            <div class="social-icon google">
-                                <div class="icon-group">
-                                    <div class="icon-white"></div>
-                                    <div class="icon-green"></div>
-                                </div>
+                            <div class="social-icon facebook">
+                                <img src="~/icons/facebookIcon.png" alt="Facebook">
                             </div>
-                            <div class="social-icon apple"></div>
+                            <div class="social-icon google">
+                                <img src="~/icons/googleIcon.png" alt="Google">
+                            </div>
+                            <div class="social-icon apple">
+                                <img src="~/icons/appleIcon.png" alt="Apple">
+                            </div>
                         </div>
                         <div class="register-info">або використовуйте ваш емейл для рєстрації</div>
                     </div>
                     <div class="register-form">
-                        <div class="form-input">
-                            <label for="registerName">Імʼя</label>
-                            <input type="text" id="registerName">
+                        <div class="form-groupRegister">
+                            <input type="text" id="registerName" placeholder="Імʼя">
                         </div>
-                        <div class="form-input">
-                            <label for="registerEmail">Емейл</label>
-                            <input type="email" id="registerEmail">
+                        <div class="form-groupRegister">
+                            <input type="email" id="registerEmail" placeholder="Емейл">
                         </div>
-                        <div class="form-input">
-                            <label for="registerPassword">Пароль</label>
-                            <input type="password" id="registerPassword">
+                        <div class="form-groupRegister">
+                            <input type="password" id="registerPassword" placeholder="Пароль">
                         </div>
                         <button class="register-button">Зареєструватись</button>
                     </div>
                 </div>
-                <div class="decorative-shape decorative-shape-left"></div>
+                @* <div class="decorative-shape decorative-shape-left"></div> *@
             </div>
         </div>
-
-
     </header>
     <div class="container">
         <main role="main" class="pb-3">
