@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const closePopupButton = document.getElementById("closePopup");
     const showRegisterLink = document.getElementById("showRegister");
     const showLoginLink = document.getElementById("showLogin");
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginPopup");
+    const registerForm = document.getElementById("registerPopup");
     var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
     var panel = document.getElementById('categoryPanel');
 
