@@ -408,14 +408,13 @@ nav {
 
 /*//////////////////////////////////FOOTER////////////////////////////////*/
 
-footer {
-    top: 100%;
+.footer {
+    margin-top: 3%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
-    position: absolute;
-    width: 1440px;
+    width: 100%;
     height: 559px;
     left: 0px;
     bottom: 0px;

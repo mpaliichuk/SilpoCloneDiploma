@@ -115,37 +115,32 @@ document.addEventListener("DOMContentLoaded", function() {
         overlay.style.display = 'block';
     });
 
-    closePopupButton.addEventListener("click", function() {
-        console.log("Close button clicked");
-        loginPopup.style.display = "none";
-        overlay.style.display = 'none';
-        overlay.style.zIndex = 9990;
-    });
+    //closePopupButton.addEventListener("click", function() {
+    //    console.log("Close button clicked");
+    //    loginPopup.style.display = "none";
+    //    overlay.style.display = 'none';
+    //    overlay.style.zIndex = 9990;
+    //});
 
-    showRegisterLink.addEventListener("click", function(event) {
-        event.preventDefault();
-        console.log("Show Register link clicked");
-        loginForm.style.display = "none";
-        registerForm.style.display = "flex";
-    });
+    //showRegisterLink.addEventListener("click", function(event) {
+    //    event.preventDefault();
+    //    console.log("Show Register link clicked");
+    //    loginForm.style.display = "none";
+    //    registerForm.style.display = "flex";
+    //});
 
-    showLoginLink.addEventListener("click", function(event) {
-        event.preventDefault();
-        console.log("Show Login link clicked");
-        registerForm.style.display = "none";
-        loginForm.style.display = "flex";
-    });
+    //showLoginLink.addEventListener("click", function(event) {
+    //    event.preventDefault();
+    //    console.log("Show Login link clicked");
+    //    registerForm.style.display = "none";
+    //    loginForm.style.display = "flex";
+    //});
 
     window.addEventListener("click", function(event) {
         if (event.target === loginPopup) {
             console.log("Clicked outside the popup");
             loginPopup.style.display = "none";
         }
-    });
-
-    window.addEventListener("scroll", function() {
-        const scrollY = window.scrollY;
-        loginPopup.style.top = `${120 + scrollY}px`;
     });
 
     overlay.addEventListener('click', function () {

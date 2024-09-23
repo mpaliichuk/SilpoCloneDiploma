@@ -1,0 +1,470 @@
+﻿.full-width-orange {
+    width: 100.1%;
+    height: 664px;
+    background: #FF5722;
+    padding: 20px;
+    border-radius: 18px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 3%;
+    margin-top: 1.5%;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+    height: 25px;
+}
+
+.breadcrumbLink {
+    text-decoration: none;
+    color: inherit;
+
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #757575;
+}
+
+.breadcrumbLink:hover {
+    color: #4d4d4d;
+}
+
+.breadcrumbArrow {
+    width: 18px;
+    height: 18px;
+}
+
+.content-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.photos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
+}
+
+.photo {
+    background: #FFFFFF;
+    border-radius: 10%;
+}
+
+.photo.large {
+    width: 350px;
+    height: 350px;
+    margin-bottom: 10px;
+    padding: 5%;
+}
+
+.photo.small {
+    width: 110px;
+    height: 110px;
+    padding: 3%;
+}
+
+.small-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.content-info {
+    width: 50%;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.name {
+    color: white;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.description {
+    color: white;
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: left;
+    transition: opacity 0.3s;
+}
+
+.description-hidden {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.info-section {
+    color: white;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.info-section-title {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F57C00;
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.info-section-title::after {
+    content: "▼";
+    font-size: 16px;
+    transition: transform 0.3s;
+    padding-left: 450px;
+}
+
+.info-section-content {
+    display: none;
+    background: #FFAB40;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.info-section-content.active {
+    display: block;
+}
+
+.price {
+    color: white;
+    font-size: 72px;
+    font-weight: 500;
+}
+
+.add-to-cart {
+    background: #4E9B51;
+    border-radius: 15px;
+    border: 2px white solid;
+    padding: 8px 20px;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-selector button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1.88946px solid #FFFFFF;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 24px;
+    line-height: 36px;
+    box-sizing: border-box;
+}
+
+.quantity-selector .minus {
+    border-radius: 3.4955px;
+    padding: 0;
+    font-family: 'Noto Sans';
+}
+
+.quantity-selector .plus {
+    border-radius: 4px;
+    padding: 5.82583px;
+}
+
+.quantity-selector .quantity {
+    width: 26px;
+    height: 60px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 44.4px;
+    line-height: 60px;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.quantity-cart-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-cart-row .add-to-cart {
+    margin-left: 20px;
+}
+
+
+/*///////////////////////////////////              CARD               ////////////////////////////////////*/
+
+#mainProductsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+    width: 100%;
+    height: 459px;
+    margin-top: 4%;
+}
+
+#subProductsDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px;
+    gap: 37.5px;
+    width: 100%;
+    height: auto;
+    padding-left: 4%;
+}
+
+#mainProductsTagText {
+    width: 100%;
+    height: 54px;
+    text-align:center;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 54px;
+    text-align: center;
+    color: #1E1E1E;
+}
+
+.cardDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 8px;
+    isolation: isolate;
+    width: 202px;
+    height: 301px;
+    background: #FFFFFF;
+    border: 3px solid #53B06C;
+    border-radius: 20px;
+    font-family: 'Noto Sans';
+}
+
+.productIconDiv {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 162px;
+    height: 100px;
+}
+
+.productIcon {
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 80px/2);
+    top: calc(50% - 80px/2);
+}
+
+.productInfoDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+    width: 162px;
+    height: 153px;
+}
+
+.productNameDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 5px;
+    width: 162px;
+    height: 62px;
+}
+
+.productName {
+    width: 162px;
+    height: 25px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.productFullName {
+    width: 162px;
+    height: 32px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    color: #1E1E1E;
+}
+
+.priceDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 13px;
+    width: 127px;
+    height: 25px;
+}
+
+.subPriceDiv {
+    display: flex;
+    flex-direction: row;
+    width: 66px;
+    height: 25px;
+    gap: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.crossTextDiv {
+    display: flex;
+    flex-direction: row;
+    width: 100px;
+    height: 20px;
+    gap: 5px;
+}
+
+.crossTextDiv span {
+    padding-top: 4px;
+    width: 80px;
+    height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    text-decoration-line: line-through;
+    color: #888888;
+}
+
+.productControlDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 50px;
+    width: 162px;
+    height: 34px;
+}
+
+.productCountDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 12px;
+    width: 74px;
+    height: 22px;
+}
+
+.productBuyBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4.6%;
+    gap: 10px;
+    width: 34px;
+    height: 34px;
+    background: #53B06C;
+    border-radius: 30px;
+    border: none;
+}
+
+.productCartIcon {
+    width: 19px;
+    height: 19px;
+}
+
+.productCountButton {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #DBDADA;
+    border-radius: 3px;
+}
+
+.productCount {
+    width: 10px;
+    height: 22px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #7A7A7A;
+}
+
+.discountIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.no-drag {
+    -webkit-user-drag: none;
+}
