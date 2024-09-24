@@ -20,18 +20,22 @@ async function GetProducts() {
         console.error('Error:', error);
         throw error;
     }*/
-
-    for (var i = 0; i < 6; i++) {
+    var isFirstBool = false;
+    for (var i = 0; i < 12; i++) {
+        if (i == 0) {
+            isFirstBool = true;
+        }
         const productCard = createProductCard({
             productIconSrc: '/icons/ProductIcon.png',
             productName: 'Сьомга Norven',
             productFullName: 'Сьомга Norven слабосолена в/у, 120г',
             currentPrice: '256',
             oldPrice: '315',
-            productId: '123'
+            productId: '123',
+            isFirst: isFirstBool
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
-
+        isFirstBool = false;
     }
 }
 
@@ -59,7 +63,7 @@ async function AddProductInCart(productId, productCount, userId) {
 }
 
 function createProductCard({ productIconSrc, productName, productFullName,
-    currentPrice, oldPrice, productId, discountIconSrc = '/icons/Discount.png' }) {
+    currentPrice, oldPrice, productId, isFirst, discountIconSrc = '/icons/Discount.png' }) {
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
     cardDiv.className = 'cardDiv';
@@ -155,7 +159,16 @@ function createProductCard({ productIconSrc, productName, productFullName,
     cardDiv.appendChild(productIconDiv);
     cardDiv.appendChild(productInfoDiv);
 
-    return cardDiv;
+    const carouselCardDiv = document.createElement('div');
+    if (isFirst) {
+        carouselCardDiv.className = 'carousel-item active';
+    }
+    else {
+        carouselCardDiv.className = 'carousel-item';
+    }
+    carouselCardDiv.appendChild(cardDiv);
+
+    return carouselCardDiv;
 }
 
 
@@ -227,7 +240,6 @@ productCountDivs.forEach(item => {
         count.innerHTML = `${currentCount + 1}`;
     });
 });
-
 function toggleDropdown() {
     var content = document.querySelector('.info-section-content');
     var description = document.querySelector('.description');
@@ -235,3 +247,46 @@ function toggleDropdown() {
     content.classList.toggle('active');
     description.classList.toggle('description-hidden');
 }
+
+
+const multipleItemCarousel = document.querySelector('#productsCarousel');
+
+if (window.innerWidth >= 576) {
+    var carouselInner = document.querySelector('.carousel-inner');
+    var carouselWidth = carouselInner.scrollWidth;
+    var cardWidth = document.querySelector('.carousel-item').offsetWidth;
+
+    var scrollPosition = 0;
+
+    document.querySelector('.carouselControlNext').addEventListener('click', function () {
+        if (scrollPosition < (carouselWidth - (cardWidth * 6))) {
+            scrollPosition += (carouselWidth * 0.065) + (cardWidth * 6) + 18;
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+
+    document.querySelector('.carouselControlPrev').addEventListener('click', function () {
+        if (scrollPosition > 0) {
+            scrollPosition -= (carouselWidth * 0.065) + (cardWidth * 6) + 18;
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+} else {
+    multipleItemCarousel.classList.add('slide');
+}
+
+window.addEventListener('resize', function () {
+    if (window.innerWidth >= 576) {
+        multipleItemCarousel.classList.remove('slide');
+    } else {
+        multipleItemCarousel.classList.add('slide');
+    }
+});
+
+
