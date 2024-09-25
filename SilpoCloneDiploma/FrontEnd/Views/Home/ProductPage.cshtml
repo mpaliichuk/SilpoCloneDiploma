@@ -14,49 +14,72 @@
         <a class="breadcrumbLink" href="#">Папайя</a>
     </div>
     <div class="full-width-orange">
-        <div class="content-inner">
-            <div class="photos">
-                <div class="photo large">
+        <div class="photosDiv">
+            <div class="photo large">
+                <img src="/icons/papaya.png" />
+            </div>
+            <div class="small-row">
+                <div class="photo small">
                     <img src="/icons/papaya.png" />
                 </div>
-                <div class="small-row">
-                    <div class="photo small">
-                        <img src="/icons/papaya.png" />
-                    </div>
-                    <div class="photo small">
-                        <img src="/icons/papaya.png" />
-                    </div>
-                    <div class="photo small">
-                        <img src="/icons/papaya.png" />
-                    </div>
+                <div class="photo small">
+                    <img src="/icons/papaya.png" />
+                </div>
+                <div class="photo small">
+                    <img src="/icons/papaya.png" />
                 </div>
             </div>
+        </div>
 
-            <div class="content-info">
+        <div class="content-info">
+            <div class="subInfoDiv">
                 <div class="name">Папайя 100г</div>
-                <div class="description description-visible">
-                    <h3>Опис</h3>
-                    Має тверду шкірку і жовто-зелений колір. Плід м’який, з легким солодкуватим смаком та ароматом дині.
-                    Рекомендуємо їсти свіжою, разом з лаймом.
+                <div class="rating"><img class="no-select no-drag" src="/icons/RatingStar.png" />4.90 <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
+                <div class="accordion">
+                    <div class="descriptionTitleDiv no-select no-drag" onclick="toggleDropdownDescription()">
+                        <span>Опис</span>
+                        <img class="ArrowHorisontalImg no-drag rotated" src="/icons/ArrowHorisontal.png" />
+                    </div>
+                    <div class="description active">
+                        <span id="descriptionInfo">
+                            Має тверду шкірку і жовто-зелений колір. Плід м’який, з легким солодкуватим смаком та ароматом дині.
+                            Рекомендуємо їсти свіжою, разом з лаймом.
+                        </span>
+                    </div>
                 </div>
-                <div class="info-section">
-                    <div class="info-section-title" onclick="toggleDropdown()">Загальна інформація </div>
+                <div class="accordion">
+                    <div class="infoTitleDiv no-select no-drag" onclick="toggleDropdown()">
+                        <span>Загальна інформація</span>
+                        <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontal.png" />
+                    </div>
                     <div class="info-section-content">
-                        <p><span>Країна:</span> <span>Іспанія</span></p>
-                        <p><span>Торгова марка:</span> <span>Без ТМ</span></p>
-                        <p><span>Кількість одиниць:</span> <span>1</span></p>
+                        <div class="attributeDivs">
+                            <div class="attribute">
+                                <span>Країна:</span>
+                                <span>Іспанія</span>
+                            </div>
+                            <div class="attribute">
+                                <span>Торгова марка:</span>
+                                <span>Без ТМ</span>
+                            </div>
+                            <div class="attribute">
+                                <span>Кількість одиниць:</span>
+                                <span>1</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="price">18.90 грн</div>
-                <div class="quantity-cart-row">
-                    <div class="quantity-selector">
-                        <button class="plus">+</button>
-                        <div class="quantity">1</div>
-                        <button class="minus">-</button>
+                <div class="subControllDiv">
+                    <div class="price">18.90 грн</div>
+                    <div class="quantity-cart-row">
+                        <div class="quantity-selector">
+                            <button class="plus">+</button>
+                            <div class="quantity">1</div>
+                            <button class="minus">-</button>
+                        </div>
+                        <div class="add-to-cart">Додати в кошик</div>
                     </div>
-                    <div class="add-to-cart">Додати в кошик</div>
-                </div>
+                </div> 
             </div>
         </div>
     </div>

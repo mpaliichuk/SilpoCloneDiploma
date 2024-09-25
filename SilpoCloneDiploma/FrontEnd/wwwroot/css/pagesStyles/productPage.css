@@ -1,18 +1,4 @@
-﻿.full-width-orange {
-    width: 100.1%;
-    height: 664px;
-    background: #FF5722;
-    padding: 20px;
-    border-radius: 18px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    margin: 0;
-}
-
-.breadcrumb {
+﻿.breadcrumb {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -45,25 +31,46 @@
     height: 18px;
 }
 
-.content-inner {
-    max-width: 1440px;
-    margin: 0 auto;
+.full-width-orange {
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
-    width: 100%;
+    padding: 100px 15% 50px 15%;
+    gap: 90px;
+    width: 100vw;
+    height: auto;
+    background: #FF5722;
+    border-radius: 36px;
+    min-height: 750px;
 }
 
-.photos {
+@media (max-width: 1500px) {
+    .full-width-orange {
+        padding: 92px 5%;
+        gap:40px;
+    }
+}
+
+@media (max-width: 940px) {
+    .full-width-orange {
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+}
+
+.photosDiv {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 50%;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+    isolation: isolate;
+    width: auto;
+    height: 480px;
 }
 
 .photo {
     background: #FFFFFF;
-    border-radius: 10%;
 }
 
 .photo.large {
@@ -71,12 +78,14 @@
     height: 350px;
     margin-bottom: 10px;
     padding: 5%;
+    border-radius: 10%;
 }
 
 .photo.small {
     width: 110px;
     height: 110px;
     padding: 3%;
+    border-radius: 20%;
 }
 
 .small-row {
@@ -94,71 +103,187 @@
 }
 
 .content-info {
-    width: 50%;
-    padding-left: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding: 0px;
     gap: 15px;
+    width: 100%;
+    height: 100%;
 }
 
 .name {
-    color: white;
-    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 5px;
+    width: 100%;
+    height: auto;
+
+    font-style: normal;
     font-weight: 600;
+    font-size: 48px;
+    line-height: 65px;
+    color: #FFFFFF;
+
+}
+
+.rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: auto;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #FFFFFF;
+    cursor:pointer;
+}
+
+.accordion{
+    width:100%;
+}
+
+.descriptionTitleDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 15px 20px 15px;
+    border-radius: 1em;
+    width: 100%;
+    height: 50px;
+    margin-left: -2%;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.descriptionTitleDiv:hover {
+    background: #E64A19;
 }
 
 .description {
-    color: white;
-    font-size: 18px;
-    line-height: 1.5;
-    text-align: left;
-    transition: opacity 0.3s;
+    max-height: 0;
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 0.2s ease-in-out;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #FFFFFF;
 }
 
-.description-hidden {
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
+.description.active {
+    max-height: 200px;
+    transition: max-height 0.3s ease-in-out;
+}
+
+#descriptionInfo {
+    display: flex;
+    padding: 2%;
+}
+
+.ArrowHorisontalImg {
+    transition: transform 0.2s ease-out;
+}
+
+.rotated {
+    transform: rotate(180deg);
+}
+
+.subInfoDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
+    width: 100%;
+    height: auto;
+}
+
+.subControllDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 30px;
+    width: 100%;
+    height: 231px;
 }
 
 .info-section {
-    color: white;
-    font-size: 16px;
-    line-height: 1.5;
-    text-align: left;
-}
-
-.info-section-title {
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-    cursor: pointer;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+
     align-items: center;
-    background: #F57C00;
-    padding: 10px;
-    border-radius: 15px;
-    margin-bottom: 10px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
 }
 
-.info-section-title::after {
-    content: "▼";
-    font-size: 16px;
-    transition: transform 0.3s;
-    padding-left: 450px;
+.infoTitleDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 15px 20px 15px;
+    border-radius: 1em;
+    width: 100%;
+    height: 50px;
+    margin-left: -2%;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.infoTitleDiv:hover {
+    background: #E64A19;
 }
 
 .info-section-content {
-    display: none;
-    background: #FFAB40;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 0px;
+
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #FFFFFF;
+    max-height: 0;
+    overflow: hidden;
+    width: 100%;
+    transition: max-height 0.2s ease-in-out;
 }
 
 .info-section-content.active {
-    display: block;
+    max-height: 200px;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.attributeDivs {
+    gap: 5px;
+    padding: 2%;
+}
+
+.attribute {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    gap: 5px;
 }
 
 .price {
@@ -205,7 +330,6 @@
 .quantity-selector .minus {
     border-radius: 3.4955px;
     padding: 0;
-    font-family: 'Noto Sans';
 }
 
 .quantity-selector .plus {
@@ -216,7 +340,6 @@
 .quantity-selector .quantity {
     width: 26px;
     height: 60px;
-    font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 500;
     font-size: 44.4px;

@@ -240,17 +240,54 @@ productCountDivs.forEach(item => {
         count.innerHTML = `${currentCount + 1}`;
     });
 });
-function toggleDropdown() {
-    var content = document.querySelector('.info-section-content');
-    var description = document.querySelector('.description');
 
-    content.classList.toggle('active');
-    description.classList.toggle('description-hidden');
+
+var info = document.querySelector('.info-section-content');
+var description = document.querySelector('.description');
+function switchAll(index) {
+    var accordion = null;
+    var image = null;
+    switch (index) {
+        case 0:
+            if (info.classList.contains('active')) {
+                accordion = info.closest('.accordion');
+                image = accordion.querySelector('.ArrowHorisontalImg');
+                info.classList.toggle('active');
+                image.classList.toggle('rotated');
+            }
+            accordion = description.closest('.accordion');
+            image = accordion.querySelector('.ArrowHorisontalImg');
+            description.classList.toggle('active');
+            image.classList.toggle('rotated');
+            break;
+        case 1:
+            if (description.classList.contains('active')) {
+                description.classList.toggle('active');
+                accordion = description.closest('.accordion');
+                image = accordion.querySelector('.ArrowHorisontalImg');
+                image.classList.toggle('rotated');
+            }
+            accordion = info.closest('.accordion');
+            image = accordion.querySelector('.ArrowHorisontalImg');
+            info.classList.toggle('active');
+            image.classList.toggle('rotated');
+            break;
+        default:
+            description.classList.toggle('active');
+            info.classList.toggle('active');
+    }
+}
+
+function toggleDropdownDescription() {
+    switchAll(0);
+}
+
+function toggleDropdown() {
+    switchAll(1);
 }
 
 
 const multipleItemCarousel = document.querySelector('#productsCarousel');
-
 if (window.innerWidth >= 576) {
     var carouselInner = document.querySelector('.carousel-inner');
     var carouselWidth = carouselInner.scrollWidth;
