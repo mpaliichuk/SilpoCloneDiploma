@@ -106,7 +106,7 @@ function createProductCard({ productIconSrc, productName, productFullName,
     productIconDiv.className = 'productIconDiv no-select';
 
     const discountIcon = document.createElement('img');
-    discountIcon.className = 'discountIcon';
+    discountIcon.className = 'discountIcon no-select no-drag';
     discountIcon.src = discountIconSrc;
 
     const productIcon = document.createElement('img');
@@ -155,9 +155,12 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     const plusButton = document.createElement('button');
     plusButton.className = 'productCountButton plus';
-    const plusIcon = document.createElement('img');
-    plusIcon.className = 'no-select no-drag';
-    plusIcon.src = 'icons/PlusMiniIcon.png';
+    //const plusIcon = document.createElement('img');
+    //plusIcon.className = 'no-select no-drag plusMiniIcon';
+    //plusIcon.src = 'icons/PlusMiniIcon.png';
+    const plusIcon = document.createElement('span');
+    plusIcon.className = 'no-select plusMiniIcon';
+    plusIcon.innerHTML = '+';
     plusButton.appendChild(plusIcon);
 
     const productCount = document.createElement('div');
@@ -166,9 +169,12 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     const minusButton = document.createElement('button');
     minusButton.className = 'productCountButton minus';
-    const minusIcon = document.createElement('img');
-    minusIcon.className = 'no-select no-drag';
-    minusIcon.src = 'icons/MinusMiniIcon.png';
+    //const minusIcon = document.createElement('img');
+    //minusIcon.className = 'no-select no-drag minusMiniIcon';
+    //minusIcon.src = 'icons/MinusMiniIcon.png';
+    const minusIcon = document.createElement('span');
+    minusIcon.className = 'no-select minusMiniIcon';
+    minusIcon.innerHTML = '-';
     minusButton.appendChild(minusIcon);
 
     productCountDiv.appendChild(minusButton);
@@ -178,7 +184,7 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const productBuyBtn = document.createElement('button');
     productBuyBtn.className = 'productBuyBtn';
     const cartIcon = document.createElement('img');
-    cartIcon.className = 'productCartIcon';
+    cartIcon.className = 'productCartIcon no-select no-drag';
     cartIcon.src = 'icons/Cart.png';
     productBuyBtn.appendChild(cartIcon);
 

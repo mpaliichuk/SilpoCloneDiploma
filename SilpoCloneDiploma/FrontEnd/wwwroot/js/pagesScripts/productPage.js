@@ -73,7 +73,7 @@ function createProductCard({ productIconSrc, productName, productFullName,
     productIconDiv.className = 'productIconDiv no-select';
 
     const discountIcon = document.createElement('img');
-    discountIcon.className = 'discountIcon';
+    discountIcon.className = 'discountIcon no-select no-drag';
     discountIcon.src = discountIconSrc;
 
     const productIcon = document.createElement('img');
@@ -122,9 +122,12 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     const plusButton = document.createElement('button');
     plusButton.className = 'productCountButton plus';
-    const plusIcon = document.createElement('img');
-    plusIcon.className = 'no-select no-drag';
-    plusIcon.src = '/icons/PlusMiniIcon.png';
+    //const plusIcon = document.createElement('img');
+    //plusIcon.className = 'no-select no-drag plusMiniIcon';
+    //plusIcon.src = 'icons/PlusMiniIcon.png';
+    const plusIcon = document.createElement('span');
+    plusIcon.className = 'no-select plusMiniIcon';
+    plusIcon.innerHTML = '+';
     plusButton.appendChild(plusIcon);
 
     const productCount = document.createElement('div');
@@ -133,9 +136,12 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     const minusButton = document.createElement('button');
     minusButton.className = 'productCountButton minus';
-    const minusIcon = document.createElement('img');
-    minusIcon.className = 'no-select no-drag';
-    minusIcon.src = '/icons/MinusMiniIcon.png';
+    //const minusIcon = document.createElement('img');
+    //minusIcon.className = 'no-select no-drag minusMiniIcon';
+    //minusIcon.src = 'icons/MinusMiniIcon.png';
+    const minusIcon = document.createElement('span');
+    minusIcon.className = 'no-select minusMiniIcon';
+    minusIcon.innerHTML = '-';
     minusButton.appendChild(minusIcon);
 
     productCountDiv.appendChild(minusButton);
@@ -145,7 +151,7 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const productBuyBtn = document.createElement('button');
     productBuyBtn.className = 'productBuyBtn';
     const cartIcon = document.createElement('img');
-    cartIcon.className = 'productCartIcon';
+    cartIcon.className = 'productCartIcon no-select no-drag';
     cartIcon.src = '/icons/Cart.png';
     productBuyBtn.appendChild(cartIcon);
 
@@ -175,6 +181,7 @@ function createProductCard({ productIconSrc, productName, productFullName,
 const cardDivs = document.querySelectorAll('.cardDiv');
 const productCountDivs = document.querySelectorAll('.productCountDiv');
 const productBuyBtns = document.querySelectorAll('.productBuyBtn');
+const addToCartBtn = document.getElementById('addToCart');
 
 productBuyBtns.forEach(item => {
     item.addEventListener('click', function (event) {
@@ -277,11 +284,9 @@ function switchAll(index) {
             info.classList.toggle('active');
     }
 }
-
 function toggleDropdownDescription() {
     switchAll(0);
 }
-
 function toggleDropdown() {
     switchAll(1);
 }
@@ -327,3 +332,42 @@ window.addEventListener('resize', function () {
 });
 
 
+const minus = document.getElementsByClassName('minusProduct')[0];
+const plus = document.getElementsByClassName('plusProduct')[0];
+const count = document.getElementsByClassName('quantity')[0];
+minus.addEventListener('click', function () {
+    let currentCount = parseInt(count.innerHTML);
+    if (currentCount > 0) {
+        count.innerHTML = `${currentCount - 1}`;
+    }
+});
+
+plus.addEventListener('click', function () {
+    let currentCount = parseInt(count.innerHTML);
+    count.innerHTML = `${currentCount + 1}`;
+});
+
+
+addToCartBtn.addEventListener('click', function () {
+    const cartControll = addToCartBtn.closest('.cartControllDiv');
+    const count = cartControll.querySelector('.quantity');
+    if (count) {
+        let currentCount = parseInt(count.innerHTML);
+        if (currentCount > 0) {
+            //AddProductInCart(cartControll.id, count.innerHTML, /*userId*/ 0);
+            alert(`${cartControll.id}, ${count.innerHTML}, ${0}`);
+            count.innerHTML = '0';
+        }
+        else {
+            alert("Спершу виберіть кількість товар (`U_U`)!");
+        }
+    }
+});
+
+addToCartBtn.addEventListener('mouseenter', function () {
+    addToCartBtn.style.background = '#FF5722';
+});
+
+addToCartBtn.addEventListener('mouseleave', function () {
+    addToCartBtn.style.background = '#4CAF50';
+});

@@ -14,7 +14,9 @@
         <a class="breadcrumbLink" href="#">Папайя</a>
     </div>
     <div class="full-width-orange">
+        <div id="leftVector"><img class="no-select no-drag" src="~/icons/LeftVector.png" /></div>
         <div class="photosDiv">
+            <img class="discountIconMainImg no-select no-drag" src="~/icons/Discount.png" />
             <div class="photo large">
                 <img src="/icons/papaya.png" />
             </div>
@@ -71,17 +73,25 @@
                 </div>
                 <div class="subControllDiv">
                     <div class="price">18.90 грн</div>
-                    <div class="quantity-cart-row">
-                        <div class="quantity-selector">
-                            <button class="plus">+</button>
+                    <div class="priceNoDiscount">
+                        <span class="oldPrice">20.90 грн</span>
+                        <div class="discountPercentage">15%</div>
+                    </div>
+                    <div class="cartControllDiv">
+                        <div class="productCountControlls">
+                            <button class="minusProduct no-select"><span class="minusIcon">-</span></button>
                             <div class="quantity">1</div>
-                            <button class="minus">-</button>
+                            <button class="plusProduct no-select"><span class="plusIcon">+</span></button>
                         </div>
-                        <div class="add-to-cart">Додати в кошик</div>
+                        <div id="addToCart" class="addToCart">
+                            <img class="сartIcon no-select no-drag" src="~/icons/Cart.png" />
+                            <span class="addToCartText">Додати в кошик</span>
+                        </div>
                     </div>
                 </div> 
             </div>
         </div>
+        <div id="rightVector"><img class="no-select no-drag" src="~/icons/RightVector.png" /></div>
     </div>
 
     <div id="mainProductsDiv">
@@ -96,6 +106,5 @@
             </div>
         </div>
     </div>
-
 </div>
 <script src="~/js/pagesScripts/productPage.js"></script>

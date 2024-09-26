@@ -37,21 +37,22 @@
     align-items: flex-start;
     padding: 100px 15% 50px 15%;
     gap: 90px;
-    width: 100vw;
+    width: calc(100vw - 17px);
+    max-width: 1550px;
     height: auto;
     background: #FF5722;
     border-radius: 36px;
-    min-height: 750px;
+    min-height: 770px;
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1300px) {
     .full-width-orange {
         padding: 92px 5%;
         gap:40px;
     }
 }
 
-@media (max-width: 940px) {
+@media (max-width: 1050px) {
     .full-width-orange {
         flex-wrap:wrap;
         justify-content:center;
@@ -59,6 +60,7 @@
 }
 
 .photosDiv {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -79,6 +81,15 @@
     margin-bottom: 10px;
     padding: 5%;
     border-radius: 10%;
+}
+
+.discountIconMainImg {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    left: 20px;
+    top: 20px;
+    z-index: 2;
 }
 
 .photo.small {
@@ -182,16 +193,17 @@
     font-weight: 400;
     font-size: 16px;
     color: #FFFFFF;
+    padding-right:2%;
 }
 
 .description.active {
-    max-height: 200px;
+    max-height: 300px;
     transition: max-height 0.3s ease-in-out;
 }
 
 #descriptionInfo {
     display: flex;
-    padding: 2%;
+    padding: 3%;
 }
 
 .ArrowHorisontalImg {
@@ -219,7 +231,7 @@
     padding: 0px;
     gap: 30px;
     width: 100%;
-    height: 231px;
+    height: auto;
 }
 
 .info-section {
@@ -287,83 +299,200 @@
 }
 
 .price {
+    font-style: normal;
     color: white;
     font-size: 72px;
     font-weight: 500;
 }
 
-.add-to-cart {
-    background: #4E9B51;
-    border-radius: 15px;
-    border: 2px white solid;
-    padding: 8px 20px;
-    color: white;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.priceDiscount {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 82px;
+    color: #FFFEFE;
 }
 
-.quantity-selector {
+.priceNoDiscount {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 10px;
+    padding: 0px;
+    gap: 7px;
+    width: 572px;
+    height: 43px;
 }
 
-.quantity-selector button {
+.oldPrice {
+    max-width: 210px;
+    height: auto;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 38px;
+    text-decoration-line: line-through;
+    color: #FFE0D6;
+    margin-right: 15px;
+}
+
+.discountPercentage {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 8px 28px;
+    width: 103px;
+    height: 43px;
+    background: #FF9800;
+    border-radius: 12px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    color: #FFFEFE;
+}
+
+.cartControllDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 40px;
+    width: 472.4px;
+    height: 60px;
+}
+
+.productCountControlls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 22px;
+    width: auto;
+    height: 60px;
+}
+
+.plusProduct {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5.82583px;
+    gap: 11.65px;
     width: 36px;
     height: 36px;
-    border: 1.88946px solid #FFFFFF;
+    background: #FF5722;
+    border: 1.9px solid #FFFEFE;
     border-radius: 4px;
-    background: none;
-    cursor: pointer;
+}
+
+.plusIcon {
     color: #FFFFFF;
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 45px;
+    font-weight: 350;
+    padding-bottom: 10px;
+}
+
+.minusProduct {
     box-sizing: border-box;
-}
-
-.quantity-selector .minus {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 11.65px;
+    width: 36px;
+    height: 36px;
+    border: 1.9px solid #FFFEFE;
     border-radius: 3.4955px;
-    padding: 0;
+    background: #FF5722;
 }
 
-.quantity-selector .plus {
-    border-radius: 4px;
-    padding: 5.82583px;
+.minusIcon {
+    color: #FFFFFF;
+    font-size: 60px;
+    font-weight: 0;
+    padding-bottom: 18px;
 }
 
-.quantity-selector .quantity {
-    width: 26px;
+.quantity {
+    width: auto;
     height: 60px;
+    font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 500;
     font-size: 44.4px;
     line-height: 60px;
-    color: #FFFFFF;
-    text-align: center;
+    color: #FFFEFE;
 }
 
-.quantity-cart-row {
+.addToCart {
+    box-sizing: border-box;
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
+    padding: 16px 20px;
+    gap: 16px;
+    width: 55%;
+    height: 59px;
+    background: #4CAF50;
+    border: 2px solid #FFFEFE;
+    border-radius: 30px;
+    cursor: pointer;
 }
 
-.quantity-cart-row .add-to-cart {
-    margin-left: 20px;
+.сartIcon {
+    width: 24px;
+    height: 24px;
 }
-/*///////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-@media screen and (min-width:590px){
-    .carousel-item {
-        display: block;
-        margin-right: 0;
+.addToCartText {
+    width: 162px;
+    height: 27px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding-bottom: 33px;
+}
+
+#leftVector {
+    /*z-index: 1;
+    margin-left: -227px;
+    margin-top: -100px;
+    width: 12%;*/
+    z-index: 1;
+    margin-left: -227px;
+    margin-top: -10%;
+    width: 100%;
+}
+
+#rightVector {
+    z-index: 1;
+    padding-top: 22%;
+    margin-bottom: -20%;
+    margin-left: -2%;
+    width: 100%;
+}
+
+@media (max-width: 1500px) {
+    #rightVector, #leftVector {
+        display: none;
+        padding: 0;
     }
+}
+
+/*///////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+@media screen and (min-width:590px) {
+    .carousel-item {
+    display: block;
+    margin-right: 0;
+}
 }
 
 .carouselControlPrev, .carouselControlNext {
@@ -600,14 +729,14 @@
 .productCountButton {
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     width: 20px;
     height: 20px;
     border: 1px solid #DBDADA;
     border-radius: 3px;
+    background: #FFFFFF;
 }
 
 .productCount {
@@ -618,6 +747,22 @@
     font-size: 16px;
     line-height: 22px;
     color: #7A7A7A;
+}
+
+.plusMiniIcon {
+    display: flex;
+    text-align: center;
+    font-size: 17px;
+    padding-bottom: 1px;
+    color: #757575;
+}
+
+.minusMiniIcon {
+    display: flex;
+    text-align: center;
+    font-size: 22px;
+    padding-bottom: 5px;
+    color: #757575;
 }
 
 .discountIcon {

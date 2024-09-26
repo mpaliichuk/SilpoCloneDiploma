@@ -275,14 +275,14 @@
 .productCountButton {
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     width: 20px;
     height: 20px;
     border: 1px solid #DBDADA;
     border-radius: 3px;
+    background: #FFFFFF;
 }
 
 .productCount {
@@ -295,12 +295,28 @@
     color: #7A7A7A;
 }
 
+.plusMiniIcon {
+    display: flex;
+    text-align: center;
+    font-size: 17px;
+    padding-bottom: 1px;
+    color: #757575;
+}
+
+.minusMiniIcon {
+    display: flex;
+    text-align: center;
+    font-size: 22px;
+    padding-bottom: 5px;
+    color: #757575;
+}
+
 .discountIcon {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; 
-    width: 40px; 
+    z-index: 1;
+    width: 40px;
     height: 40px;
 }
 
@@ -323,18 +339,6 @@
     margin-bottom: 20px;
 }
 
-#leftHand {
-    z-index: 1;
-    padding-top: 35px;
-    width: 12%;
-}
-
-#rightHand {
-    z-index: 1;
-    padding-top: 300px;
-    width: 29%;
-}
-
 #certificateMainSection {
     display: flex;
     flex-direction: column;
@@ -355,6 +359,18 @@
     height: 520px;
     background: #FF5722;
     border-radius: 36px;
+}
+
+#leftHand {
+    z-index: 1;
+    padding-top: 35px;
+    width: 12%;
+}
+
+#rightHand {
+    z-index: 1;
+    padding-top: 300px;
+    width: 29%;
 }
 
 @media (max-width: 1500px) {
