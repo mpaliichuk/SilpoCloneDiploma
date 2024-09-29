@@ -1,0 +1,690 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+    font-size: 14px;
+}
+.container {
+    margin: 0;
+    padding: 0;
+}
+main {
+    margin-top: -1.2%;
+    width: 115%;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+}
+nav {
+    height: 84px;
+}
+
+/*////////////////////////////////////*/
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    z-index: 9990; /* Overlay */
+}
+
+
+/*/////////////////////////NoSystem////////////////////////////*/
+
+#mainDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 22px 60px 22px 92px;
+    margin-bottom: 300px;
+    gap: 6%;
+    position: absolute;
+    width: 100%;
+    height: 84px;
+    top: 0px;
+    background: #FFFFFF;
+    border-width: 0px 3px 3px 3px;
+    border-style: solid;
+    border-color: #4E9B51;
+    border-radius: 0px 0px 36px 36px;
+    z-index: 9991;
+}
+
+@media (max-width: 1440px) {
+    #mainDiv {
+        padding: 22px 30px;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    #mainDiv {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px 20px;
+        gap: 20px;
+        height: 150px;
+        bottom: 100%;
+    }
+}
+
+#headerDiv1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 60px;
+    max-width: 50%;
+    height: 40px;
+    order: 0;
+}
+
+#headerDiv2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+    width: 519px;
+    height: 40px;
+    order: 1;
+}
+
+/*@media (max-width: 768px) {
+    #headerDiv1, #headerDiv2 {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px;
+    }
+}*/
+
+#catalogDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 70px;
+    width: 314.87px;
+    height: 40px;
+}
+
+#catalogDiv:hover {
+    
+    border-color: rgba(255, 87, 34, 1)
+}
+
+#logo {
+    width: 90.87px;
+    height: 37px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#list {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#categoriesText {
+    /* Каталог */
+    width: 62px;
+    height: 22px;
+}
+
+/*///////*/
+.dropdown-menu-fullscreen {
+    top: 90px;
+    left: -1.5px;
+    min-width: 280px;
+    width: 24.2%;
+    height: 500px;
+    overflow-y: auto;
+    z-index: 1050;
+    display: none;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 4px;
+    background: #FFFFFF;
+    border: 3px solid #4CAF50;
+}
+
+.dropdown-menu-fullscreen.show {
+    display: block; 
+}
+
+#categoryPanel.show {
+    display: flex;
+}
+
+.dropdown-menu-fullscreen .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+}
+
+.category-list {
+    padding: 20px;
+    font-family: Noto Sans;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 27.24px;
+    text-align: left;
+    color: #585858;
+}
+
+.category-item {
+    margin: 10px 0;
+}
+
+#navbarDropdownMenuLink {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 134px;
+    height: 40px;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+    background: #4E9B51;
+    border-radius: 30px;
+    order: 1;
+}
+
+#navbarDropdownMenuLink:hover {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 134px;
+    height: 40px;
+    font-family: Noto Sans;
+    color: #FF5722;
+    background-color: #FFFFFF;
+    border-radius: 30px;
+    order: 1;
+    border: 3px solid #FF5722;
+    border-radius: 30px;
+}
+
+#categoryPanel {
+    margin-top: 29px;
+    left: 24.3%;
+    overflow-y: auto;
+    z-index: 1050;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #FFFFFF;
+    display: none;
+    padding: 34px;
+    gap: 48px;
+    position: absolute;
+    min-width: 700px;
+    width: 75.5%;
+    height: 693px;
+    border: 3px solid #53B06C;
+    border-radius: 30px;
+}
+
+.rowCategoryFotoDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 28px;
+    width: 968px;
+    height: 160px;
+    flex: none;
+}
+
+.categoryFoto {
+    box-sizing: border-box;
+    width: 304px;
+    height: 160px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.miniCategoryIcon {
+    width: 30px;
+    height: 30px;
+    margin-right:5px;
+}
+/*///////*/
+#searchDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px 10px 20px;
+    gap: 10px;
+    width: 330px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 3px solid #4E9B51;
+    border-radius: 30px;
+    order: 1;
+    /*background: url(../icons/Search.png) no-repeat scroll 5px 5px;*/
+    z-index: 9993;
+}
+#searchIcon {
+    width: 24px;
+    height: 24px;
+}
+
+#searchText {
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #626262;
+    order: 1;
+    border: 0;
+    height: 30px;
+    outline: none; 
+}
+
+/*///////*/
+#deliveryDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 15px;
+    gap: 8px;
+    width: 261px;
+    height: 40px;
+    border: 3px solid #4E9B51;
+    border-radius: 30px;
+}
+
+#deliveryIcon {
+    width: 24px;
+    height: 24px;
+}
+
+#deliveryText {
+    width: 195px;
+    height: 22px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #585858;
+    flex: none;
+    border: 0;
+    outline: none;
+}
+
+#profile {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 64px;
+    height: 40px;
+    border: 3px solid #4E9B51;
+    border-radius: 30px;
+    order: 1;
+}
+
+#profileIcon {
+    width: 24px;
+    height: 24px;
+}
+
+#basketDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: 152px;
+    height: 40px;
+    background: #FF5722;
+    border-radius: 30px;
+    order: 2;
+    cursor:pointer;
+}
+
+#basketIcon {
+    width: 24px;
+    height: 24px;
+}
+
+#basketText {
+    width: 52px;
+    height: 22px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+    order: 1;
+}
+
+/*//////////////////////////////////FOOTER////////////////////////////////*/
+
+footer {
+    top: 100%;
+    position: absolute;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    width: 100%;
+    height: 559px;
+    left: 0px;
+    bottom: 0px;
+}
+
+#infoDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2% 6.33%;
+    padding-bottom:100px;
+    gap: 7.5%;
+    width: 100%;
+    background: #4CAF50;
+    border-radius: 36px;
+    align-self: stretch;
+}
+
+@media (max-width: 1060px) {
+    #infoDiv {
+        display: none;
+    }
+    .footer {
+        height: 270px;
+        border-top: solid 32px #4E9B51;
+    }
+}
+
+/*Adapting*/
+.columnDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 4px;
+    width: 17.87%;
+    height: 253px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.headerSpan, .bodySpan {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+    flex: none;
+    font-family: "Noto Sans", sans-serif;
+    font-style: normal;
+    color: #FFFFFF;
+    order: 0;
+    flex-grow: 0;
+    word-break: break-word; 
+    overflow-wrap: break-word;
+}
+
+.headerSpan{
+    font-size:19px;
+    font-weight:bold;
+}
+
+.bodySpan {
+    height: 38px;
+    cursor: pointer;
+}
+
+#mainFooterDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    width: 100%;
+    height: 194px;
+    flex: none;
+
+}
+
+#privacyDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 10px 20px 90px;
+    gap: 10px;
+    width: 100%;
+    height: 65px;
+    background: #FF5722;
+    border-radius: 36px 36px 0px 0px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+#privacyTextDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 3px;
+    width: 375px;
+    height: 25px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+#copyrightIcon {
+    width: 10px;
+    height: 10px;
+}
+
+#copyrightText {
+    font-family: "Noto Sans", sans-serif;
+    font-style: normal;
+    color: #FFFFFF;
+}
+
+#contactsDiv {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+    padding: 20px 0px 20px 82px;
+    gap: 12%;
+    width: 100%;
+    height:auto;
+    background: #FFFFFF;
+}
+
+@media (max-width: 1000px) {
+    #contactsDiv {
+        padding: 0;
+        gap: 5%;
+        width: 100%;
+    }
+}
+
+#mainContactsDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 10%;
+    width: 528px;
+    height: 67px;
+    flex: none;
+}
+
+#socialDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 28px;
+    width: 204px;
+    height: 40px;
+    flex: none;
+}
+
+#logoFooter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px;
+    gap: 8px;
+    width: 148px;
+    height: 67px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.socialIcons {
+    width: 30px;
+    height: 30px;
+}
+
+/*/////////////////////////////////////////////////////////////////////////*/
+#communicationDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    height: 129px;
+    gap: 16%;
+    width: 613px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+#communicationSubDiv1, #communicationSubDiv2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    width:45%;
+}
+
+.communicationTextDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+    width: 277px;
+    padding-top: 8%;
+}
+
+
+.communicationMainText {
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    color: #4CAF50;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.communicationPhoneDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 5px;
+    width: 100%;
+    height: 22px;
+}
+
+.communicationIconDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 5px;
+    width: 100%;
+    height: 22px;
+}
+
+.communicationText {
+    font-family: "Noto Sans", sans-serif;
+    width: 100%;
+    height: 22px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #53B06C;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.communicationIcon {
+    width: 20px;
+    height: 20px;
+}

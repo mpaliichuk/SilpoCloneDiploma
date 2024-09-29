@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/adminPanel.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="logo"></div>
+            <img src="~/Admin_Image/logo.png" alt="Logo" class="logo" />
+            <button id="menu-toggle" class="menu-toggle">☰</button>
+            <ul>
+                <li><a href="/Home/Index"><img src="~/Admin_Image/Home.png" alt="Logo" />  Головна</a></li>
+                <li><a href="/Admin/ToConfirm"><img src="~/Admin_Image/Frame251.png" alt="Logo" />  Заявки на підтвердження</a></li>
+                <li><a href="/Admin/Stores"><img src="~/Admin_Image/basket.png" alt="Logo" />   Магазини</a></li>
+                <li><a href="/Admin/Users"><img src="~/Admin_Image/user.png" alt="Logo" />   Користувачі</a></li>
+                <li><a href="/Admin/Management"><img src="~/Admin_Image/management.png" alt="Logo" />   Менеджмент</a></li>
+                <li><a href="/Admin/EditAttribute">Атрибути</a></li>
+                <li><a href="/Admin/Brand">Бренд</a></li>
+                <li><a href="/Admin/Manufacturer">Виробник</a></li>
+                <li><a href="/Admin/Categories">Категорії</a></li>
+                <li><a href="/Admin/Product">Товар</a></li>
+                <br />
+                <br />
+                <br />
+                <li><a href="/Account/Logout"><img src="~/Admin_Image/SignOut.png" alt="Logo" /> Вийти</a></li>
+            </ul>
+        </div>
+        <div> @RenderBody()</div>
+                   
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/admin_js.js" asp-append-version="true"></script>
+</body>
+</html>
