@@ -41,7 +41,7 @@
     font-size: 40px;
     line-height: 54px;
     text-align: center;
-    color: #53B06C;
+    color: #1E1E1E;
 }
 #topCategoriesButtonsDiv {
     display: flex;
@@ -103,7 +103,7 @@
     font-size: 40px;
     line-height: 54px;
     text-align: center;
-    color: #4E9B51;
+    color: #1E1E1E;
 }
 
 #subProductsDiv {
@@ -258,7 +258,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 4.6%;
+    padding: 5.5%;
     gap: 10px;
     width: 34px;
     height: 34px;
@@ -268,8 +268,8 @@
 }
 
 .productCartIcon {
-    width: 19px;
-    height: 19px;
+    width: 16px;
+    height: 16px;
 }
 
 .productCountButton {
@@ -399,7 +399,7 @@
     font-size: 40px;
     line-height: 54px;
     text-align: center;
-    color: #4E9B51;
+    color: #1E1E1E;
     margin-bottom: 1.5%;
 }
 
@@ -617,7 +617,7 @@
     font-size: 40px;
     line-height: 54px;
     text-align: center;
-    color: #4E9B51;
+    color: #1E1E1E;
 }
 
 #accordionFAQTextDiv {
@@ -675,7 +675,7 @@
     font-size: 40px;
     line-height: 54px;
     text-align: center;
-    color: #4E9B51;
+    color: #1E1E1E;
 }
 
 #shopSubDiv {

@@ -99,14 +99,12 @@ nav {
 
 #headerDiv2 {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     padding: 0px;
-    gap: 32px;
-    width: 519px;
+    width: auto;
     height: 40px;
-    order: 1;
 }
 
 /*@media (max-width: 768px) {
@@ -323,52 +321,25 @@ nav {
 }
 
 /*///////*/
-#deliveryDiv {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 6px 15px;
-    gap: 8px;
-    width: 261px;
-    height: 40px;
-    border: 3px solid #4E9B51;
-    border-radius: 30px;
-}
-
-#deliveryIcon {
-    width: 24px;
-    height: 24px;
-}
-
-#deliveryText {
-    width: 195px;
-    height: 22px;
-    font-family: 'Noto Sans';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
-    color: #585858;
-    flex: none;
-    border: 0;
-    outline: none;
-}
 
 #profile {
-    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 10px 20px;
-    gap: 8px;
-    width: 64px;
+    gap: 10px;
+    margin: 0 auto;
+    width: auto;
     height: 40px;
-    border: 3px solid #4E9B51;
+    border: 3px solid #4CAF50;
+    background: #FFFEFE;
     border-radius: 30px;
-    order: 1;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #585858;
 }
 
 #profileIcon {
@@ -645,7 +616,7 @@ footer {
     font-weight: 700;
     font-size: 18px;
     line-height: 25px;
-    color: #4CAF50;
+    color: #1E1E1E;
     flex: none;
     order: 0;
     flex-grow: 0;
@@ -678,7 +649,7 @@ footer {
     font-weight: 600;
     font-size: 16px;
     line-height: 22px;
-    color: #53B06C;
+    color: #1E1E1E;
     flex: none;
     order: 1;
     flex-grow: 0;

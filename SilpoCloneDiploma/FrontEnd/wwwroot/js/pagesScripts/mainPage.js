@@ -283,6 +283,15 @@ cardDivs.forEach(item => {
             button.style.background = '#53B06C';
         }
     });
+
+    const cartButton = item.querySelector('.productBuyBtn');
+    cartButton.addEventListener('mouseenter', function (event) {
+        event.stopPropagation();
+    });
+
+    cartButton.addEventListener('mouseleave', function (event) {
+        event.stopPropagation();
+    });
 })
 
 certificateButtons.forEach(certificate => {
