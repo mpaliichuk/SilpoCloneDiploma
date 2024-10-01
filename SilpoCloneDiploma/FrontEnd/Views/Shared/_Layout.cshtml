@@ -389,39 +389,37 @@
 <body>
     <header>
         <div id="overlay"></div>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3">
+        <nav class="navbar mb-3">
             <div id="mainDiv" class="container-fluid">
-                <div id="headerDiv1" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div id="catalogDiv">
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Goodmeal">
-                            <img id="logo" src="~/icons/Logo.png" />
+                <div id="catalogDiv">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Goodmeal">
+                        <img id="logo" src="~/icons/Logo.png" />
+                    </a>
+                    <div>
+                        <a id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <img id="categoriesLogo" src="~/icons/List.png" />
+                            <span id="categoriesText">Каталог</span>
                         </a>
-                        <div>
-                            <a id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <img id="categoriesLogo" src="~/icons/List.png" />
-                                <span id="categoriesText">Каталог</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-fullscreen"
-                                aria-labelledby="navbarDropdownMenuLink">
-                                <div class="category-list">
-                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                            src="~/icons/Fruit.png" />Фрукти</a>
-                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                            src="~/icons/Vegetables.png" />Овочі</a>
-                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                            src="~/icons/Fish.png" />Риба</a>
-                                    <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                            src="~/icons/Meat.png" />М'ясо</a>
-                                </div>
+                        <div class="dropdown-menu dropdown-menu-fullscreen"
+                            aria-labelledby="navbarDropdownMenuLink">
+                            <div class="category-list">
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fruit.png" />Фрукти</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Vegetables.png" />Овочі</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fish.png" />Риба</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Meat.png" />М'ясо</a>
                             </div>
-                            <div id="categoryPanel"></div>
                         </div>
+                        <div id="categoryPanel"></div>
                     </div>
-                    <div id="searchDiv">
-                        <img id="searchIcon" src="~/icons/Search.png" />
-                        <input id="searchText" placeholder="Шукати..." />
-                    </div>
+                </div>
+                <div id="searchDiv">
+                    <img id="searchIcon" src="~/icons/Search.png" />
+                    <input id="searchText" placeholder="Шукати..." />
                 </div>
                 <div id="headerDiv2">
                     <button id="profile" type="button">

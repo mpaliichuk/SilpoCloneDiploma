@@ -52,19 +52,19 @@ nav {
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
+    flex-wrap:nowrap;
     align-items: center;
-    padding: 22px 60px 22px 92px;
-    margin-bottom: 300px;
-    gap: 6%;
+    padding: 22px 60px 22px 122px;
+    gap: 80px;
     position: absolute;
-    width: 100%;
     height: 84px;
     top: 0px;
-    background: #FFFFFF;
+    background: #FFFEFE;
     border-width: 0px 3px 3px 3px;
     border-style: solid;
-    border-color: #4E9B51;
+    border-color: #4CAF50;
     border-radius: 0px 0px 36px 36px;
+
     z-index: 9991;
 }
 
@@ -94,7 +94,6 @@ nav {
     gap: 60px;
     max-width: 50%;
     height: 40px;
-    order: 0;
 }
 
 #headerDiv2 {
@@ -134,17 +133,11 @@ nav {
 #logo {
     width: 90.87px;
     height: 37px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 #list {
     width: 24px;
     height: 24px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 #categoriesText {
@@ -294,12 +287,11 @@ nav {
     align-items: center;
     padding: 10px 20px 10px 20px;
     gap: 10px;
-    width: 330px;
+    width: auto;
     height: 40px;
     background: #FFFFFF;
     border: 3px solid #4E9B51;
     border-radius: 30px;
-    order: 1;
     /*background: url(../icons/Search.png) no-repeat scroll 5px 5px;*/
     z-index: 9993;
 }
@@ -314,7 +306,6 @@ nav {
     font-weight: 400;
     font-size: 16px;
     color: #626262;
-    order: 1;
     border: 0;
     height: 30px;
     outline: none; 
@@ -358,7 +349,6 @@ nav {
     height: 40px;
     background: #FF5722;
     border-radius: 30px;
-    order: 2;
     cursor:pointer;
 }
 
@@ -376,7 +366,6 @@ nav {
     font-size: 16px;
     line-height: 22px;
     color: #FFFFFF;
-    order: 1;
 }
 
 /*//////////////////////////////////FOOTER////////////////////////////////*/

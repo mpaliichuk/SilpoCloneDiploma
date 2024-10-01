@@ -18,8 +18,10 @@ namespace FrontEnd.Controllers
         }
 
         [Route("Goodmeal/ProductPage/{id}")]
-        public IActionResult ProductPage()
+        public IActionResult ProductPage(string id)
         {
+            var productId = id;
+            ViewBag.ProductId = productId;
             return View();
         }
 

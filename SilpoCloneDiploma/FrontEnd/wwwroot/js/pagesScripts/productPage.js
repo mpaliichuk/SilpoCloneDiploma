@@ -1,4 +1,93 @@
-﻿GetProducts();
+﻿var productId = document.getElementById("productId").value;
+GetProduct(productId);
+
+GetProducts();
+async function GetProduct(productId) {
+    // const response = await fetch("/api/Products/" + productId, {
+    //     method: "GET",
+    //     headers: {
+    //         "Accept": "application/json",
+    //         "Content-Type": "application/json"
+    //     }
+    // });
+    // if (response.ok) {
+    //     const product = await response.json();
+        let product = {
+            id: 5,
+            title: "Умные часы XYZ",
+            description: "Многофункциональные умные часы с сенсорным экраном и мониторингом здоровья.",
+            imageUrls: [
+                "https://i.pinimg.com/736x/1e/f2/9b/1ef29ba4eee6204bf2fe891456d10970.jpg",
+                "https://i.pinimg.com/564x/d2/b3/43/d2b3433dd73e81ec561b2a43587b60fe.jpg",
+                "https://i.pinimg.com/736x/a9/f7/0c/a9f70cff8206e7bf189f2e14cc9a915c.jpg",
+                "https://i.pinimg.com/736x/33/54/cf/3354cf583d7fa7a30e3300de83e4bf44.jpg"
+            ],
+            price: 5000,
+            discountPercentage: 10,
+            rating: 4.5,
+            category_id: 3,
+            attributes: [
+                { key: "Цвет", value: "Чёрный" },
+                { key: "Материал", value: "Металл и пластик" },
+                { key: "Время работы", value: "48 часов" },
+                { key: "Вес", value: "50 грамм" }
+            ]
+        };
+
+        document.getElementById("productRouteName").innerText = product.title;
+        document.getElementById("productTitle").innerText = product.title;
+        document.getElementById("descriptionInfo").innerText = product.description;
+        document.getElementById("productMainImg").src = product.imageUrls[0];
+
+        for (let i = 1; i < product.imageUrls.length; i++) {
+            let smallImg = document.getElementById("productSmallImg" + i.toString());
+            if (smallImg) {
+                smallImg.src = product.imageUrls[i];
+            }
+        }
+
+        document.getElementById("ratingScore").innerText = product.rating;
+
+        /* Attributes work */
+
+        if (product.attributes && product.attributes.length > 0) {
+            const attributesDiv = document.getElementById("attributes");
+            attributesDiv.innerHTML = "";
+            product.attributes.forEach(attributeData => {
+                const attribute = document.createElement('div');
+                attribute.className = 'attribute';
+
+                const attributeKeySpan = document.createElement('span');
+                const attributeValueSpan = document.createElement('span');
+
+                attributeKeySpan.innerText = attributeData.key;
+                attributeValueSpan.innerText = attributeData.value;
+
+                attribute.appendChild(attributeKeySpan);
+                attribute.appendChild(attributeValueSpan);
+
+                attributesDiv.appendChild(attribute);
+            });
+        }
+
+        let finalPrice = product.price - (product.price * (product.discountPercentage / 100));
+        document.getElementById("productPrice").innerText = finalPrice.toFixed(2) + " грн";
+
+        // if sale
+        if (product.discountPercentage > 0) {
+            const photosDiv = document.getElementsByClassName("photosDiv")[0];
+            const img = document.createElement('img');
+            img.className = "discountIconMainImg no-select no-drag";
+            img.setAttribute("src", "/icons/Discount.png");
+            photosDiv.appendChild(img);
+
+            generatePriceNoDiscount(product.price, product.discountPercentage);
+        }
+
+        document.getElementById("addToCart").setAttribute("product-id", product.id);
+        //GetCategory(product.category_id);
+    // }
+}
 async function GetProducts() {
     var productsByDiscount = [];
 
@@ -37,6 +126,29 @@ async function GetProducts() {
         document.getElementById('subProductsDiv').appendChild(productCard);
         isFirstBool = false;
     }
+}
+
+//Controls
+
+function generatePriceNoDiscount(oldPrice, discountPercentage) {
+    const priceNoDiscountDiv = document.getElementById("priceNoDiscountDiv");
+
+    const oldPriceSpan = document.createElement('span');
+    oldPriceSpan.id = 'productOldPrice';
+    oldPriceSpan.className = 'oldPrice';
+    oldPriceSpan.innerText = oldPrice + ' грн';
+
+    const discountDiv = document.createElement('div');
+    discountDiv.className = 'discountPercentage';
+
+    const percentageSpan = document.createElement('span');
+    percentageSpan.id = 'percentage';
+    percentageSpan.innerText = discountPercentage + '%';
+
+    discountDiv.appendChild(percentageSpan);
+    priceNoDiscountDiv.appendChild(oldPriceSpan);
+    priceNoDiscountDiv.appendChild(discountDiv);
+
 }
 
 async function AddProductInCart(productId, productCount, userId) {
@@ -182,21 +294,35 @@ const cardDivs = document.querySelectorAll('.cardDiv');
 const productCountDivs = document.querySelectorAll('.productCountDiv');
 const productBuyBtns = document.querySelectorAll('.productBuyBtn');
 const addToCartBtn = document.getElementById('addToCart');
+const photos = document.querySelectorAll('.poductPhoto');
+
+photos.forEach(item => {
+    item.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('largePhoto')) {
+            const largeContainer = document.querySelector('.large');
+            const bigImg = largeContainer.querySelector('img');
+            if (bigImg) {
+                var tmpSrc = bigImg.src;
+                bigImg.src = event.target.src;
+                event.target.src = tmpSrc;
+            }
+        }
+    });
+});
+
 
 productBuyBtns.forEach(item => {
     item.addEventListener('click', function (event) {
-        event.stopPropagation();
         const cardDiv = item.closest('.cardDiv');
-        const count = cardDiv.querySelector('.productCount');
-        if (count) {
-            let currentCount = parseInt(count.innerHTML);
+        const countElement = cardDiv.querySelector('.productCount');
+        if (countElement) {
+            let currentCount = parseInt(countElement.innerHTML, 10);
             if (currentCount > 0) {
-                //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
-                alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
-                count.innerHTML = '0';
-            }
-            else {
-                alert("Спершу виберіть кількість товар (`U_U`)!");
+                // AddProductInCart(cardDiv.id, currentCount, /*userId*/ 0);
+                alert(`${cardDiv.id}, ${currentCount}, ${0}`);
+                countElement.innerHTML = '0';
+            } else {
+                alert("Спершу виберіть кількість товару (`U_U`)!");
             }
         }
     });
@@ -248,7 +374,6 @@ productCountDivs.forEach(item => {
     });
 });
 
-
 var info = document.querySelector('.info-section-content');
 var description = document.querySelector('.description');
 function switchAll(index) {
@@ -291,7 +416,6 @@ function toggleDropdown() {
     switchAll(1);
 }
 
-
 const multipleItemCarousel = document.querySelector('#productsCarousel');
 if (window.innerWidth >= 576) {
     var carouselInner = document.querySelector('.carousel-inner');
@@ -331,7 +455,6 @@ window.addEventListener('resize', function () {
     }
 });
 
-
 const minus = document.getElementsByClassName('minusProduct')[0];
 const plus = document.getElementsByClassName('plusProduct')[0];
 const count = document.getElementsByClassName('quantity')[0];
@@ -347,15 +470,14 @@ plus.addEventListener('click', function () {
     count.innerHTML = `${currentCount + 1}`;
 });
 
-
 addToCartBtn.addEventListener('click', function () {
     const cartControll = addToCartBtn.closest('.cartControllDiv');
     const count = cartControll.querySelector('.quantity');
     if (count) {
-        let currentCount = parseInt(count.innerHTML);
+        let currentCount = parseInt(count.innerHTML, 10);
         if (currentCount > 0) {
-            //AddProductInCart(cartControll.id, count.innerHTML, /*userId*/ 0);
-            alert(`${cartControll.id}, ${count.innerHTML}, ${0}`);
+            //AddProductInCart(addToCartBtn.getAttribute('product-id'), count.innerHTML, /*userId*/ 0);
+            alert(`${addToCartBtn.getAttribute('product-id')}, ${count.innerHTML}, ${0}`);
             count.innerHTML = '0';
         }
         else {

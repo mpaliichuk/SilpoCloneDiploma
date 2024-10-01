@@ -262,7 +262,7 @@ cardDivs.forEach(item => {
     item.addEventListener('click', function (event) {
         const productControlDiv = item.querySelector('.productControlDiv');
         if (productControlDiv && !productControlDiv.contains(event.target)) {
-            var productId = 0; //З базы 
+            var productId = item.id;
             window.location = "/Goodmeal/ProductPage/" + productId;
         }
     });

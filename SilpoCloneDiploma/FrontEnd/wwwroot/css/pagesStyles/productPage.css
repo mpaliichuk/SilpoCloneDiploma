@@ -319,8 +319,8 @@
     align-items: center;
     padding: 0px;
     gap: 7px;
-    width: 572px;
-    height: 43px;
+    width: auto;
+    height: auto;
 }
 
 .oldPrice {
@@ -468,15 +468,15 @@
     width: 12%;*/
     z-index: 1;
     margin-left: -227px;
-    margin-top: -10%;
+    margin-top: -11%;
     width: 100%;
 }
 
 #rightVector {
     z-index: 1;
-    padding-top: 22%;
+    padding-top: 19%;
     margin-bottom: -20%;
-    margin-left: -2%;
+    margin-right: -21.2%;
     width: 100%;
 }
 

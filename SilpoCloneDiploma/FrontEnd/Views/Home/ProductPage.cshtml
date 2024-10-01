@@ -1,9 +1,11 @@
 @{
     ViewData["Title"] = "Home Page";
+    var productId = ViewBag.ProductId;
 }
 <link rel="stylesheet" href="~/css/pagesStyles/productPage.css" asp-append-version="true" />
 
 <div class="content">
+    <input type="hidden" id="productId" value="@productId">
     <div class="breadcrumb">
         <a class="breadcrumbLink" href="#">Головна</a> 
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
@@ -11,32 +13,32 @@
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
         <a class="breadcrumbLink" href="#">Всі</a> 
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-        <a class="breadcrumbLink" href="#">Папайя</a>
+        <a id="productRouteName" class="breadcrumbLink" href="#">Папайя</a>
     </div>
     <div class="full-width-orange">
         <div id="leftVector"><img class="no-select no-drag" src="~/icons/LeftVector.png" /></div>
         <div class="photosDiv">
-            <img class="discountIconMainImg no-select no-drag" src="~/icons/Discount.png" />
+            @*<img class="discountIconMainImg no-select no-drag" src="~/icons/Discount.png" /> *@
             <div class="photo large">
-                <img src="/icons/papaya.png" />
+                <img class="poductPhoto largePhoto" id="productMainImg" src="/icons/papaya.png" />
             </div>
             <div class="small-row">
                 <div class="photo small">
-                    <img src="/icons/papaya.png" />
+                    <img class="poductPhoto smallPhoto" id="productSmallImg1" src="/icons/papaya.png" />
                 </div>
                 <div class="photo small">
-                    <img src="/icons/papaya.png" />
+                    <img class="poductPhoto smallPhoto" id="productSmallImg2" src="/icons/papaya.png" />
                 </div>
                 <div class="photo small">
-                    <img src="/icons/papaya.png" />
+                    <img class="poductPhoto smallPhoto" id="productSmallImg3" src="/icons/papaya.png" />
                 </div>
             </div>
         </div>
 
         <div class="content-info">
             <div class="subInfoDiv">
-                <div class="name">Папайя 100г</div>
-                <div class="rating"><img class="no-select no-drag" src="/icons/RatingStar.png" />4.90 <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
+                <div id="productTitle" class="name">Папайя 100г</div>
+                <div class="rating"><img class="no-select no-drag" src="/icons/RatingStar.png" /><span id="ratingScore">4.90</span> <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
                 <div class="accordion">
                     <div class="descriptionTitleDiv no-select no-drag" onclick="toggleDropdownDescription()">
                         <span>Опис</span>
@@ -55,7 +57,7 @@
                         <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontal.png" />
                     </div>
                     <div class="info-section-content">
-                        <div class="attributeDivs">
+                        <div id="attributes" class="attributeDivs">
                             <div class="attribute">
                                 <span>Країна:</span>
                                 <span>Іспанія</span>
@@ -72,10 +74,10 @@
                     </div>
                 </div>
                 <div class="subControllDiv">
-                    <div class="price">18.90 грн</div>
-                    <div class="priceNoDiscount">
-                        <span class="oldPrice">20.90 грн</span>
-                        <div class="discountPercentage">15%</div>
+                    <div id="productPrice" class="price">18.90 грн</div>
+                    <div id="priceNoDiscountDiv" class="priceNoDiscount">
+                        @* <span id="productOldPrice" class="oldPrice">20.90 грн</span>
+                        <div class="discountPercentage"><span id="percentage">15%</span></div> *@
                     </div>
                     <div class="cartControllDiv">
                         <div class="productCountControlls">
