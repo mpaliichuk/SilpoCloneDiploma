@@ -17,9 +17,8 @@ async function GetProduct(productId) {
             title: "Умные часы XYZ",
             description: "Многофункциональные умные часы с сенсорным экраном и мониторингом здоровья.",
             imageUrls: [
-                "https://i.pinimg.com/736x/1e/f2/9b/1ef29ba4eee6204bf2fe891456d10970.jpg",
                 "https://i.pinimg.com/564x/d2/b3/43/d2b3433dd73e81ec561b2a43587b60fe.jpg",
-                "https://i.pinimg.com/736x/a9/f7/0c/a9f70cff8206e7bf189f2e14cc9a915c.jpg",
+                "https://i.pinimg.com/736x/1e/f2/9b/1ef29ba4eee6204bf2fe891456d10970.jpg",
                 "https://i.pinimg.com/736x/33/54/cf/3354cf583d7fa7a30e3300de83e4bf44.jpg"
             ],
             price: 5000,
@@ -39,8 +38,8 @@ async function GetProduct(productId) {
         document.getElementById("descriptionInfo").innerText = product.description;
         document.getElementById("productMainImg").src = product.imageUrls[0];
 
-        for (let i = 1; i < product.imageUrls.length; i++) {
-            let smallImg = document.getElementById("productSmallImg" + i.toString());
+        for (let i = 0; i < product.imageUrls.length; i++) {
+            let smallImg = document.getElementById("productSmallImg" + (i + 1).toString());
             if (smallImg) {
                 smallImg.src = product.imageUrls[i];
             }
@@ -295,19 +294,66 @@ const productCountDivs = document.querySelectorAll('.productCountDiv');
 const productBuyBtns = document.querySelectorAll('.productBuyBtn');
 const addToCartBtn = document.getElementById('addToCart');
 const photos = document.querySelectorAll('.poductPhoto');
+const buttonPrev = document.getElementById('buttonPrev');
+const buttonNext = document.getElementById('buttonNext');
+var photoPosition = 1;
 
 photos.forEach(item => {
     item.addEventListener('click', function (event) {
-        if (!event.target.classList.contains('largePhoto')) {
+        if (!event.target.classList.contains('largePhoto') && !event.target.id.includes(photoPosition.toString())) {
             const largeContainer = document.querySelector('.large');
             const bigImg = largeContainer.querySelector('img');
-            if (bigImg) {
-                var tmpSrc = bigImg.src;
-                bigImg.src = event.target.src;
-                event.target.src = tmpSrc;
+            bigImg.src = event.target.src;
+
+            const imgId = event.target.id;
+            const lastDigit = imgId.match(/\d+$/);
+            photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
+            switch (photoPosition) {
+                case 1:
+                    buttonPrev.classList.toggle('noActiveButton');
+                    if (buttonNext.classList.contains('noActiveButton'))
+                        buttonNext.classList.toggle('noActiveButton');
+                    break;
+                case 2:
+                    if (buttonPrev.classList.contains('noActiveButton'))
+                        buttonPrev.classList.toggle('noActiveButton');
+                    if (buttonNext.classList.contains('noActiveButton'))
+                        buttonNext.classList.toggle('noActiveButton');
+                    break;
+                case 3:
+                    buttonNext.classList.toggle('noActiveButton');
+                    if (buttonPrev.classList.contains('noActiveButton'))
+                        buttonPrev.classList.toggle('noActiveButton');
+                    break;
             }
         }
     });
+});
+
+buttonPrev.addEventListener('click', function () {
+    const largeContainer = document.querySelector('.large');
+    const bigImg = largeContainer.querySelector('img');
+    const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
+    bigImg.src = smallImg.src;
+    photoPosition--;
+    if (photoPosition < 2)
+        buttonPrev.classList.toggle('noActiveButton');
+    if (photoPosition == 2 && buttonNext.classList.contains('noActiveButton')) {
+        buttonNext.classList.toggle('noActiveButton');
+    }
+});
+
+buttonNext.addEventListener('click', function () {
+    const largeContainer = document.querySelector('.large');
+    const bigImg = largeContainer.querySelector('img');
+    const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
+    bigImg.src = smallImg.src;
+    photoPosition++;
+    if (photoPosition > 2)
+        buttonNext.classList.toggle('noActiveButton');
+    if (photoPosition == 2 && buttonPrev.classList.contains('noActiveButton')) {
+        buttonPrev.classList.toggle('noActiveButton');
+    }
 });
 
 

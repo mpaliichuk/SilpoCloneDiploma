@@ -71,15 +71,62 @@
     height: 480px;
 }
 
+#largeSubDiv{
+    display:flex;
+    position:relative;
+}
+
+#buttonPrev, #buttonNext {
+    text-align: center;
+    position: absolute;
+    box-sizing: border-box;
+    padding: 7px;
+    gap: 10px;
+    width: 48px;
+    height: 48px;
+    background: #FFFEFE;
+    border: 2px solid #CBCBCB;
+    border-radius: 100px;
+
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 0;
+}
+
+
+#buttonPrev {
+    top: 45.39%;
+    left: -12px;
+    z-index: 1;
+}
+
+.noActiveButton {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+#buttonNext {
+    top: 45.39%;
+    right: -12px;
+}
+
 .photo {
+    display:flex;
+    justify-content:center;
+    align-items:center;
     background: #FFFFFF;
 }
 
 .photo.large {
     width: 350px;
-    height: 350px;
+    height: auto;
+    min-height: 310px;
     margin-bottom: 10px;
-    padding: 5%;
+    padding: 17.5px;
     border-radius: 10%;
 }
 
@@ -97,6 +144,7 @@
     height: 110px;
     padding: 3%;
     border-radius: 20%;
+    cursor: pointer;
 }
 
 .small-row {
@@ -104,6 +152,7 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
+    margin-top:auto;
 }
 
 .photo img {
