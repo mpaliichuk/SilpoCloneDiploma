@@ -212,9 +212,6 @@ const cardDivs = document.querySelectorAll('.cardDiv');
 const productCountDivs = document.querySelectorAll('.productCountDiv');
 const productBuyBtns = document.querySelectorAll('.productBuyBtn');
 
-/////////////////////////////////////////////////////////////////////////////
-
-
 categoryPanels.forEach(panel => {
     panel.addEventListener('click', function (event) {
         var categoryName = event.currentTarget.id;
@@ -340,7 +337,6 @@ certificateBuy.forEach(item => {
     });
 });
 
-
 productCountDivs.forEach(item => {
     const minus = item.getElementsByClassName('minus')[0];
     const plus = item.getElementsByClassName('plus')[0];
@@ -403,3 +399,5 @@ shopDivs.forEach(item => {
         img.src = '/icons/CarrotPointer.png';
     });
 });
+
+/////////////////////////////////////////////////////////////////////////////

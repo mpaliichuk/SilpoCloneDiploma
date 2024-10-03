@@ -208,8 +208,13 @@
     cursor:pointer;
 }
 
-.accordion{
-    width:100%;
+.ratingStar {
+    width: 24px;
+    height: 24px;
+}
+
+.accordion {
+    width: 100%;
 }
 
 .descriptionTitleDiv {

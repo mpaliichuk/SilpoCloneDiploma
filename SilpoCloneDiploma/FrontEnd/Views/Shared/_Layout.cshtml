@@ -395,14 +395,13 @@
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Goodmeal">
                         <img id="logo" src="~/icons/Logo.png" />
                     </a>
-                    <div>
+                    <div id="catalogSubDiv">
                         <a id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <img id="categoriesLogo" src="~/icons/List.png" />
                             <span id="categoriesText">Каталог</span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-fullscreen"
-                            aria-labelledby="navbarDropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-fullscreen" aria-labelledby="navbarDropdownMenuLink">
                             <div class="category-list">
                                 <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
                                         src="~/icons/Fruit.png" />Фрукти</a>
@@ -412,9 +411,30 @@
                                         src="~/icons/Fish.png" />Риба</a>
                                 <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
                                         src="~/icons/Meat.png" />М'ясо</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fruit.png" />Фрукти</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Vegetables.png" />Овочі</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fish.png" />Риба</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Meat.png" />М'ясо</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fruit.png" />Фрукти</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Vegetables.png" />Овочі</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fish.png" />Риба</a>
+                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Meat.png" />М'ясо</a>
+                            </div>
+                            <div id="categoryPanel">
+                                <div class="categoryDivCard">
+                                    <div class="categorIconDiv"><img class="categortIcon" src="~/icons/Cart.png"/></div>
+                                    <div class="categorTextDiv"><span class="categoryText">Риба і М'ясо</span></div>
+                                </div>
                             </div>
                         </div>
-                        <div id="categoryPanel"></div>
                     </div>
                 </div>
                 <div id="searchDiv">
@@ -572,16 +592,16 @@
                             <img id="logoFooter" src="~/icons/Logo.png" />
                         </a>
                         <div id="socialDiv">
-                            <a role="button">
+                            <a role="button" href="https://www.facebook.com/">
                                 <img class="socialIcons" src="~/icons/Facebook.png" />
                             </a>
-                            <a role="button">
+                            <a role="button" href="https://www.instagram.com/">
                                 <img class="socialIcons" src="~/icons/Instagram.png" />
                             </a>
-                            <a role="button">
+                            <a role="button" href="https://www.viber.com/">
                                 <img class="socialIcons" src="~/icons/Viber.png" />
                             </a>
-                            <a role="button">
+                            <a role="button" href="https://web.telegram.org/">
                                 <img class="socialIcons" src="~/icons/Telegram.png" />
                             </a>
                         </div>
@@ -617,8 +637,7 @@
                 </div>
                 <div id="privacyDiv">
                     <div id="privacyTextDiv">
-                        <img id="copyrightIcon" src="~/icons/Copyright.png" />
-                        <span id="copyrightText"><b>Goodmeal</b>, 2024. Всі права захищено</span>
+                        <span id="copyrightText"><sup>©</sup><b>Goodmeal</b>, 2024. Всі права захищено</span>
                     </div>
                 </div>
             </div>

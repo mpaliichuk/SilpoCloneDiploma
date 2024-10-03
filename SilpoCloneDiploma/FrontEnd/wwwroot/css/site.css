@@ -30,6 +30,7 @@ body {
 }
 nav {
     height: 84px;
+/*    background-color: #4CAF50;*/
 }
 
 /*////////////////////////////////////*/
@@ -54,8 +55,8 @@ nav {
     flex-direction: row;
     flex-wrap:nowrap;
     align-items: center;
-    padding: 22px 60px 22px 122px;
-    gap: 80px;
+    padding: 22px 60px 22px 100px;
+    gap: 50px;
     position: absolute;
     height: 84px;
     top: 0px;
@@ -125,11 +126,6 @@ nav {
     height: 40px;
 }
 
-#catalogDiv:hover {
-    
-    border-color: rgba(255, 87, 34, 1)
-}
-
 #logo {
     width: 90.87px;
     height: 37px;
@@ -140,25 +136,33 @@ nav {
     height: 24px;
 }
 
-#categoriesText {
-    /* Каталог */
-    width: 62px;
-    height: 22px;
+#categoriesTextcategoriesText {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFEFE;
 }
 
-/*///////*/
+#categoriesLogo {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////////*/
 .dropdown-menu-fullscreen {
     top: 90px;
     left: -1.5px;
     min-width: 280px;
-    width: 24.2%;
-    height: 500px;
+    width: 100%;
+    height: auto;
     overflow-y: auto;
     z-index: 1050;
     display: none;
     justify-content: center;
     box-sizing: border-box;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     padding: 20px;
     gap: 4px;
@@ -167,7 +171,7 @@ nav {
 }
 
 .dropdown-menu-fullscreen.show {
-    display: block; 
+    display: flex; 
 }
 
 #categoryPanel.show {
@@ -182,6 +186,7 @@ nav {
 }
 
 .category-list {
+    flex: 1;
     padding: 20px;
     font-family: Noto Sans;
     font-size: 20px;
@@ -211,51 +216,84 @@ nav {
     font-size: 16px;
     line-height: 22px;
     color: #FFFFFF;
-    background: #4E9B51;
+    background: #4CAF50;
     border-radius: 30px;
     order: 1;
 }
 
 #navbarDropdownMenuLink:hover {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    gap: 8px;
-    width: 134px;
-    height: 40px;
-    font-family: Noto Sans;
-    color: #FF5722;
-    background-color: #FFFFFF;
-    border-radius: 30px;
-    order: 1;
-    border: 3px solid #FF5722;
-    border-radius: 30px;
+    border: 3px solid #4CAF50;
+    color: #4CAF50;
+    background: #FFFFFF;
+    padding: 7px 17px;
 }
 
 #categoryPanel {
+    flex: 3;
     margin-top: 29px;
-    left: 24.3%;
-    overflow-y: auto;
-    z-index: 1050;
     justify-content: center;
     box-sizing: border-box;
     flex-direction: column;
     align-items: flex-start;
-    background: #FFFFFF;
     display: none;
-    padding: 34px;
     gap: 48px;
-    position: absolute;
     min-width: 700px;
-    width: 75.5%;
-    height: 693px;
-    border: 3px solid #53B06C;
+    height: auto;
+}
+
+/*/////////////////////////////  new code for CategoryCard  ///////////////////////////////////*/
+
+.categoryDivCard {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 270px;
+    height: 140px;
+    background: #FFFEFE;
+    border: 3px solid #FF5722;
     border-radius: 30px;
 }
 
-.rowCategoryFotoDiv {
+.categorIconDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    background: #FF5722;
+    /*border-radius: 0px 100px 100px 0px;*/
+    /*height: 70%;*/
+    /*padding-inline-end: 10px;*/
+    height: 100%;
+    border-radius: 26px 0px 0px 26px;
+}
+
+.categortIcon {
+    width: 35px;
+    height: 35px;
+}
+
+.categorTextDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 3;
+}
+
+.categoryText {
+    text-align: center;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 600;
+    /*padding-right: 7%;*/
+    /*font-size: 16px;*/
+    font-size: 18px;
+    line-height: 22px;
+    color: #FF5722;
+}
+
+/*/////////////////////////////////////////////////////////////////////////////////////////////*/
+/*Old code DON`T DELETE*/
+/*.rowCategoryFotoDiv {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -272,14 +310,17 @@ nav {
     height: 160px;
     border-radius: 30px;
     cursor: pointer;
-}
-
+}*/
 .miniCategoryIcon {
     width: 30px;
     height: 30px;
-    margin-right:5px;
+    margin-right: 5px;
 }
-/*///////*/
+
+
+/*//////////////////////////////////////////////////////////////////////////////////////////*/
+
+
 #searchDiv {
     box-sizing: border-box;
     display: flex;
@@ -290,11 +331,11 @@ nav {
     width: auto;
     height: 40px;
     background: #FFFFFF;
-    border: 3px solid #4E9B51;
+    border: 3px solid #4CAF50;
     border-radius: 30px;
-    /*background: url(../icons/Search.png) no-repeat scroll 5px 5px;*/
     z-index: 9993;
 }
+
 #searchIcon {
     width: 24px;
     height: 24px;
@@ -310,8 +351,6 @@ nav {
     height: 30px;
     outline: none; 
 }
-
-/*///////*/
 
 #profile {
     display: flex;
@@ -487,11 +526,6 @@ footer {
     flex: none;
     order: 0;
     flex-grow: 0;
-}
-
-#copyrightIcon {
-    width: 10px;
-    height: 10px;
 }
 
 #copyrightText {
