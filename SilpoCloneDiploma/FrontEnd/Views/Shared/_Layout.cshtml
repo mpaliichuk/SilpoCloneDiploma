@@ -393,62 +393,40 @@
             <div id="mainDiv" class="container-fluid">
                 <div id="catalogDiv">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Goodmeal">
-                        <img id="logo" src="~/icons/Logo.png" />
+                        <img class="no-select no-drag" id="logo" src="~/icons/Logo.png" />
                     </a>
                     <div id="catalogSubDiv">
                         <a id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            <img id="categoriesLogo" src="~/icons/List.png" />
+                            <img class="no-select no-drag" id="categoriesLogo" src="~/icons/List.png" />
                             <span id="categoriesText">Каталог</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-fullscreen" aria-labelledby="navbarDropdownMenuLink">
                             <div class="category-list">
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fruit.png" />Фрукти</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Vegetables.png" />Овочі</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fish.png" />Риба</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Meat.png" />М'ясо</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fruit.png" />Фрукти</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Vegetables.png" />Овочі</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fish.png" />Риба</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Meat.png" />М'ясо</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fruit.png" />Фрукти</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Vegetables.png" />Овочі</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fish.png" />Риба</a>
-                                <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Meat.png" />М'ясо</a>
+                                @* <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
+                                        src="~/icons/Fruit.png" />Фрукти</a> *@
                             </div>
                             <div id="categoryPanel">
-                                <div class="categoryDivCard">
+                                @* <div class="categoryDivCard">
                                     <div class="categorIconDiv"><img class="categortIcon" src="~/icons/Cart.png"/></div>
                                     <div class="categorTextDiv"><span class="categoryText">Риба і М'ясо</span></div>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="searchDiv">
-                    <img id="searchIcon" src="~/icons/Search.png" />
+                    <img class="no-select no-drag" id="searchIcon" src="~/icons/Search.png" />
                     <input id="searchText" placeholder="Шукати..." />
                 </div>
                 <div id="headerDiv2">
                     <button id="profile" type="button">
-                        <img id="profileIcon" src="~/icons/Person.png" />
+                        <img class="no-select no-drag" id="profileIcon" src="~/icons/Person.png" />
                         <span>Акаунт</span>
                     </button>
                 </div>
                 <div id="basketDiv">
-                    <img id="basketIcon" src="~/icons/Cart.png" />
+                    <img class="no-select no-drag" id="basketIcon" src="~/icons/Cart.png" />
                     <span id="basketText">Кошик</span>
                 </div>
             </div>
@@ -589,20 +567,20 @@
                 <div id="contactsDiv" class="container-fluid">
                     <div id="mainContactsDiv" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Goodmeal">
-                            <img id="logoFooter" src="~/icons/Logo.png" />
+                            <img id="logoFooter" class="no-select no-drag" src="~/icons/Logo.png" />
                         </a>
                         <div id="socialDiv">
                             <a role="button" href="https://www.facebook.com/">
-                                <img class="socialIcons" src="~/icons/Facebook.png" />
+                                <img class="socialIcons no-select no-drag" src="~/icons/Facebook.png" />
                             </a>
                             <a role="button" href="https://www.instagram.com/">
-                                <img class="socialIcons" src="~/icons/Instagram.png" />
+                                <img class="socialIcons no-select no-drag" src="~/icons/Instagram.png" />
                             </a>
                             <a role="button" href="https://www.viber.com/">
-                                <img class="socialIcons" src="~/icons/Viber.png" />
+                                <img class="socialIcons no-select no-drag" src="~/icons/Viber.png" />
                             </a>
                             <a role="button" href="https://web.telegram.org/">
-                                <img class="socialIcons" src="~/icons/Telegram.png" />
+                                <img class="socialIcons no-select no-drag" src="~/icons/Telegram.png" />
                             </a>
                         </div>
                     </div>
@@ -612,11 +590,11 @@
                                 <span class="communicationMainText">Гаряча лінія у межах України</span>
                             </div>
                             <div class="communicationPhoneDiv">
-                                <img class="communicationIcon" src="~/icons/Phone.png" />
+                                <img class="communicationIcon no-select no-drag" src="~/icons/Phone.png" />
                                 <span class="communicationText">0800 301 707</span>
                             </div>
                             <div class="communicationIconDiv">
-                                <img class="communicationIcon" src="~/icons/Clock.png" />
+                                <img class="communicationIcon no-select no-drag" src="~/icons/Clock.png" />
                                 <span class="communicationText">7.00-23.00</span>
                             </div>
                         </div>
@@ -625,11 +603,11 @@
                                 <span class="communicationMainText">Для дзвінків з-за кордону</span>
                             </div>
                             <div class="communicationPhoneDiv">
-                                <img class="communicationIcon" src="~/icons/Phone.png" />
+                                <img class="communicationIcon no-select no-drag" src="~/icons/Phone.png" />
                                 <span class="communicationText"> 0800 301 707</span>
                             </div>
                             <div class="communicationIconDiv">
-                                <img class="communicationIcon" src="~/icons/Clock.png" />
+                                <img class="communicationIcon no-select no-drag" src="~/icons/Clock.png" />
                                 <span class="communicationText">7.00-23.00</span>
                             </div>
                         </div>

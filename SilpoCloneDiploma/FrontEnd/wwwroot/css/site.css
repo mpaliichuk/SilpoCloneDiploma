@@ -46,6 +46,14 @@ nav {
     z-index: 9990; /* Overlay */
 }
 
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.no-drag {
+    -webkit-user-drag: none;
+}
 
 /*/////////////////////////NoSystem////////////////////////////*/
 
@@ -151,6 +159,7 @@ nav {
 }
 
 /*//////////////////////////////////////////////////////////////////////////////////////////*/
+
 .dropdown-menu-fullscreen {
     top: 90px;
     left: -1.5px;
@@ -160,14 +169,12 @@ nav {
     overflow-y: auto;
     z-index: 1050;
     display: none;
-    justify-content: center;
-    box-sizing: border-box;
     flex-direction: row;
     align-items: flex-start;
     padding: 20px;
-    gap: 4px;
+    gap: 20px;
     background: #FFFFFF;
-    border: 3px solid #4CAF50;
+    border: 3px solid #FF5722;
 }
 
 .dropdown-menu-fullscreen.show {
@@ -186,6 +193,9 @@ nav {
 }
 
 .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
     flex: 1;
     padding: 20px;
     font-family: Noto Sans;
@@ -194,10 +204,32 @@ nav {
     line-height: 27.24px;
     text-align: left;
     color: #585858;
+    min-width: 335px;
 }
 
 .category-item {
-    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 20px;
+    gap: 10px;
+    width: auto;
+    height: 32px;
+    background: #FFF6F3;
+    border: 2px solid #FF5722;
+    border-radius: 30px;
+    /*Text*/
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 22px;
+    color: #FF5722;
+}
+
+.category-item:hover {
+    background: #FF5722;
+    color: #FFFEFE;
 }
 
 #navbarDropdownMenuLink {
@@ -231,15 +263,17 @@ nav {
 #categoryPanel {
     flex: 3;
     margin-top: 29px;
-    justify-content: center;
+    justify-content: flex-start;
     box-sizing: border-box;
-    flex-direction: column;
+    flex-wrap:wrap;
+    flex-direction: row;
     align-items: flex-start;
     display: none;
     gap: 48px;
-    min-width: 700px;
     height: auto;
 }
+
+
 
 /*/////////////////////////////  new code for CategoryCard  ///////////////////////////////////*/
 
@@ -252,6 +286,7 @@ nav {
     background: #FFFEFE;
     border: 3px solid #FF5722;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .categorIconDiv {
@@ -289,6 +324,7 @@ nav {
     font-size: 18px;
     line-height: 22px;
     color: #FF5722;
+    padding: 0px 10px 0px 10px;
 }
 
 /*/////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -312,8 +348,8 @@ nav {
     cursor: pointer;
 }*/
 .miniCategoryIcon {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     margin-right: 5px;
 }
 
