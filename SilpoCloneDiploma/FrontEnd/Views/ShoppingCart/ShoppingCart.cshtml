@@ -33,10 +33,11 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        margin-left: 580px;
     }
 
     .cart-icon {
-        position: relative;
+        padding-right: 550px;
         width: 24px;
         height: 24px;
     }
@@ -46,6 +47,7 @@
         font-family: 'Noto Sans', sans-serif;
         font-weight: 400;
         color: #1E1E1E;
+        white-space: nowrap;
     }
 
     .free-delivery-message {
@@ -460,68 +462,66 @@
     <div class="cart-container">
         <div class="cart-header">
             <div class="cart-title">Кошик</div>
-            <div class="cart-clear">
-                <div class="cart-icon">
-                    <img src="~/icons/solar_cart-3-outline.png"></img>
-                </div>
-                <div class="cart-clear-text">Очистити кошик</div>
-            </div>
         </div>
-
         <div class="cart-items">
             <div class="free-delivery-message">
                 <div class="free-delivery-text">Безкоштовна доставка на суму від <span class="free-delivery-bold">1299
                         грн</span></div>
             </div>
-
-            <div class="cart-item">
+            <div class="cart-clear" id="clear-cart-button">
+                <div class="cart-clear-text">Очистити кошик</div>
+                <div class="cart-icon">
+                    <img src="~/icons/solar_cart-3-outline.png"></img>
+                </div>
+            </div>
+            <div class="cart-item" data-id="item-1">
                 <img class="item-image" src="https://via.placeholder.com/50x50" alt="Лимон" />
                 <div class="item-name">Лимон</div>
                 <div class="item-quantity">
-                    <div class="quantity-unit">кг</div>
+                    <div class="quantity-unit">100 г</div>
                     <div class="item-price">189,00 грн</div>
                     <div class="quantity-control">
-                        <div class="quantity-button">+</div>
-                        <div class="quantity-text">0.5 кг</div>
-                        <div class="quantity-button">-</div>
+                        <div class="quantity-button" onclick="incrementQuantity('item-1')">+</div>
+                        <div class="quantity-text">0.1 кг</div>
+                        <div class="quantity-button" onclick="decrementQuantity('item-1')">-</div>
                     </div>
                     <div class="item-total">35,00 грн</div>
                     <div class="remove-item">
-                        <div class="remove-icon">X</div>
+                        <div class="remove-icon" onclick="removeItem('item-1')">X</div>
                     </div>
                 </div>
             </div>
-            <div class="cart-item">
+            <div class="cart-item" data-id="item-2">
                 <img class="item-image" src="https://via.placeholder.com/50x50" alt="Ожина фасована" />
                 <div class="item-name">Ожина фасована</div>
                 <div class="item-quantity">
-                    <div class="quantity-unit">250 г</div>
+                    <div class="quantity-unit">100 г</div>
                     <div class="item-price">189,00 грн</div>
                     <div class="quantity-control">
-                        <div class="quantity-button">+</div>
-                        <div class="quantity-text">0.1</div>
-                        <div class="quantity-button">-</div>
+                        <div class="quantity-button" onclick="incrementQuantity('item-2')">+</div>
+                        <div class="quantity-text">0.1 кг</div>
+                        <div class="quantity-button" onclick="decrementQuantity('item-2')">-</div>
                     </div>
                     <div class="item-total">35,00 грн</div>
                     <div class="remove-item">
-                        <div class="remove-icon">X</div>
+                        <div class="remove-icon" onclick="removeItem('item-2')">X</div>
                     </div>
                 </div>
             </div>
-            <div class="cart-item">
+            <div class="cart-item" data-id="item-3">
                 <img class="item-image" src="https://via.placeholder.com/50x50" alt="Папайя" />
                 <div class="item-name">Папайя</div>
                 <div class="item-quantity">
-                    <div class="quantity-unit">кг</div>
+                    <div class="quantity-unit">100 г</div>
                     <div class="item-price">189,00 грн</div>
                     <div class="quantity-control">
-                        <div class="quantity-button">+</div>
+                        <div class="quantity-button" onclick="incrementQuantity('item-3')">+</div>
                         <div class="quantity-text">0.1 кг</div>
-                        <div class="quantity-button">-</div>
+                        <div class="quantity-button" onclick="decrementQuantity('item-3')">-</div>
                     </div>
                     <div class="item-total">35,00 грн</div>
                     <div class="remove-item">
-                        <div class="remove-icon">X</div>
+                        <div class="remove-icon" onclick="removeItem('item-3')">X</div>
                     </div>
                 </div>
             </div>
@@ -586,21 +586,22 @@
         <div class="CertificateDetails">
             <div class="Detail">
                 <div class="DetailLabel">Доставка:</div>
-                <div class="DetailValue">69,00 грн</div>
+                <div class="DetailValue" id="deliveryCost">69,00 грн</div>
             </div>
             <div class="Detail">
                 <div class="DetailLabel">Вага з супутнім пакованням:</div>
-                <div class="DetailValue">1,76 кг</div>
+                <div class="DetailValue" id="totalWeight">1,76 кг</div>
             </div>
             <div class="Detail">
                 <div class="DetailLabel">Всього:</div>
-                <div class="DetailValue total">402,00 грн</div>
+                <div class="DetailValue total" id="totalPrice">402,00 грн</div>
             </div>
             <div class="AdditionalInfo">
                 <div class="InfoContent">
                     <div class="InfoTitle">Коментар до замовлення</div>
-                    <div class="InfoComment">Тут ви можете залишити свої побажання щодо окремих товарів, усього
-                        замовлення, пакування тощо.</div>
+                    <textarea class="InfoComment"
+                        placeholder="Тут ви можете залишити свої побажання щодо окремих товарів, усього замовлення, пакування тощо."
+                        rows="4"></textarea>
                 </div>
                 <div class="PromoNext">
                     <div class="NextText">Далі</div>
@@ -609,4 +610,87 @@
         </div>
     </div>
 </div>
-</div>
+<script>
+
+    let cartItems = {
+        'item-1': {
+            name: 'Лимон',
+            weight: 0.1,
+            pricePerKg: 189.00
+        },
+        'item-2': {
+            name: 'Ожина фасована',
+            weight: 0.1,
+            pricePerKg: 189.00
+        },
+        'item-3': {
+            name: 'Папайя',
+            weight: 0.1,
+            pricePerKg: 189.00
+        }
+    };
+
+    document.getElementById('clear-cart-button').addEventListener('click', function () {
+        const cartItemsDisplay = document.querySelectorAll('.cart-item');
+        cartItemsDisplay.forEach(item => item.remove());
+        cartItems = {};
+        updateCertificateDetails();
+    });
+
+    function updateCartItemDisplay(itemId) {
+        const item = cartItems[itemId];
+        const quantityText = document.querySelector(`.cart-item[data-id="${itemId}"] .quantity-text`);
+        const itemTotal = document.querySelector(`.cart-item[data-id="${itemId}"] .item-total`);
+        const quantityUnit = document.querySelector(`.cart-item[data-id="${itemId}"] .quantity-unit`);
+
+        quantityText.textContent = `${item.weight.toFixed(1)} кг`;
+        itemTotal.textContent = `${(item.weight * item.pricePerKg).toFixed(2)} грн`;
+
+        const weightInGrams = (item.weight * 1000).toFixed(0);
+        quantityUnit.textContent = `${weightInGrams} г`;
+
+        updateCertificateDetails();
+    }
+
+    function updateCertificateDetails() {
+        let totalWeight = 0;
+        let totalPrice = 0;
+
+        for (let itemId in cartItems) {
+            totalWeight += cartItems[itemId].weight;
+            totalPrice += cartItems[itemId].weight * cartItems[itemId].pricePerKg;
+        }
+
+        document.getElementById('totalWeight').textContent = `${totalWeight.toFixed(2)} кг`;
+        document.getElementById('totalPrice').textContent = `${totalPrice.toFixed(2)} грн`;
+
+        if (totalWeight === 0 && totalPrice === 0) {
+            document.getElementById('totalWeight').textContent = `0.00 кг`;
+            document.getElementById('totalPrice').textContent = `0.00 грн`;
+        }
+    }
+
+    function incrementQuantity(itemId) {
+        if (cartItems[itemId].weight < 10) {
+            cartItems[itemId].weight = (cartItems[itemId].weight + 0.1).toFixed(1);
+            cartItems[itemId].weight = parseFloat(cartItems[itemId].weight);
+            updateCartItemDisplay(itemId);
+        }
+    }
+
+    function decrementQuantity(itemId) {
+        if (cartItems[itemId].weight > 0.1) {
+            cartItems[itemId].weight = (cartItems[itemId].weight - 0.1).toFixed(1);
+            cartItems[itemId].weight = parseFloat(cartItems[itemId].weight);
+            updateCartItemDisplay(itemId);
+        }
+    }
+
+    function removeItem(itemId) {
+        delete cartItems[itemId];
+        document.querySelector(`.cart-item[data-id="${itemId}"]`).remove();
+        updateCertificateDetails();
+    }
+
+    updateCertificateDetails();
+</script>
