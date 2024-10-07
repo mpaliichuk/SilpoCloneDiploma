@@ -12,8 +12,8 @@ using ProductServiceApi.Models;
 namespace ProductServiceApi.Migrations
 {
     [DbContext(typeof(ProductCategoryContext))]
-    [Migration("20240817155040_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20241007135706_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,8 +62,8 @@ namespace ProductServiceApi.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
+                    b.Property<double>("Count")
+                        .HasColumnType("float");
 
                     b.Property<string>("GeneralInformation")
                         .HasMaxLength(500)
@@ -82,8 +82,8 @@ namespace ProductServiceApi.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasAnnotation("Relational:JsonPropertyName", "productComposition");
 
-                    b.Property<bool?>("Sale")
-                        .HasColumnType("bit");
+                    b.Property<double?>("Sale")
+                        .HasColumnType("float");
 
                     b.Property<string>("Title")
                         .IsRequired()

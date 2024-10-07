@@ -59,8 +59,8 @@ namespace ProductServiceApi.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
+                    b.Property<double>("Count")
+                        .HasColumnType("float");
 
                     b.Property<string>("GeneralInformation")
                         .HasMaxLength(500)
@@ -79,8 +79,8 @@ namespace ProductServiceApi.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasAnnotation("Relational:JsonPropertyName", "productComposition");
 
-                    b.Property<bool?>("Sale")
-                        .HasColumnType("bit");
+                    b.Property<double?>("Sale")
+                        .HasColumnType("float");
 
                     b.Property<string>("Title")
                         .IsRequired()

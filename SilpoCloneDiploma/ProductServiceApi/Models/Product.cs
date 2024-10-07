@@ -31,9 +31,9 @@ namespace ProductServiceApi.Models
         [Required(ErrorMessage = "Availability status is required")]
         public Availability Availability { get; set; }
 
-        public int Count { get; set; }
+        public double Count { get; set; }
 
-        public bool? Sale { get; set; }
+        public double? Sale { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
         [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number")]

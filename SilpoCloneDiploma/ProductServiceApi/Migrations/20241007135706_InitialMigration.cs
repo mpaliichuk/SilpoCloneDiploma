@@ -5,7 +5,7 @@
 namespace ProductServiceApi.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,8 +40,8 @@ namespace ProductServiceApi.Migrations
                     GeneralInformation = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ImageUrls = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Availability = table.Column<int>(type: "int", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false),
-                    Sale = table.Column<bool>(type: "bit", nullable: true),
+                    Count = table.Column<double>(type: "float", nullable: false),
+                    Sale = table.Column<double>(type: "float", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
