@@ -26,9 +26,9 @@ namespace ProductServiceApi.Dtos
             [Required]
             public Availability Availability { get; set; }
 
-            public int Count { get; set; }
+            public double Count { get; set; }
 
-            public bool? Sale { get; set; }
+            public double? Sale { get; set; }
 
             [Required]
             [Range(0, double.MaxValue)]
