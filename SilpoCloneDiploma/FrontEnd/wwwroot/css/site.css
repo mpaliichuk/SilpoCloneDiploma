@@ -228,8 +228,9 @@ nav {
 }
 
 .category-item:hover {
-    background: #FF5722;
-    color: #FFFEFE;
+    border: 3px solid #FF5722;
+    color: #FF5722;
+    background: #FFF6F3;
 }
 
 #navbarDropdownMenuLink {
@@ -287,6 +288,7 @@ nav {
     border: 3px solid #FF5722;
     border-radius: 30px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .categorIconDiv {
@@ -303,8 +305,8 @@ nav {
 }
 
 .categortIcon {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
 }
 
 .categorTextDiv {
@@ -327,35 +329,13 @@ nav {
     padding: 0px 10px 0px 10px;
 }
 
-/*/////////////////////////////////////////////////////////////////////////////////////////////*/
-/*Old code DON`T DELETE*/
-/*.rowCategoryFotoDiv {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 28px;
-    width: 968px;
-    height: 160px;
-    flex: none;
-}
-
-.categoryFoto {
-    box-sizing: border-box;
-    width: 304px;
-    height: 160px;
-    border-radius: 30px;
-    cursor: pointer;
-}*/
 .miniCategoryIcon {
     width: 25px;
     height: 25px;
     margin-right: 5px;
 }
 
-
-/*//////////////////////////////////////////////////////////////////////////////////////////*/
-
+/*/////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #searchDiv {
     box-sizing: border-box;

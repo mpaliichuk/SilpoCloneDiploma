@@ -516,14 +516,14 @@
 }
 
 #leftVector {
-    /*z-index: 1;
-    margin-left: -227px;
-    margin-top: -100px;
-    width: 12%;*/
     z-index: 1;
     margin-left: -227px;
     margin-top: -11%;
-    width: 100%;
+}
+
+.leftVectorImg {
+    width: 180px;
+    height: 736px;
 }
 
 #rightVector {
@@ -531,7 +531,6 @@
     padding-top: 19%;
     margin-bottom: -20%;
     margin-right: -21.2%;
-    width: 100%;
 }
 
 @media (max-width: 1500px) {
