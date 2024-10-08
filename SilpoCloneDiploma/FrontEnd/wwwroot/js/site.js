@@ -34,7 +34,7 @@ const categories = {
         icon: '/icons/CategoryIcons/SmallFruitIcon.png',
         items: [
             { name: 'Сезонні фрукти', link: '/icons/CategoryIcons/SeasonalFruits.png', route: 'SeasonalFruits' },
-            { name: 'Ягоди', link: '/icons/CategoryIcons/Berries.png', route: '/Berries' },
+            { name: 'Ягоди', link: '/icons/CategoryIcons/Berries.png', route: 'Berries' },
             { name: 'Смузі та фреші', link: '/icons/CategoryIcons/Smoothies.png', route: 'Smoothies' },
             { name: 'Фруктові снеки', link: '/icons/CategoryIcons/FruitSnacks.png', route: 'FruitSnacks' },
             { name: 'Горіхи', link: '/icons/CategoryIcons/Nuts.png', route: 'Nuts' },
@@ -150,7 +150,7 @@ function generateCategoryInitialisator() {
     const categoryValues = Object.values(categories);
 
     for (var categoryId = 0; categoryId < categoryValues.length; categoryId++) {
-        createCategoryItem(`Goodmeal/Category/${categoryId}`, categoryId);
+        createCategoryItem(`/Goodmeal/Category/${categoryId}`, categoryId);
     }
 
     for (var categoryId = 0; categoryId < dropdownItems.length; categoryId++) {
@@ -202,9 +202,9 @@ function generateCategoryPanel(categoryId) {
 function generateCategoryCard(iconSrc, categoryText, id, route) {
     const categoryDivCard = document.createElement('a');
     if (route)
-        categoryDivCard.href = `Goodmeal/Category/${id}/${route}`;
+        categoryDivCard.href = `/Goodmeal/Category/${id}/${route}`;
     else
-        categoryDivCard.href = `Goodmeal/Category/${id}`;
+        categoryDivCard.href = `/Goodmeal/Category/${id}`;
 
     categoryDivCard.className = 'categoryDivCard';
 

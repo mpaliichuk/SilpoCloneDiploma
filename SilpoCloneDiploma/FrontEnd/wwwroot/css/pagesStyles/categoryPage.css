@@ -1,0 +1,439 @@
+﻿.mainCategoryDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 60px 0px 60px;
+    gap: 32px;
+    width: 100%;
+    height: auto;
+}
+
+.mainItemsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 4px;
+    width: 100%;
+    height: auto;
+}
+
+#paginationDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 28px;
+    width: 231px;
+    height: 107px;
+    background-color: rebeccapurple;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 0.5%;
+    margin-top: 1.5%;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+    height: 25px;
+}
+
+.breadcrumbLink {
+    text-decoration: none;
+    color: inherit;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #757575;
+}
+
+.breadcrumbLink:hover {
+    color: #4d4d4d;
+}
+
+.breadcrumbArrow {
+    width: 18px;
+    height: 18px;
+}
+
+.subItemsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    width: 100%;
+    height: auto;
+}
+
+.controlItemsDis {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 28px;
+    width: 100%;
+    height: 152px;
+}
+
+#categoryNameDiv {
+    width: 100%;
+    height: 54px;
+    text-align: center;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 54px;
+    text-align: center;
+    color: #1E1E1E;
+}
+
+.controlSubCategoriesDis {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap:wrap;
+    padding: 16px 0px;
+    gap: 24px;
+    width: 100%;
+    height: auto;
+}
+
+.subCategory {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 8px 16px;
+    gap: 4px;
+    width: 109px;
+    height: 38px;
+    background: #4CAF50;
+    border-radius: 24px;
+    border: 0px;
+    /*Text*/
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+#subCategoryNameText {
+    color: #FFFEFE;
+}
+
+#subCategoryCount {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.itemsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+    width: 100%;
+    height: auto;
+}
+
+.filterItemsDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    height: 25px;
+}
+
+.filtered, .sorted {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.no-caret::after {
+    display: none;
+}
+
+/*///////////////////////////////////              CARDS               ////////////////////////////////////*/
+#mainProductsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+    width: 100%;
+    height: auto;
+    margin-top: 4%;
+}
+
+#pagesDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 28px;
+    width: auto;
+    height: 44px;
+}
+
+#productsCarousel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 301px;
+}
+
+#productsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 22px;
+    width: 100%;
+    height: 301px;
+}
+
+#subProductsDiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    gap: 35px 30px;
+    width: 100%;
+    height: auto;
+}
+
+
+#mainProductsTagText {
+    width: 100%;
+    height: 54px;
+    text-align: center;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 54px;
+    text-align: center;
+    color: #1E1E1E;
+}
+
+.cardDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 8px;
+    isolation: isolate;
+    width: auto;
+    height: 301px;
+    background: #FFFFFF;
+    border: 3px solid #53B06C;
+    border-radius: 20px;
+    font-family: 'Noto Sans';
+}
+
+.productIconDiv {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 162px;
+    height: 100px;
+}
+
+.productIcon {
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 80px/2);
+    top: calc(50% - 80px/2);
+}
+
+.productInfoDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+    width: 162px;
+    height: 153px;
+}
+
+.productNameDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 5px;
+    width: 162px;
+    height: 62px;
+}
+
+.productName {
+    width: 162px;
+    height: 25px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.productFullName {
+    width: 162px;
+    height: 32px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    color: #1E1E1E;
+}
+
+.priceDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 13px;
+    width: 127px;
+    height: 25px;
+}
+
+.subPriceDiv {
+    display: flex;
+    flex-direction: row;
+    width: 66px;
+    height: 25px;
+    gap: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.crossTextDiv {
+    display: flex;
+    flex-direction: row;
+    width: 100px;
+    height: 20px;
+    gap: 5px;
+}
+
+    .crossTextDiv span {
+        padding-top: 4px;
+        width: 80px;
+        height: 20px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 19px;
+        text-decoration-line: line-through;
+        color: #888888;
+    }
+
+.productControlDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 50px;
+    width: 162px;
+    height: 34px;
+}
+
+.productCountDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 12px;
+    width: 74px;
+    height: 22px;
+}
+
+.productBuyBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8.8px;
+    gap: 10px;
+    width: 34px;
+    height: 34px;
+    background: #53B06C;
+    border-radius: 30px;
+    border: none;
+}
+
+.productCartIcon {
+    width: 16px;
+    height: 16px;
+}
+
+.productCountButton {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #DBDADA;
+    border-radius: 3px;
+    background: #FFFFFF;
+}
+
+.productCount {
+    width: 10px;
+    height: 22px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #7A7A7A;
+}
+
+.plusMiniIcon {
+    display: flex;
+    text-align: center;
+    font-size: 17px;
+    padding-bottom: 1px;
+    color: #757575;
+}
+
+.minusMiniIcon {
+    display: flex;
+    text-align: center;
+    font-size: 22px;
+    padding-bottom: 5px;
+    color: #757575;
+}
+
+.discountIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.no-drag {
+    -webkit-user-drag: none;
+}
