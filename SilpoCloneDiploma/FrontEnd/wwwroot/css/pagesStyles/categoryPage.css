@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding: 20px 60px 0px 60px;
-    gap: 32px;
+    gap: 60px;
     width: 100%;
     height: auto;
 }
@@ -21,12 +21,71 @@
 #paginationDiv {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 0px;
     gap: 28px;
-    width: 231px;
-    height: 107px;
-    background-color: rebeccapurple;
+    width: auto;
+    height: auto;
+    font-family: 'Noto Sans';
+}
+
+.moreItemsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 40px;
+    gap: 8px;
+    width: 210px;
+    height: 55px;
+    border: 0px;
+    background: #4CAF50;
+    border-radius: 30px;
+    /*Text*/
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    color: #FFFEFE;
+}
+
+#pagesControlDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px;
+    gap: 20px;
+    width: auto;
+    height: auto;
+}
+
+.pageControlButtons{
+    border:0px;
+    background: none;
+    font-size:30px;
+}
+
+.pages{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:5%;
+}
+
+.pageButton, .lastPageButton, .selectorButton {
+    border: 0px;
+    background: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #1E1E1E;
+}
+
+.selectorButton {
+    cursor: default;
 }
 
 .breadcrumb {

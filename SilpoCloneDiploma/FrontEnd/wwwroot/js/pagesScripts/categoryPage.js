@@ -1,4 +1,14 @@
-﻿GetProducts();
+﻿var categoryName = document.getElementById("subCategoryName").value;
+if (categoryName != "All") {
+    document.getElementById("categoryNameDiv").innerText = categoryName;
+}
+
+var currentPage = 1;
+var pageSize = 18;
+var newPage = true;
+var pageChangeSymbol = "plus";
+
+GetProducts();
 async function GetProducts() {
     var productsByDiscount = [];
 
@@ -20,25 +30,21 @@ async function GetProducts() {
         console.error('Error:', error);
         throw error;
     }*/
-    var isFirstBool = false;
+    if (newPage)
+        document.getElementById('subProductsDiv').innerText = '';
     for (var i = 0; i < 18; i++) {
-        if (i == 0) {
-            isFirstBool = true;
-        }
         const productCard = createProductCard({
             productIconSrc: '/icons/ProductIcon.png',
             productName: 'Сьомга Norven',
             productFullName: 'Сьомга Norven слабосолена в/у, 120г',
             currentPrice: '256',
             oldPrice: '315',
-            productId: '123',
-            isFirst: isFirstBool
+            productId: '123'
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
-        isFirstBool = false;
     }
+    addCardsEvents();
 }
-
 function createProductCard({ productIconSrc, productName, productFullName,
     currentPrice, oldPrice, productId, discountIconSrc = '/icons/Discount.png' }) {
     const cardDiv = document.createElement('div');
@@ -144,3 +150,141 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     return cardDiv;
 }
+
+const moreItemsBtn = document.getElementById('moreItems');
+var pageButtons = document.querySelectorAll('.pageButton');
+const buttonPrev = document.getElementById('buttonPrev');
+const buttonNext = document.getElementById('buttonNext');
+
+moreItemsBtn.addEventListener("click", function () {
+    newPage = false;
+    GetProducts();
+    pageChangeSymbol = "plus";
+    changePageText(pageChangeSymbol);
+});
+
+buttonNext.addEventListener("click", function () {
+    newPage = true;
+    GetProducts();
+    pageChangeSymbol = "plus";
+    changePageText(pageChangeSymbol);
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
+});
+
+buttonPrev.addEventListener("click", function () {
+    newPage = true;
+    GetProducts();
+    pageChangeSymbol = "minus";
+    changePageText(pageChangeSymbol);
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
+});
+
+function changePageText(pageChangeSymbol) {
+    var tmpPage = currentPage;
+    var minusStep = 0;
+    pageButtons.forEach(btn => {
+        if (pageChangeSymbol == "plus")
+            btn.innerText = ++tmpPage;
+        else {
+            tmpPage--;
+            btn.innerText = tmpPage - minusStep;
+            minusStep++;
+            tmpPage += 3;
+        }
+    });
+    if (pageChangeSymbol == "plus")
+        currentPage++;
+    else
+        currentPage--;
+}
+
+/*////////////////////////////      Cards       //////////////////////////////////////////////*/
+
+function addCardsEvents() {
+    const cardDivs = document.querySelectorAll('.cardDiv');
+    const productCountDivs = document.querySelectorAll('.productCountDiv');
+    const productBuyBtns = document.querySelectorAll('.productBuyBtn');
+
+    productBuyBtns.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const cardDiv = item.closest('.cardDiv');
+            const count = cardDiv.querySelector('.productCount');
+            if (count) {
+                let currentCount = parseInt(count.innerHTML);
+                if (currentCount > 0) {
+                    //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
+                    alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
+                    count.innerHTML = '0';
+                }
+                else {
+                    alert("Спершу виберіть кількість товар (`U_U`)!");
+                }
+            }
+        });
+    });
+
+    cardDivs.forEach(item => {
+        item.addEventListener('click', function (event) {
+            const productControlDiv = item.querySelector('.productControlDiv');
+            if (productControlDiv && !productControlDiv.contains(event.target)) {
+                var productId = item.id;
+                window.location = "/Goodmeal/ProductPage/" + productId;
+            }
+        });
+        item.addEventListener('mouseenter', function () {
+            item.style.border = '3px solid #FF5722';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#FF5722';
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            item.style.border = '3px solid #53B06C';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#53B06C';
+            }
+        });
+
+        const cartButton = item.querySelector('.productBuyBtn');
+        cartButton.addEventListener('mouseenter', function (event) {
+            event.stopPropagation();
+        });
+
+        cartButton.addEventListener('mouseleave', function (event) {
+            event.stopPropagation();
+        });
+    })
+
+    productCountDivs.forEach(item => {
+        const minus = item.getElementsByClassName('minus')[0];
+        const plus = item.getElementsByClassName('plus')[0];
+        const count = item.getElementsByClassName('productCount')[0];
+        minus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            if (currentCount > 0) {
+                count.innerHTML = `${currentCount - 1}`;
+            }
+        });
+
+        plus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            count.innerHTML = `${currentCount + 1}`;
+        });
+    });
+}
+/*////////////////////////////////////////////////////////////////////////////////////////////*/
