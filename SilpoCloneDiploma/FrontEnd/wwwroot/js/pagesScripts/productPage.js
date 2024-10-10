@@ -14,22 +14,21 @@ async function GetProduct(productId) {
     //     const product = await response.json();
         let product = {
             id: 5,
-            title: "Умные часы XYZ",
-            description: "Многофункциональные умные часы с сенсорным экраном и мониторингом здоровья.",
+            title: "Папайя",
+            description: "Плоди за розмірами і формою схожі на диню масою до 5 кг, з соковитим жовтогарячим м'якушем, всередині з чорним насінням.",
             imageUrls: [
-                "https://i.pinimg.com/564x/d2/b3/43/d2b3433dd73e81ec561b2a43587b60fe.jpg",
-                "https://i.pinimg.com/736x/1e/f2/9b/1ef29ba4eee6204bf2fe891456d10970.jpg",
-                "https://i.pinimg.com/736x/33/54/cf/3354cf583d7fa7a30e3300de83e4bf44.jpg"
+                "https://i.pinimg.com/564x/e7/1f/bf/e71fbfc7add78aefc7d81dad746b1f0d.jpg",
+                "https://i.pinimg.com/564x/7b/34/27/7b3427e1a0020c30747ac1fd53a5ac88.jpg",
+                "https://i.pinimg.com/564x/a1/39/2d/a1392d131ef3d1269e9bc0d023f2021d.jpg"
             ],
-            price: 5000,
+            price: 50,
             discountPercentage: 10,
             rating: 4.5,
             category_id: 3,
             attributes: [
-                { key: "Цвет", value: "Чёрный" },
-                { key: "Материал", value: "Металл и пластик" },
-                { key: "Время работы", value: "48 часов" },
-                { key: "Вес", value: "50 грамм" }
+                { key: "Колір", value: "Помаранчевий" },
+                { key: "Країна", value: "Мексика" },
+                { key: "Вага", value: "100 грамм" }
             ]
         };
 
@@ -38,11 +37,13 @@ async function GetProduct(productId) {
         document.getElementById("descriptionInfo").innerText = product.description;
         document.getElementById("productMainImg").src = product.imageUrls[0];
 
-        for (let i = 0; i < product.imageUrls.length; i++) {
-            let smallImg = document.getElementById("productSmallImg" + (i + 1).toString());
-            if (smallImg) {
-                smallImg.src = product.imageUrls[i];
-            }
+        photoCount = product.imageUrls.length;
+        if (photoCount > 1)
+            document.getElementById("buttonPrev").classList = "noActiveButton";
+        for (let i = 0; i < photoCount; i++) {
+            var smallPhotoId = "productSmallImg" + (i + 1).toString();
+            var child = createSmallRow(smallPhotoId, product.imageUrls[i]);
+            document.querySelector('.small-row').appendChild(child);
         }
 
         document.getElementById("ratingScore").innerText = product.rating;
@@ -128,6 +129,25 @@ async function GetProducts() {
 }
 
 //Controls
+
+function createSmallRow(id, src) {
+    let smallRow = document.createElement('div');
+    smallRow.className = 'small-row';
+
+    let photoDiv = document.createElement('div');
+    photoDiv.className = 'photo small';
+
+    let img = document.createElement('img');
+    img.className = 'poductPhoto smallPhoto';
+    img.id = id;
+    img.src = src;
+
+    photoDiv.appendChild(img);
+
+    smallRow.appendChild(photoDiv);
+
+    return smallRow;
+}
 
 function generatePriceNoDiscount(oldPrice, discountPercentage) {
     const priceNoDiscountDiv = document.getElementById("priceNoDiscountDiv");
@@ -297,6 +317,7 @@ const photos = document.querySelectorAll('.poductPhoto');
 const buttonPrev = document.getElementById('buttonPrev');
 const buttonNext = document.getElementById('buttonNext');
 var photoPosition = 1;
+var photoCount;
 
 photos.forEach(item => {
     item.addEventListener('click', function (event) {
@@ -308,51 +329,50 @@ photos.forEach(item => {
             const imgId = event.target.id;
             const lastDigit = imgId.match(/\d+$/);
             photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
-            switch (photoPosition) {
-                case 1:
-                    buttonPrev.classList.toggle('noActiveButton');
-                    if (buttonNext.classList.contains('noActiveButton'))
-                        buttonNext.classList.toggle('noActiveButton');
-                    break;
-                case 2:
-                    if (buttonPrev.classList.contains('noActiveButton'))
-                        buttonPrev.classList.toggle('noActiveButton');
-                    if (buttonNext.classList.contains('noActiveButton'))
-                        buttonNext.classList.toggle('noActiveButton');
-                    break;
-                case 3:
-                    buttonNext.classList.toggle('noActiveButton');
-                    if (buttonPrev.classList.contains('noActiveButton'))
-                        buttonPrev.classList.toggle('noActiveButton');
-                    break;
-            }
+
+            updateButtons();
         }
     });
 });
+function updateButtons() {
+    if (photoCount === 1) {
+        buttonPrev.classList.add('noActiveButton');
+        buttonNext.classList.add('noActiveButton');
+    } else {
+        if (photoPosition === 1) {
+            buttonPrev.classList.add('noActiveButton');
+            buttonNext.classList.remove('noActiveButton');
+        } else if (photoPosition === photoCount) {
+            buttonPrev.classList.remove('noActiveButton');
+            buttonNext.classList.add('noActiveButton');
+        } else {
+            buttonPrev.classList.remove('noActiveButton');
+            buttonNext.classList.remove('noActiveButton');
+        }
+    }
+}
+updateButtons();
+
 
 buttonPrev.addEventListener('click', function () {
-    const largeContainer = document.querySelector('.large');
-    const bigImg = largeContainer.querySelector('img');
-    const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
-    bigImg.src = smallImg.src;
-    photoPosition--;
-    if (photoPosition < 2)
-        buttonPrev.classList.toggle('noActiveButton');
-    if (photoPosition == 2 && buttonNext.classList.contains('noActiveButton')) {
-        buttonNext.classList.toggle('noActiveButton');
+    if (photoPosition > 1) {
+        const largeContainer = document.querySelector('.large');
+        const bigImg = largeContainer.querySelector('img');
+        const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
+        bigImg.src = smallImg.src;
+        photoPosition--;
+        updateButtons();
     }
 });
 
 buttonNext.addEventListener('click', function () {
-    const largeContainer = document.querySelector('.large');
-    const bigImg = largeContainer.querySelector('img');
-    const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
-    bigImg.src = smallImg.src;
-    photoPosition++;
-    if (photoPosition > 2)
-        buttonNext.classList.toggle('noActiveButton');
-    if (photoPosition == 2 && buttonPrev.classList.contains('noActiveButton')) {
-        buttonPrev.classList.toggle('noActiveButton');
+    if (photoPosition < photoCount) {
+        const largeContainer = document.querySelector('.large');
+        const bigImg = largeContainer.querySelector('img');
+        const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
+        bigImg.src = smallImg.src;
+        photoPosition++;
+        updateButtons();
     }
 });
 
@@ -504,6 +524,7 @@ window.addEventListener('resize', function () {
 const minus = document.getElementsByClassName('minusProduct')[0];
 const plus = document.getElementsByClassName('plusProduct')[0];
 const count = document.getElementsByClassName('quantity')[0];
+
 minus.addEventListener('click', function () {
     let currentCount = parseInt(count.innerHTML);
     if (currentCount > 0) {

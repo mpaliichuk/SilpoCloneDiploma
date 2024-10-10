@@ -17,13 +17,20 @@
     <input type="hidden" id="categoryId" value="@categoryId">
     <div class="mainItemsDiv">
         <div class="breadcrumb">
-            <a class="breadcrumbLink" href="#">Головна</a>
+            <a class="breadcrumbLink" href="/">Головна</a>
             <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-            <a class="breadcrumbLink" href="#">Фрукти</a>
-            <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-            <a class="breadcrumbLink" href="#">Всі</a>
-            <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-            <a id="productRouteName" class="breadcrumbLink" href="#">Папайя</a>
+            @if (subCategoryName != "All")
+            {
+                <a class="breadcrumbLink" href="/Goodmeal/Category/@categoryId">Фрукти</a>
+                <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
+                <a class="breadcrumbLink">@subCategoryName</a>
+            }
+            else
+            {
+                <a class="breadcrumbLink">Фрукти</a>
+                <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
+                <a class="breadcrumbLink">Всі</a>
+            }
         </div>
         <div class="subItemsDiv">
             <div class="controlItemsDis">

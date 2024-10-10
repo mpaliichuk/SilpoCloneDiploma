@@ -135,7 +135,7 @@ nav {
 }
 
 #logo {
-    width: 90.87px;
+    width: 91px;
     height: 37px;
 }
 
@@ -274,10 +274,6 @@ nav {
     height: auto;
 }
 
-
-
-/*/////////////////////////////  new code for CategoryCard  ///////////////////////////////////*/
-
 .categoryDivCard {
     display: flex;
     align-items: center;
@@ -334,8 +330,6 @@ nav {
     height: 25px;
     margin-right: 5px;
 }
-
-/*/////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #searchDiv {
     box-sizing: border-box;
@@ -444,15 +438,13 @@ footer {
 #infoDiv {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2% 6.33%;
-    padding-bottom:100px;
-    gap: 7.5%;
+    justify-content: space-around;
+
+    height:auto;
+    padding: 3% 5% 3% 5%;
     width: 100%;
     background: #4CAF50;
     border-radius: 36px;
-    align-self: stretch;
 }
 
 @media (max-width: 1060px) {
@@ -470,38 +462,34 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0px;
-    gap: 4px;
-    width: 17.87%;
-    height: 253px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    gap: 25px;
+    width: 230px;
+    height: auto;
 }
 
-.headerSpan, .bodySpan {
+.headerSpan {
     display: flex;
-    align-items: center;
-    padding: 8px;
-    gap: 8px;
-    flex: none;
-    font-family: "Noto Sans", sans-serif;
-    font-style: normal;
-    color: #FFFFFF;
-    order: 0;
-    flex-grow: 0;
-    word-break: break-word; 
-    overflow-wrap: break-word;
-}
+    font-size: 21px;
 
-.headerSpan{
-    font-size:19px;
-    font-weight:bold;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 27px;
+    color: #FFFEFE;
 }
 
 .bodySpan {
-    height: 38px;
+    display: flex;
+    height: auto;
     cursor: pointer;
+    width: 100%;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFEFE;
 }
 
 #mainFooterDiv {
@@ -512,7 +500,6 @@ footer {
     width: 100%;
     height: 194px;
     flex: none;
-
 }
 
 #privacyDiv {
@@ -520,15 +507,9 @@ footer {
     flex-direction: column;
     align-items: flex-start;
     padding: 20px 10px 20px 90px;
-    gap: 10px;
     width: 100%;
-    height: 65px;
     background: #FF5722;
     border-radius: 36px 36px 0px 0px;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
 }
 
 #privacyTextDiv {
@@ -539,9 +520,6 @@ footer {
     gap: 3px;
     width: 375px;
     height: 25px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 #copyrightText {
@@ -602,9 +580,6 @@ footer {
     gap: 8px;
     width: 148px;
     height: 67px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 .socialIcons {
@@ -656,9 +631,6 @@ footer {
     font-size: 18px;
     line-height: 25px;
     color: #1E1E1E;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 .communicationPhoneDiv {
@@ -689,9 +661,6 @@ footer {
     font-size: 16px;
     line-height: 22px;
     color: #1E1E1E;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
 }
 
 .communicationIcon {
