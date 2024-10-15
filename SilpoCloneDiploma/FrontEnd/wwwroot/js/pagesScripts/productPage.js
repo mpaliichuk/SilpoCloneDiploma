@@ -3,28 +3,25 @@ GetProduct(productId);
 
 GetProducts();
 async function GetProduct(productId) {
-    // const response = await fetch("/api/Products/" + productId, {
-    //     method: "GET",
-    //     headers: {
-    //         "Accept": "application/json",
-    //         "Content-Type": "application/json"
-    //     }
-    // });
-    // if (response.ok) {
-    //     const product = await response.json();
+    const response = await fetch("http://localhost:5152/gateway/Products/" + productId, {
+         method: "GET",
+         headers: {
+             "Accept": "application/json",
+             "Content-Type": "application/json"
+         }
+    });
+    if (response.ok) {
+        const responseProduct = await response.json();
+        console.log(responseProduct);
         let product = {
-            id: 5,
-            title: "Папайя",
-            description: "Плоди за розмірами і формою схожі на диню масою до 5 кг, з соковитим жовтогарячим м'якушем, всередині з чорним насінням.",
-            imageUrls: [
-                "https://i.pinimg.com/564x/e7/1f/bf/e71fbfc7add78aefc7d81dad746b1f0d.jpg",
-                "https://i.pinimg.com/564x/7b/34/27/7b3427e1a0020c30747ac1fd53a5ac88.jpg",
-                "https://i.pinimg.com/564x/a1/39/2d/a1392d131ef3d1269e9bc0d023f2021d.jpg"
-            ],
-            price: 50,
-            discountPercentage: 10,
+            id: productId,
+            title: responseProduct.title,
+            description: responseProduct.generalInformation,
+            imageUrls: responseProduct.imageUrls,
+            price: responseProduct.price,
+            discountPercentage: responseProduct.sale,
             rating: 4.5,
-            category_id: 3,
+            category_id: responseProduct.category_id,
             attributes: [
                 { key: "Колір", value: "Помаранчевий" },
                 { key: "Країна", value: "Мексика" },
@@ -45,7 +42,6 @@ async function GetProduct(productId) {
             var child = createSmallRow(smallPhotoId, product.imageUrls[i]);
             document.querySelector('.small-row').appendChild(child);
         }
-
         document.getElementById("ratingScore").innerText = product.rating;
 
         /* Attributes work */
@@ -86,29 +82,31 @@ async function GetProduct(productId) {
 
         document.getElementById("addToCart").setAttribute("product-id", product.id);
         //GetCategory(product.category_id);
-    // }
+    }
 }
 async function GetProducts() {
     var productsByDiscount = [];
 
-    /*try {
-        const response = await fetch("/api/Products/ProductsByDiscount", {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        });
-        if (response.ok) {
-            const productsByDiscount = await response.json();
-            productsByDiscount.forEach(product => {
-                const productCard = createProductCard(product);
-                document.getElementById('subProductsDiv').appendChild(productCard);
-            });
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }*/
+    //try {
+    //    const response = await fetch("http://localhost:5152/gateway/Products/ProductsBySameCategory", {
+    //        method: "GET",
+    //        headers: {
+    //            "Accept": "application/json",
+    //            "Content-Type": "application/json"
+    //        }
+    //    });
+    //    if (response.ok) {
+    //        productsByDiscount = await response.json();
+    //        //productsByDiscount.forEach(product => {
+    //        //    const productCard = createProductCard(product);
+    //        //    document.getElementById('subProductsDiv').appendChild(productCard);
+    //        //});
+    //    }
+    //} catch (error) {
+    //    console.error('Error:', error);
+    //    throw error;
+    //}
+
     var isFirstBool = false;
     for (var i = 0; i < 12; i++) {
         if (i == 0) {
@@ -138,9 +136,23 @@ function createSmallRow(id, src) {
     photoDiv.className = 'photo small';
 
     let img = document.createElement('img');
-    img.className = 'poductPhoto smallPhoto';
+    img.className = 'productPhoto smallPhoto';
     img.id = id;
     img.src = src;
+
+    img.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('largePhoto') && !event.target.id.includes(photoPosition.toString())) {
+            const largeContainer = document.querySelector('.large');
+            const bigImg = largeContainer.querySelector('img');
+            bigImg.src = event.target.src;
+
+            const imgId = event.target.id;
+            const lastDigit = imgId.match(/\d+$/);
+            photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
+
+            updateButtons();
+        }
+    });
 
     photoDiv.appendChild(img);
 
@@ -307,33 +319,134 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     return carouselCardDiv;
 }
+//function createProductCard({ productIconSrc, productName, productFullName,
+//    price, sale, productId, discountIconSrc = 'icons/Discount.png' }) {
+//    const cardDiv = document.createElement('div');
+//    cardDiv.id = `${productId}`;
+//    cardDiv.className = 'cardDiv';
+//    //cardDiv.setAttribute("product-id", productId);
 
+//    const productIconDiv = document.createElement('div');
+//    productIconDiv.className = 'productIconDiv no-select';
+
+//    if (sale > 0) {
+//        const discountIcon = document.createElement('img');
+//        discountIcon.className = 'discountIcon no-select no-drag';
+//        discountIcon.src = discountIconSrc;
+//        productIconDiv.appendChild(discountIcon);
+//    }
+
+//    const productIcon = document.createElement('img');
+//    productIcon.className = 'productIcon';
+//    productIcon.src = productIconSrc;
+
+//    productIconDiv.appendChild(productIcon);
+
+//    const productInfoDiv = document.createElement('div');
+//    productInfoDiv.className = 'productInfoDiv';
+
+//    const productNameDiv = document.createElement('div');
+//    productNameDiv.className = 'productNameDiv no-select';
+
+//    const productNameElement = document.createElement('div');
+//    productNameElement.className = 'productName';
+//    productNameElement.textContent = productName;
+
+//    const productFullNameElement = document.createElement('div');
+//    productFullNameElement.className = 'productFullName';
+//    productFullNameElement.textContent = productFullName;
+
+//    productNameDiv.appendChild(productNameElement);
+//    productNameDiv.appendChild(productFullNameElement);
+
+//    const priceDiv = document.createElement('div');
+//    priceDiv.className = 'priceDiv no-select';
+
+//    if (sale > 0) {
+//        const subPriceDiv = document.createElement('div');
+//        subPriceDiv.className = 'subPriceDiv';
+//        const discountedPrice = price - (price * (sale / 100));
+//        subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
+
+//        const crossTextDiv = document.createElement('div');
+//        crossTextDiv.className = 'crossTextDiv';
+//        crossTextDiv.innerHTML = `<span>${price} грн</span>`;
+
+//        priceDiv.appendChild(subPriceDiv);
+//        priceDiv.appendChild(crossTextDiv);
+//    }
+//    else {
+//        const subPriceDiv = document.createElement('div');
+//        subPriceDiv.className = 'subPriceDiv';
+//        subPriceDiv.innerHTML = `<b>${price}</b><span>грн</span>`;
+
+//        priceDiv.appendChild(subPriceDiv);
+//    }
+
+
+//    const productControlDiv = document.createElement('div');
+//    productControlDiv.className = 'productControlDiv';
+
+//    const productCountDiv = document.createElement('div');
+//    productCountDiv.className = 'productCountDiv';
+
+//    const plusButton = document.createElement('button');
+//    plusButton.className = 'productCountButton plus';
+//    //const plusIcon = document.createElement('img');
+//    //plusIcon.className = 'no-select no-drag plusMiniIcon';
+//    //plusIcon.src = 'icons/PlusMiniIcon.png';
+//    const plusIcon = document.createElement('span');
+//    plusIcon.className = 'no-select plusMiniIcon';
+//    plusIcon.innerHTML = '+';
+//    plusButton.appendChild(plusIcon);
+
+//    const productCount = document.createElement('div');
+//    productCount.className = 'productCount';
+//    productCount.textContent = '0';
+
+//    const minusButton = document.createElement('button');
+//    minusButton.className = 'productCountButton minus';
+//    //const minusIcon = document.createElement('img');
+//    //minusIcon.className = 'no-select no-drag minusMiniIcon';
+//    //minusIcon.src = 'icons/MinusMiniIcon.png';
+//    const minusIcon = document.createElement('span');
+//    minusIcon.className = 'no-select minusMiniIcon';
+//    minusIcon.innerHTML = '-';
+//    minusButton.appendChild(minusIcon);
+
+//    productCountDiv.appendChild(minusButton);
+//    productCountDiv.appendChild(productCount);
+//    productCountDiv.appendChild(plusButton);
+
+//    const productBuyBtn = document.createElement('button');
+//    productBuyBtn.className = 'productBuyBtn';
+//    const cartIcon = document.createElement('img');
+//    cartIcon.className = 'productCartIcon no-select no-drag';
+//    cartIcon.src = 'icons/Cart.png';
+//    productBuyBtn.appendChild(cartIcon);
+
+//    productControlDiv.appendChild(productCountDiv);
+//    productControlDiv.appendChild(productBuyBtn);
+
+//    productInfoDiv.appendChild(productNameDiv);
+//    productInfoDiv.appendChild(priceDiv);
+//    productInfoDiv.appendChild(productControlDiv);
+
+//    cardDiv.appendChild(productIconDiv);
+//    cardDiv.appendChild(productInfoDiv);
+
+//    return cardDiv;
+//}
 
 const cardDivs = document.querySelectorAll('.cardDiv');
 const productCountDivs = document.querySelectorAll('.productCountDiv');
 const productBuyBtns = document.querySelectorAll('.productBuyBtn');
 const addToCartBtn = document.getElementById('addToCart');
-const photos = document.querySelectorAll('.poductPhoto');
 const buttonPrev = document.getElementById('buttonPrev');
 const buttonNext = document.getElementById('buttonNext');
 var photoPosition = 1;
 var photoCount;
 
-photos.forEach(item => {
-    item.addEventListener('click', function (event) {
-        if (!event.target.classList.contains('largePhoto') && !event.target.id.includes(photoPosition.toString())) {
-            const largeContainer = document.querySelector('.large');
-            const bigImg = largeContainer.querySelector('img');
-            bigImg.src = event.target.src;
-
-            const imgId = event.target.id;
-            const lastDigit = imgId.match(/\d+$/);
-            photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
-
-            updateButtons();
-        }
-    });
-});
 function updateButtons() {
     if (photoCount === 1) {
         buttonPrev.classList.add('noActiveButton');

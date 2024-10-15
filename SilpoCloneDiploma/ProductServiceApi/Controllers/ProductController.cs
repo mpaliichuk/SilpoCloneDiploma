@@ -35,8 +35,10 @@ namespace ProductServiceApi.Controllers
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProductsAsync()
         {
             var products = await _service.GetAllProductsAsync();
+            Console.Write(products);
             var productDtos = products.Select(p => new ProductDto
             {
+                Id = p.Id,
                 Title = p.Title,
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,
@@ -52,13 +54,48 @@ namespace ProductServiceApi.Controllers
         }
 
         /// <summary>
+        /// Get 18 random discounted products.
+        /// </summary>
+        [HttpGet("random-discounted")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetRandomDiscountedProductsAsync()
+        {
+            var products = await _service.GetAllProductsAsync();
+            var discountedProducts = products.Where(p => p.Sale > 0);
+
+            var randomProducts = discountedProducts
+                .OrderBy(p => Guid.NewGuid())
+                .Take(18)
+                .ToList();
+
+            var productDtos = randomProducts.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Title = p.Title,
+                ProductComposition = p.ProductComposition,
+                GeneralInformation = p.GeneralInformation,
+                ImageUrls = p.ImageUrls,
+                Availability = p.Availability,
+                Count = p.Count,
+                Sale = p.Sale,
+                Price = p.Price,
+                CategoryId = p.CategoryId
+            });
+
+            return Ok(productDtos);
+        }
+
+
+        /// <summary>
         /// Get a product by ID.
         /// </summary>
         /// <param name="id">The ID of the product.</param>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "Administrator")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult<ProductDto>> GetProductByIdAsync(int id)
         {
             var product = await _service.GetProductByIdAsync(id);
