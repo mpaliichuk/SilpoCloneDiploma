@@ -55,7 +55,7 @@ async function GetProducts() {
 }
 async function AddProductInCart(productId, productCount, userId) {
     try {
-        const response = await fetch("/api/Products", {
+        const response = await fetch("http://localhost:5152/gateway/AddToCart", {
             method: "POST",
             headers: {
                 "Accept": "application/json",

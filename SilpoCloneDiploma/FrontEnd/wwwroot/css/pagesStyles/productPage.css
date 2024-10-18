@@ -541,16 +541,14 @@
 }
 
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-@media screen and (min-width:590px) {
-    .carousel-item {
+.carousel-item {
     display: block;
     margin-right: 0;
 }
-}
 
 .carouselControlPrev, .carouselControlNext {
-    border:none;
-    background-color:white;
+    border: none;
+    background-color: white;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -588,7 +586,7 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-    height: 301px;
+    height: auto;
 }
 
 #productsDiv {
@@ -604,10 +602,12 @@
 #subProductsDiv {
     display: flex;
     width: 100%;
+    max-width: 1368px;
     height: auto;
     margin-left: 5.5%;
     margin-right: 4.5%;
 }
+
 #subProductsDiv > *:not(:last-child) {
     margin-right: 28px;
 }
@@ -624,7 +624,7 @@
     text-align: center;
     color: #1E1E1E;
 }
-
+/*////////////////////////////////////////////////////////Card//////////////////////////////////////////////////*/
 .cardDiv {
     box-sizing: border-box;
     display: flex;
@@ -634,7 +634,7 @@
     gap: 8px;
     isolation: isolate;
     width: 202px;
-    height: 301px;
+    height: 335px;
     background: #FFFFFF;
     border: 3px solid #53B06C;
     border-radius: 20px;
@@ -663,22 +663,21 @@
     padding: 0px;
     gap: 16px;
     width: 162px;
-    height: 153px;
+    height: 193px;
 }
 
 .productNameDiv {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
     padding: 0px;
     gap: 5px;
     width: 162px;
-    height: 62px;
+    height: 102px;
 }
 
 .productName {
-    width: 162px;
-    height: 25px;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -722,6 +721,7 @@
 .crossTextDiv {
     display: flex;
     flex-direction: row;
+    text-align: center;
     width: 100px;
     height: 20px;
     gap: 5px;
@@ -765,7 +765,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 8.8px;
+    padding: 5.5%;
     gap: 10px;
     width: 34px;
     height: 34px;
@@ -827,6 +827,7 @@
     height: 40px;
 }
 
+
 .no-select {
     user-select: none;
     -webkit-user-select: none;
@@ -835,3 +836,5 @@
 .no-drag {
     -webkit-user-drag: none;
 }
+
+/*///////////////////////////////////////////////////////////EndCatd//////////////////////////////////////////////////////*/
