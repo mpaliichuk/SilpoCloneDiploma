@@ -33,35 +33,35 @@ const categories = {
         name: 'Фрукти',
         icon: '/icons/CategoryIcons/SmallFruitIcon.png',
         items: [
-            { name: 'Сезонні фрукти', link: '/icons/Cart.png' },
-            { name: 'Ягоди', link: '/icons/Cart.png' },
-            { name: 'Смузі та фреші', link: '/icons/Cart.png' },
-            { name: 'Фруктові снеки', link: '/icons/Cart.png' },
-            { name: 'Горіхи', link: '/icons/Cart.png' },
-            { name: 'Всі продукти', link: '/icons/Cart.png' }
+            { name: 'Сезонні фрукти', link: '/icons/CategoryIcons/SeasonalFruits.png', route: 'SeasonalFruits' },
+            { name: 'Ягоди', link: '/icons/CategoryIcons/Berries.png', route: 'Berries' },
+            { name: 'Смузі та фреші', link: '/icons/CategoryIcons/Smoothies.png', route: 'Smoothies' },
+            { name: 'Фруктові снеки', link: '/icons/CategoryIcons/FruitSnacks.png', route: 'FruitSnacks' },
+            { name: 'Горіхи', link: '/icons/CategoryIcons/Nuts.png', route: 'Nuts' },
+            { name: 'Всі продукти', link: '/icons/CategoryIcons/AllProducts.png', route: '' }
         ]
     },
     1: {
         name: 'Здорове харчування',
         icon: '/icons/CategoryIcons/SmallHealthyFoodIcon.png',
         items: [
-            { name: 'Безлактозні продукти', link: '/icons/Cart.png' },
-            { name: 'Веганські продукти', link: '/icons/Cart.png' },
-            { name: 'Органічна їжа', link: '/icons/Cart.png' },
-            { name: 'Безглютенові продукти', link: '/icons/Cart.png' },
-            { name: 'Без додаткового цукру', link: '/icons/Cart.png' },
-            { name: 'Всі продукти', link: '/icons/Cart.png' }
+            { name: 'Безлактозні продукти', link: '/icons/CategoryIcons/Lactose-free.png', route: 'Lactose-free' },
+            { name: 'Веганські продукти', link: '/icons/CategoryIcons/Vegan.png', route: 'Vegan' },
+            { name: 'Органічна їжа', link: '/icons/CategoryIcons/Organic.png', route: 'Organic' },
+            { name: 'Безглютенові продукти', link: '/icons/CategoryIcons/Gluten-free.png', route: 'Gluten-free' },
+            { name: 'Без додаткового цукру', link: '/icons/CategoryIcons/NoAddedSugar.png', route: 'NoAddedSugar' },
+            { name: 'Всі продукти', link: '/icons/CategoryIcons/AllProducts.png', route: '' }
         ]
     },
     2: {
         name: 'Овочі',
         icon: '/icons/CategoryIcons/SmallVegetablesIcon.png',
         items: [
-            { name: 'Сезонні овочі', link: '/icons/Cart.png' },
-            { name: 'Зелень і салати', link: '/icons/Cart.png' },
-            { name: 'Соління', link: '/icons/Cart.png' },
-            { name: 'Гриби', link: '/icons/Cart.png' },
-            { name: 'Всі продукти', link: '/icons/Cart.png' }
+            { name: 'Сезонні овочі', link: '/icons/CategoryIcons/SeasonalVegetables.png', route: 'SeasonalVegetables' },
+            { name: 'Зелень і салати', link: '/icons/CategoryIcons/GreensAndSalads.png', route: 'GreensAndSalads' },
+            { name: 'Соління', link: '/icons/CategoryIcons/Pickles.png', route: 'Pickles' },
+            { name: 'Гриби', link: '/icons/CategoryIcons/Mushrooms.png', route: 'Mushrooms' },
+            { name: 'Всі продукти', link: '/icons/CategoryIcons/AllProducts.png', route: '' }
         ]
     },
     3:{
@@ -140,8 +140,9 @@ const categories = {
         items: []
     },
 };
-var delay = 200;
+var delay = 300;
 var hoverTimeout;
+var elementBefore;
 
 function generateCategoryInitialisator() {
     const categoryList = document.querySelector('.category-list');
@@ -149,30 +150,41 @@ function generateCategoryInitialisator() {
     const categoryValues = Object.values(categories);
 
     for (var categoryId = 0; categoryId < categoryValues.length; categoryId++) {
-        createCategoryItem('#', categoryId);
+        createCategoryItem(`/Goodmeal/Category/${categoryId}`, categoryId);
     }
 
     for (var categoryId = 0; categoryId < dropdownItems.length; categoryId++) {
         dropdownItems[categoryId].addEventListener('mouseenter', function (event) {
-            event.preventDefault();
-            const img = event.target.querySelector('.miniCategoryIcon');
-            if (!img.dataset.originalSrc) {
-                img.dataset.originalSrc = img.src;
-            }
-            img.src = img.src.replace('/icons/CategoryIcons\/', '/icons/CategoryIcons/Hover');
+            event.preventDefault();      
             hoverTimeout = setTimeout(() => {
+                if (elementBefore) {
+                    elementBefore.style.background = "#FFF6F3";
+                    elementBefore.style.color = "#FF5722";
+                    const img = elementBefore.querySelector('.miniCategoryIcon');
+                    if (img.dataset.originalSrc) {
+                        img.src = img.dataset.originalSrc;
+                    }
+                    elementBefore = null;
+                }  
+
+                const img = event.target.querySelector('.miniCategoryIcon');
+                if (!img.dataset.originalSrc) {
+                    img.dataset.originalSrc = img.src;
+                }
+                img.src = img.src.replace('/icons/CategoryIcons\/', '/icons/CategoryIcons/Hover');
+
+                event.target.style.background = "#FF5722";
+                event.target.style.color = "#FFFEFE";
+                elementBefore = event.target;
                 generateCategoryPanel(event.target.id);
+
             }, delay);
         });
 
         dropdownItems[categoryId].addEventListener('mouseleave', function (event) {
-                event.preventDefault();
-                clearTimeout(hoverTimeout);
-                const img = event.target.querySelector('.miniCategoryIcon');
-                if (img.dataset.originalSrc) {
-                    img.src = img.dataset.originalSrc;
-                }
-            });
+            event.preventDefault();
+            clearTimeout(hoverTimeout);       
+        });
     }
 }
 
@@ -180,15 +192,20 @@ function generateCategoryPanel(categoryId) {
     panel.innerHTML = '';
     if (categories[categoryId].items.length > 0) {
         categories[categoryId].items.forEach((item) => {
-            generateCategoryCard(item.link, item.name);    
+            generateCategoryCard(item.link, item.name, categoryId, item.route);    
         });
     } else {
-        generateCategoryCard('/icons/Cart.png', 'Всі продукти'); 
+        generateCategoryCard('/icons/CategoryIcons/AllProducts.png', 'Всі продукти', categoryId); 
     }
 }
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-function generateCategoryCard(iconSrc, categoryText) {
-    const categoryDivCard = document.createElement('div');
+function generateCategoryCard(iconSrc, categoryText, id, route) {
+    const categoryDivCard = document.createElement('a');
+    if (route)
+        categoryDivCard.href = `/Goodmeal/Category/${id}/${route}`;
+    else
+        categoryDivCard.href = `/Goodmeal/Category/${id}`;
+
     categoryDivCard.className = 'categoryDivCard';
 
     const categorIconDiv = document.createElement('div');

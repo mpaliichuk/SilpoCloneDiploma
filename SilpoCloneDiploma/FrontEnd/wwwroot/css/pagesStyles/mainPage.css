@@ -117,7 +117,7 @@
 #topCategoriesButtonsDiv {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    justify-content: center;
     padding-left: 5.6%;
     padding-right: 5.4%;
     gap: 1.9%;
@@ -202,7 +202,7 @@
     gap: 8px;
     isolation: isolate;
     width: 202px;
-    height: 301px;
+    height: 335px;
     background: #FFFFFF;
     border: 3px solid #53B06C;
     border-radius: 20px;
@@ -231,22 +231,21 @@
     padding: 0px;
     gap: 16px;
     width: 162px;
-    height: 153px;
+    height: 193px;
 }
 
 .productNameDiv {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
     padding: 0px;
     gap: 5px;
     width: 162px;
-    height: 62px;
+    height: 102px;
 }
 
 .productName {
-    width: 162px;
-    height: 25px;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -290,6 +289,7 @@
 .crossTextDiv {
     display: flex;
     flex-direction: row;
+    text-align:center;
     width: 100px;
     height: 20px;
     gap: 5px;
@@ -404,7 +404,7 @@
     -webkit-user-drag: none;
 }
 
-/*//////////////////////////////////////////////////////////////*/
+/*///////////////////////////////////////////////////////////////End card/////////////////////////////////////////////////////////////*/
 #certificateMainDiv {
     display: flex;
     flex-direction: row;

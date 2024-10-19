@@ -5,8 +5,8 @@ namespace ProductServiceApi.Models
 {
     public enum Availability
     {
-        InStock,
         OutOfStock,
+        InStock,
     }
 
     public class Product

@@ -21,41 +21,41 @@ GetProducts();
 async function GetProducts() {
     var productsByDiscount = [];
 
-    /*try {
-        const response = await fetch("/api/Products/ProductsByDiscount", {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/DiscountedProducts", {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         });
         if (response.ok) {
-            const productsByDiscount = await response.json();
-            productsByDiscount.forEach(product => {
-                const productCard = createProductCard(product);
-                document.getElementById('subProductsDiv').appendChild(productCard);
-            });
+            productsByDiscount = await response.json();
+            //productsByDiscount.forEach(product => {
+            //    const productCard = createProductCard(product);
+            //    document.getElementById('subProductsDiv').appendChild(productCard);
+            //});
         }
     } catch (error) {
         console.error('Error:', error);
         throw error;
-    }*/
-
-    for (var i = 0; i < 18; i++) {
+    }
+    console.log(productsByDiscount);
+    for (var i = 0; i < productsByDiscount.length; i++) {
         const productCard = createProductCard({
-            productIconSrc: 'icons/ProductIcon.png',
-            productName: 'Сьомга Norven',
-            productFullName: 'Сьомга Norven слабосолена в/у, 120г',
-            currentPrice: '256',
-            oldPrice: '315',
-            productId: '123'
+            productIconSrc: productsByDiscount[i].imageUrls[0],
+            productName: productsByDiscount[i].title,
+            productFullName: productsByDiscount[i].productComposition,
+            price: productsByDiscount[i].price,
+            sale: productsByDiscount[i].sale,
+            productId: productsByDiscount[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
-
     }
+    cardFunctionality();
 }
 async function AddProductInCart(productId, productCount, userId) {
     try {
-        const response = await fetch("/api/Products", {
+        const response = await fetch("http://localhost:5152/gateway/AddToCart", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
@@ -95,7 +95,7 @@ async function addCertificatesToCart(certificates) {
 }
 
 function createProductCard({ productIconSrc, productName, productFullName,
-    currentPrice, oldPrice, productId, discountIconSrc = 'icons/Discount.png' })
+    price, sale, productId, discountIconSrc = 'icons/Discount.png' })
 {
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
@@ -138,11 +138,12 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     const subPriceDiv = document.createElement('div');
     subPriceDiv.className = 'subPriceDiv';
-    subPriceDiv.innerHTML = `<b>${currentPrice}</b><span>грн</span>`;
+    const discountedPrice = price - (price * (sale / 100));
+    subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
 
     const crossTextDiv = document.createElement('div');
     crossTextDiv.className = 'crossTextDiv';
-    crossTextDiv.innerHTML = `<span>${oldPrice} грн</span>`;
+    crossTextDiv.innerHTML = `<span>${price} грн</span>`;
 
     priceDiv.appendChild(subPriceDiv);
     priceDiv.appendChild(crossTextDiv);
@@ -208,9 +209,6 @@ const accordionButtons = document.querySelectorAll('.accordionButton');
 const certificateButtons = document.querySelectorAll('.certificate');
 const shopDivs = document.querySelectorAll('.shopElement');
 const certificateBuy = document.querySelectorAll('.addToCart');
-const cardDivs = document.querySelectorAll('.cardDiv');
-const productCountDivs = document.querySelectorAll('.productCountDiv');
-const productBuyBtns = document.querySelectorAll('.productBuyBtn');
 
 categoryPanels.forEach(panel => {
     panel.addEventListener('click', function (event) {
@@ -236,60 +234,86 @@ categoryPanels.forEach(panel => {
     });
 });
 
-productBuyBtns.forEach(item => {
-    item.addEventListener('click', function (event) {
-        event.stopPropagation();
-        const cardDiv = item.closest('.cardDiv');
-        const count = cardDiv.querySelector('.productCount');
-        if (count) {
+function cardFunctionality() {
+    const cardDivs = document.querySelectorAll('.cardDiv');
+    const productCountDivs = document.querySelectorAll('.productCountDiv');
+    const productBuyBtns = document.querySelectorAll('.productBuyBtn');
+
+    productBuyBtns.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const cardDiv = item.closest('.cardDiv');
+            const count = cardDiv.querySelector('.productCount');
+            if (count) {
+                let currentCount = parseInt(count.innerHTML);
+                if (currentCount > 0) {
+                    //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
+                    alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
+                    count.innerHTML = '0';
+                }
+                else {
+                    alert("Спершу виберіть кількість товар (`U_U`)!");
+                }
+            }
+        });
+    });
+
+    cardDivs.forEach(item => {
+        item.addEventListener('click', function (event) {
+            const productControlDiv = item.querySelector('.productControlDiv');
+            if (productControlDiv && !productControlDiv.contains(event.target)) {
+                var productId = item.id;
+                window.location = "/Goodmeal/ProductPage/" + productId;
+            }
+        });
+        item.addEventListener('mouseenter', function () {
+            item.style.border = '3px solid #FF5722';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#FF5722';
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            item.style.border = '3px solid #53B06C';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#53B06C';
+            }
+        });
+
+        const cartButton = item.querySelector('.productBuyBtn');
+        cartButton.addEventListener('mouseenter', function (event) {
+            event.stopPropagation();
+        });
+
+        cartButton.addEventListener('mouseleave', function (event) {
+            event.stopPropagation();
+        });
+    })
+
+    productCountDivs.forEach(item => {
+        const minus = item.getElementsByClassName('minus')[0];
+        const plus = item.getElementsByClassName('plus')[0];
+        const count = item.getElementsByClassName('productCount')[0];
+        minus.addEventListener('click', function (event) {
+            event.stopPropagation();
             let currentCount = parseInt(count.innerHTML);
             if (currentCount > 0) {
-                //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
-                alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
-                count.innerHTML = '0';
+                count.innerHTML = `${currentCount - 1}`;
             }
-            else {
-                alert("Спершу виберіть кількість товар (`U_U`)!");
-            }
-        }
-    });
-});
+        });
 
-cardDivs.forEach(item => {
-    item.addEventListener('click', function (event) {
-        const productControlDiv = item.querySelector('.productControlDiv');
-        if (productControlDiv && !productControlDiv.contains(event.target)) {
-            var productId = item.id;
-            window.location = "/Goodmeal/ProductPage/" + productId;
-        }
-    });
-    item.addEventListener('mouseenter', function () {
-        item.style.border = '3px solid #FF5722';
-
-        const button = item.getElementsByClassName('productBuyBtn')[0];
-        if (button) {
-            button.style.background = '#FF5722';
-        }
+        plus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            count.innerHTML = `${currentCount + 1}`;
+        });
     });
 
-    item.addEventListener('mouseleave', function () {
-        item.style.border = '3px solid #53B06C';
-
-        const button = item.getElementsByClassName('productBuyBtn')[0];
-        if (button) {
-            button.style.background = '#53B06C';
-        }
-    });
-
-    const cartButton = item.querySelector('.productBuyBtn');
-    cartButton.addEventListener('mouseenter', function (event) {
-        event.stopPropagation();
-    });
-
-    cartButton.addEventListener('mouseleave', function (event) {
-        event.stopPropagation();
-    });
-})
+}
 
 certificateButtons.forEach(certificate => {
     certificate.addEventListener('click', function (event) {
@@ -334,25 +358,6 @@ certificateBuy.forEach(item => {
         else {
             alert("Спершу виберіть сертифікати для покупки (*μ_μ)!");
         }
-    });
-});
-
-productCountDivs.forEach(item => {
-    const minus = item.getElementsByClassName('minus')[0];
-    const plus = item.getElementsByClassName('plus')[0];
-    const count = item.getElementsByClassName('productCount')[0];
-    minus.addEventListener('click', function (event) {
-        event.stopPropagation();
-        let currentCount = parseInt(count.innerHTML);
-        if (currentCount > 0) {
-            count.innerHTML = `${currentCount - 1}`;
-        }
-    });
-
-    plus.addEventListener('click', function (event) {
-        event.stopPropagation();
-        let currentCount = parseInt(count.innerHTML);
-        count.innerHTML = `${currentCount + 1}`;
     });
 });
 

@@ -100,6 +100,7 @@ var app = builder.Build();
 // Configure middleware
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -112,5 +113,19 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+//Apply migrations
+ApplyMigrations();
+
 // Run the application
 app.Run();
+
+void ApplyMigrations()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ProductCategoryContext>();
+
+        if (context.Database.GetPendingMigrations().Any())
+            context.Database.Migrate();
+    }
+}

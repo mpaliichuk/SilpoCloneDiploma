@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Category Page";
+    var categoryId = "0";
+    var subCategoryName = "All";
+    @if (ViewBag.SubCategoryName != null)
+    {
+        categoryId = ViewBag.CategoryId;
+        subCategoryName = ViewBag.SubCategoryName;
+    }
+    else{
+        categoryId = ViewBag.CategoryId;
+    }
+}
+<link rel="stylesheet" href="~/css/pagesStyles/categoryPage.css" asp-append-version="true" />
+<div class="mainCategoryDiv">
+    <input type="hidden" id="subCategoryName" value="@subCategoryName">
+    <input type="hidden" id="categoryId" value="@categoryId">
+    <div class="mainItemsDiv">
+        <div class="breadcrumb">
+            <a class="breadcrumbLink" href="/">Головна</a>
+            <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
+            @if (subCategoryName != "All")
+            {
+                <a class="breadcrumbLink" href="/Goodmeal/Category/@categoryId">Фрукти</a>
+                <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
+                <a class="breadcrumbLink">@subCategoryName</a>
+            }
+            else
+            {
+                <a class="breadcrumbLink">Фрукти</a>
+                <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
+                <a class="breadcrumbLink">Всі</a>
+            }
+        </div>
+        <div class="subItemsDiv">
+            <div class="controlItemsDis">
+                <div id="categoryNameDiv">Назва категорії</div>
+                <div class="controlSubCategoriesDis">
+                    <button class="subCategory">
+                        <span id="subCategoryNameText">Фрукти</span>
+                        <span id="subCategoryCount">30</span>
+                    </button>
+                    <button class="subCategory">
+                        <span id="subCategoryNameText">Фрукти</span>
+                        <span id="subCategoryCount">30</span>
+                    </button>
+                    <button class="subCategory">
+                        <span id="subCategoryNameText">Фрукти</span>
+                        <span id="subCategoryCount">30</span>
+                    </button>
+                </div>
+            </div>
+            <div class="itemsDiv">
+                <div class="filterItemsDiv">
+                    <div class="filtered">
+                        <img type="button" class="dropdown-toggle no-caret" data-bs-toggle="dropdown" style="width:20px;" src="~/icons/ListHoverGreen.png" />
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Виробник</a></li>
+                            <li><a class="dropdown-item" href="#">Країна</a></li>
+                            <li><a class="dropdown-item" href="#">Ціна</a></li>
+                        </ul>
+                    </div>
+                    <div class="sorted">
+                        <img type="button" class="dropdown-toggle no-caret" data-bs-toggle="dropdown" style="width:20px;" src="~/icons/ListHoverGreen.png" />
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Спочатку популярні</a></li>
+                            <li><a class="dropdown-item" href="#">Спочатку акційні</a></li>
+                            <li><a class="dropdown-item" href="#">За рейтингом</a></li>
+                            <li><a class="dropdown-item" href="#">Від А до Я</a></li>
+                            <li><a class="dropdown-item" href="#">Від Я до А</a></li>
+                            <li><a class="dropdown-item" href="#">Спочатку дешевші</a></li>
+                            <li><a class="dropdown-item" href="#">Спочатку дорожчі</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="subProductsDiv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="paginationDiv">
+        <button class="moreItemsDiv" id="moreItems">Показати ще</button>
+        <div id="pagesControlDiv">
+            <button class="pageControlButtons" id="buttonPrev"><</button>
+            <div class="pages">
+                <button class="pageButton">1</button>
+                <button class="pageButton">2</button>
+                <button class="pageButton">3</button>
+                <button class="selectorButton">...</button>
+                <button class="lastPageButton">14</button>
+            </div>
+            <button class="pageControlButtons" id="buttonNext">></button>
+        </div>
+    </div>
+</div>
+<script src="/js/pagesScripts/categoryPage.js"></script>

@@ -26,14 +26,21 @@ namespace FrontEnd.Controllers
         }
 
         [Route("Goodmeal/Category/{id}")]
-        public IActionResult CategoryPage()
+        public IActionResult CategoryPage(string id)
         {
-            return View();
+            var categoryId = id;
+            ViewBag.CategoryId = categoryId;
+            return View("CategoryPage");
         }
 
-        public IActionResult Privacy()
+        [Route("Goodmeal/Category/{id}/{subCategoryName}")]
+        public IActionResult SubCategoryPage(string id, string subCategoryName)
         {
-            return View();
+            var subName = subCategoryName;
+            var categoryId = id;
+            ViewBag.CategoryId = categoryId;
+            ViewBag.SubCategoryName = subName;
+            return View("CategoryPage");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

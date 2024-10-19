@@ -7,41 +7,37 @@
 <div class="content">
     <input type="hidden" id="productId" value="@productId">
     <div class="breadcrumb">
-        <a class="breadcrumbLink" href="#">Головна</a> 
+        <a class="breadcrumbLink" href="/">Головна</a> 
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
+        @*Db info*@
         <a class="breadcrumbLink" href="#">Фрукти</a> 
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
         <a class="breadcrumbLink" href="#">Всі</a> 
+        @*Db info*@
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-        <a id="productRouteName" class="breadcrumbLink" href="#">Папайя</a>
+        <a id="productRouteName" class="breadcrumbLink">Папайя</a>
     </div>
     <div class="full-width-orange">
-        <div id="leftVector"><img class="no-select no-drag" src="~/icons/LeftVector.png" /></div>
+        <div id="leftVector"><img class="no-select no-drag leftVectorImg" src="~/icons/LeftVector.png" /></div>
         <div class="photosDiv">
             @*<img class="discountIconMainImg no-select no-drag" src="~/icons/Discount.png" /> *@
             <div class="photo large">
                 <div id="largeSubDiv">
-                    <button id="buttonPrev" class="noActiveButton"><</button>
-                    <img class="poductPhoto largePhoto" id="productMainImg" src="/icons/papaya.png" />
+                    <button id="buttonPrev"><</button>
+                    <img class="productPhoto largePhoto" id="productMainImg"@*  src="/icons/papaya.png" *@ />
                     <button id="buttonNext">></button>
                 </div>
             </div>
             <div class="small-row">
-                <div class="photo small">
-                    <img class="poductPhoto smallPhoto" id="productSmallImg1" src="/icons/papaya.png" />
-                </div>
-                <div class="photo small">
-                    <img class="poductPhoto smallPhoto" id="productSmallImg2" src="/icons/papaya.png" />
-                </div>
-                <div class="photo small">
-                    <img class="poductPhoto smallPhoto" id="productSmallImg3" src="/icons/papaya.png" />
-                </div>
+                @* <div class="photo small">
+                    <img class="productPhoto smallPhoto" id="productSmallImg1" src="/icons/papaya.png" />
+                </div> *@
             </div>
         </div>
 
         <div class="content-info">
             <div class="subInfoDiv">
-                <div id="productTitle" class="name">Папайя 100г</div>
+                <div id="productTitle" class="name">@* Папайя 100г *@</div>
                 <div class="rating"><img class="no-select no-drag ratingStar" src="/icons/RatingStar.png" /><span id="ratingScore">4.90</span> <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
                 <div class="accordion">
                     <div class="descriptionTitleDiv no-select no-drag" onclick="toggleDropdownDescription()">
@@ -50,8 +46,8 @@
                     </div>
                     <div class="description active">
                         <span id="descriptionInfo">
-                            Має тверду шкірку і жовто-зелений колір. Плід м’який, з легким солодкуватим смаком та ароматом дині.
-                            Рекомендуємо їсти свіжою, разом з лаймом.
+                            @* Має тверду шкірку і жовто-зелений колір. Плід м’який, з легким солодкуватим смаком та ароматом дині.
+                            Рекомендуємо їсти свіжою, разом з лаймом. *@
                         </span>
                     </div>
                 </div>
@@ -62,7 +58,7 @@
                     </div>
                     <div class="info-section-content">
                         <div id="attributes" class="attributeDivs">
-                            <div class="attribute">
+                            @* <div class="attribute">
                                 <span>Країна:</span>
                                 <span>Іспанія</span>
                             </div>
@@ -73,12 +69,12 @@
                             <div class="attribute">
                                 <span>Кількість одиниць:</span>
                                 <span>1</span>
-                            </div>
+                            </div> *@
                         </div>
                     </div>
                 </div>
                 <div class="subControllDiv">
-                    <div id="productPrice" class="price">18.90 грн</div>
+                    <div id="productPrice" class="price"></div>
                     <div id="priceNoDiscountDiv" class="priceNoDiscount">
                         @* <span id="productOldPrice" class="oldPrice">20.90 грн</span>
                         <div class="discountPercentage"><span id="percentage">15%</span></div> *@
@@ -107,8 +103,8 @@
                 <div id="subProductsDiv" class="carousel-inner"></div>
             </div>
             <div id="pagesDiv">
-                <button class="carouselControlPrev"><img src="/icons/Arrow(left).png" /></button>
-                <button class="carouselControlNext"><img src="/icons/Arrow(right).png" /></button>
+                <button class="carouselControlPrev" type="button"><img src="/icons/Arrow(left).png" /></button>
+                <button class="carouselControlNext" type="button"><img src="/icons/Arrow(right).png" /></button>
             </div>
         </div>
     </div>

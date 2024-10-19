@@ -1,50 +1,48 @@
 ﻿var productId = document.getElementById("productId").value;
-GetProduct(productId);
+var categoryId = 0;
 
-GetProducts();
-async function GetProduct(productId) {
-    // const response = await fetch("/api/Products/" + productId, {
-    //     method: "GET",
-    //     headers: {
-    //         "Accept": "application/json",
-    //         "Content-Type": "application/json"
-    //     }
-    // });
-    // if (response.ok) {
-    //     const product = await response.json();
+GetProduct(productId, categoryId);
+async function GetProduct(productId, productCategoryId) {
+    const response = await fetch("http://localhost:5152/gateway/Products/" + productId, {
+         method: "GET",
+         headers: {
+             "Accept": "application/json",
+             "Content-Type": "application/json"
+         }
+    });
+    if (response.ok) {
+        const responseProduct = await response.json();
+        console.log(responseProduct);
         let product = {
-            id: 5,
-            title: "Умные часы XYZ",
-            description: "Многофункциональные умные часы с сенсорным экраном и мониторингом здоровья.",
-            imageUrls: [
-                "https://i.pinimg.com/564x/d2/b3/43/d2b3433dd73e81ec561b2a43587b60fe.jpg",
-                "https://i.pinimg.com/736x/1e/f2/9b/1ef29ba4eee6204bf2fe891456d10970.jpg",
-                "https://i.pinimg.com/736x/33/54/cf/3354cf583d7fa7a30e3300de83e4bf44.jpg"
-            ],
-            price: 5000,
-            discountPercentage: 10,
+            id: productId,
+            title: responseProduct.title,
+            description: responseProduct.generalInformation,
+            imageUrls: responseProduct.imageUrls,
+            price: responseProduct.price,
+            discountPercentage: responseProduct.sale,
             rating: 4.5,
-            category_id: 3,
+            category_id: responseProduct.categoryId,
             attributes: [
-                { key: "Цвет", value: "Чёрный" },
-                { key: "Материал", value: "Металл и пластик" },
-                { key: "Время работы", value: "48 часов" },
-                { key: "Вес", value: "50 грамм" }
+                { key: "Колір", value: "Помаранчевий" },
+                { key: "Країна", value: "Мексика" },
+                { key: "Вага", value: "100 грамм" }
             ]
         };
+        productCategoryId = responseProduct.categoryId;
 
         document.getElementById("productRouteName").innerText = product.title;
         document.getElementById("productTitle").innerText = product.title;
         document.getElementById("descriptionInfo").innerText = product.description;
         document.getElementById("productMainImg").src = product.imageUrls[0];
 
-        for (let i = 0; i < product.imageUrls.length; i++) {
-            let smallImg = document.getElementById("productSmallImg" + (i + 1).toString());
-            if (smallImg) {
-                smallImg.src = product.imageUrls[i];
-            }
+        photoCount = product.imageUrls.length;
+        if (photoCount > 1)
+            document.getElementById("buttonPrev").classList = "noActiveButton";
+        for (let i = 0; i < photoCount; i++) {
+            var smallPhotoId = "productSmallImg" + (i + 1).toString();
+            var child = createSmallRow(smallPhotoId, product.imageUrls[i]);
+            document.querySelector('.small-row').appendChild(child);
         }
-
         document.getElementById("ratingScore").innerText = product.rating;
 
         /* Attributes work */
@@ -85,50 +83,109 @@ async function GetProduct(productId) {
 
         document.getElementById("addToCart").setAttribute("product-id", product.id);
         //GetCategory(product.category_id);
-    // }
+        GetProductsBySameCategory(productCategoryId);
+    }
 }
-async function GetProducts() {
-    var productsByDiscount = [];
+async function GetProductsBySameCategory(productCategoryId) {
+    var productsByCategory = [];
 
-    /*try {
-        const response = await fetch("/api/Products/ProductsByDiscount", {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/ProductsBySameCategory/" + productId + "/" + productCategoryId, {
             method: "GET",
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "Content-Type": "application/json"
             }
         });
         if (response.ok) {
-            const productsByDiscount = await response.json();
-            productsByDiscount.forEach(product => {
-                const productCard = createProductCard(product);
-                document.getElementById('subProductsDiv').appendChild(productCard);
-            });
+            productsByCategory = await response.json();
+            //productsByCategory.forEach(product => {
+            //    const productCard = createProductCard(product);
+            //    document.getElementById('subProductsDiv').appendChild(productCard);
+            //});
         }
     } catch (error) {
         console.error('Error:', error);
         throw error;
-    }*/
+    }
+
     var isFirstBool = false;
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < 8; i++) {
         if (i == 0) {
             isFirstBool = true;
         }
         const productCard = createProductCard({
-            productIconSrc: '/icons/ProductIcon.png',
-            productName: 'Сьомга Norven',
-            productFullName: 'Сьомга Norven слабосолена в/у, 120г',
-            currentPrice: '256',
-            oldPrice: '315',
-            productId: '123',
+            productIconSrc: productsByCategory[i].imageUrls[0],
+            productName: productsByCategory[i].title,
+            productFullName: productsByCategory[i].productComposition,
+            price: productsByCategory[i].price,
+            sale: productsByCategory[i].sale,
+            productId: productsByCategory[i].id,
             isFirst: isFirstBool
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
         isFirstBool = false;
     }
+    cardFunctionality();
+    productsSwitch();
 }
 
+async function AddProductInCart(productId, productCount, userId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/AddToCart", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                productId: productId,
+                productCount: productCount,
+                userId: userId
+            })
+        });
+        if (response.ok) {
+            alert("Товар додано в кошик!");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
 //Controls
 
+function createSmallRow(id, src) {
+    let smallRow = document.createElement('div');
+    smallRow.className = 'small-row';
+
+    let photoDiv = document.createElement('div');
+    photoDiv.className = 'photo small';
+
+    let img = document.createElement('img');
+    img.className = 'productPhoto smallPhoto';
+    img.id = id;
+    img.src = src;
+
+    img.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('largePhoto') && !event.target.id.includes(photoPosition.toString())) {
+            const largeContainer = document.querySelector('.large');
+            const bigImg = largeContainer.querySelector('img');
+            bigImg.src = event.target.src;
+
+            const imgId = event.target.id;
+            const lastDigit = imgId.match(/\d+$/);
+            photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
+
+            updateButtons();
+        }
+    });
+
+    photoDiv.appendChild(img);
+
+    smallRow.appendChild(photoDiv);
+
+    return smallRow;
+}
 function generatePriceNoDiscount(oldPrice, discountPercentage) {
     const priceNoDiscountDiv = document.getElementById("priceNoDiscountDiv");
 
@@ -149,32 +206,8 @@ function generatePriceNoDiscount(oldPrice, discountPercentage) {
     priceNoDiscountDiv.appendChild(discountDiv);
 
 }
-
-async function AddProductInCart(productId, productCount, userId) {
-    try {
-        const response = await fetch("/api/Products", {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                productId: productId,
-                productCount: productCount,
-                userId: userId
-            })
-        });
-        if (response.ok) {
-            alert("Товар додано в кошик!");
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
-
 function createProductCard({ productIconSrc, productName, productFullName,
-    currentPrice, oldPrice, productId, isFirst, discountIconSrc = '/icons/Discount.png' }) {
+    price, sale, productId, isFirst, discountIconSrc = '/icons/Discount.png' }) {
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
     cardDiv.className = 'cardDiv';
@@ -183,15 +216,17 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const productIconDiv = document.createElement('div');
     productIconDiv.className = 'productIconDiv no-select';
 
-    const discountIcon = document.createElement('img');
-    discountIcon.className = 'discountIcon no-select no-drag';
-    discountIcon.src = discountIconSrc;
+    if (sale > 0) {
+        const discountIcon = document.createElement('img');
+        discountIcon.className = 'discountIcon no-select no-drag';
+        discountIcon.src = discountIconSrc;
+        productIconDiv.appendChild(discountIcon);
+    }
 
     const productIcon = document.createElement('img');
     productIcon.className = 'productIcon';
     productIcon.src = productIconSrc;
 
-    productIconDiv.appendChild(discountIcon);
     productIconDiv.appendChild(productIcon);
 
     const productInfoDiv = document.createElement('div');
@@ -214,16 +249,26 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const priceDiv = document.createElement('div');
     priceDiv.className = 'priceDiv no-select';
 
-    const subPriceDiv = document.createElement('div');
-    subPriceDiv.className = 'subPriceDiv';
-    subPriceDiv.innerHTML = `<b>${currentPrice}</b><span>грн</span>`;
+    if (sale > 0) {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        const discountedPrice = price - (price * (sale / 100));
+        subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
 
-    const crossTextDiv = document.createElement('div');
-    crossTextDiv.className = 'crossTextDiv';
-    crossTextDiv.innerHTML = `<span>${oldPrice} грн</span>`;
+        const crossTextDiv = document.createElement('div');
+        crossTextDiv.className = 'crossTextDiv';
+        crossTextDiv.innerHTML = `<span>${price} грн</span>`;
 
-    priceDiv.appendChild(subPriceDiv);
-    priceDiv.appendChild(crossTextDiv);
+        priceDiv.appendChild(subPriceDiv);
+        priceDiv.appendChild(crossTextDiv);
+    }
+    else {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        subPriceDiv.innerHTML = `<b>${price}</b><span>грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+    }
 
     const productControlDiv = document.createElement('div');
     productControlDiv.className = 'productControlDiv';
@@ -287,139 +332,169 @@ function createProductCard({ productIconSrc, productName, productFullName,
 
     return carouselCardDiv;
 }
+function cardFunctionality() {
+    const cardDivs = document.querySelectorAll('.cardDiv');
+    const productCountDivs = document.querySelectorAll('.productCountDiv');
+    const productBuyBtns = document.querySelectorAll('.productBuyBtn');
 
+    productBuyBtns.forEach(item => {
+        item.addEventListener('click', function (event) {
+            const cardDiv = item.closest('.cardDiv');
+            const countElement = cardDiv.querySelector('.productCount');
+            if (countElement) {
+                let currentCount = parseInt(countElement.innerHTML, 10);
+                if (currentCount > 0) {
+                    // AddProductInCart(cardDiv.id, currentCount, /*userId*/ 0);
+                    alert(`${cardDiv.id}, ${currentCount}, ${0}`);
+                    countElement.innerHTML = '0';
+                } else {
+                    alert("Спершу виберіть кількість товару (`U_U`)!");
+                }
+            }
+        });
+    });
+    cardDivs.forEach(item => {
+        item.addEventListener('click', function (event) {
+            const productControlDiv = item.querySelector('.productControlDiv');
+            if (productControlDiv && !productControlDiv.contains(event.target)) {
+                var productId = item.id;
+                window.location = "/Goodmeal/ProductPage/" + productId;
+            }
+        });
+        item.addEventListener('mouseenter', function () {
+            item.style.border = '3px solid #FF5722';
 
-const cardDivs = document.querySelectorAll('.cardDiv');
-const productCountDivs = document.querySelectorAll('.productCountDiv');
-const productBuyBtns = document.querySelectorAll('.productBuyBtn');
-const addToCartBtn = document.getElementById('addToCart');
-const photos = document.querySelectorAll('.poductPhoto');
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#FF5722';
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            item.style.border = '3px solid #53B06C';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#53B06C';
+            }
+        });
+    });
+    productCountDivs.forEach(item => {
+        const minus = item.getElementsByClassName('minus')[0];
+        const plus = item.getElementsByClassName('plus')[0];
+        const count = item.getElementsByClassName('productCount')[0];
+        minus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            if (currentCount > 0) {
+                count.innerHTML = `${currentCount - 1}`;
+            }
+        });
+
+        plus.addEventListener('click', function (event) {
+            event.stopPropagation();
+            let currentCount = parseInt(count.innerHTML);
+            count.innerHTML = `${currentCount + 1}`;
+        });
+    });
+}
+
+//Photo switch functionality
 const buttonPrev = document.getElementById('buttonPrev');
 const buttonNext = document.getElementById('buttonNext');
 var photoPosition = 1;
+var photoCount;
 
-photos.forEach(item => {
-    item.addEventListener('click', function (event) {
-        if (!event.target.classList.contains('largePhoto') && !event.target.id.includes(photoPosition.toString())) {
-            const largeContainer = document.querySelector('.large');
-            const bigImg = largeContainer.querySelector('img');
-            bigImg.src = event.target.src;
-
-            const imgId = event.target.id;
-            const lastDigit = imgId.match(/\d+$/);
-            photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
-            switch (photoPosition) {
-                case 1:
-                    buttonPrev.classList.toggle('noActiveButton');
-                    if (buttonNext.classList.contains('noActiveButton'))
-                        buttonNext.classList.toggle('noActiveButton');
-                    break;
-                case 2:
-                    if (buttonPrev.classList.contains('noActiveButton'))
-                        buttonPrev.classList.toggle('noActiveButton');
-                    if (buttonNext.classList.contains('noActiveButton'))
-                        buttonNext.classList.toggle('noActiveButton');
-                    break;
-                case 3:
-                    buttonNext.classList.toggle('noActiveButton');
-                    if (buttonPrev.classList.contains('noActiveButton'))
-                        buttonPrev.classList.toggle('noActiveButton');
-                    break;
-            }
+function updateButtons() {
+    if (photoCount === 1) {
+        buttonPrev.classList.add('noActiveButton');
+        buttonNext.classList.add('noActiveButton');
+    } else {
+        if (photoPosition === 1) {
+            buttonPrev.classList.add('noActiveButton');
+            buttonNext.classList.remove('noActiveButton');
+        } else if (photoPosition === photoCount) {
+            buttonPrev.classList.remove('noActiveButton');
+            buttonNext.classList.add('noActiveButton');
+        } else {
+            buttonPrev.classList.remove('noActiveButton');
+            buttonNext.classList.remove('noActiveButton');
         }
-    });
-});
+    }
+}
+updateButtons();
 
 buttonPrev.addEventListener('click', function () {
-    const largeContainer = document.querySelector('.large');
-    const bigImg = largeContainer.querySelector('img');
-    const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
-    bigImg.src = smallImg.src;
-    photoPosition--;
-    if (photoPosition < 2)
-        buttonPrev.classList.toggle('noActiveButton');
-    if (photoPosition == 2 && buttonNext.classList.contains('noActiveButton')) {
-        buttonNext.classList.toggle('noActiveButton');
+    if (photoPosition > 1) {
+        const largeContainer = document.querySelector('.large');
+        const bigImg = largeContainer.querySelector('img');
+        const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
+        bigImg.src = smallImg.src;
+        photoPosition--;
+        updateButtons();
     }
 });
 
 buttonNext.addEventListener('click', function () {
-    const largeContainer = document.querySelector('.large');
-    const bigImg = largeContainer.querySelector('img');
-    const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
-    bigImg.src = smallImg.src;
-    photoPosition++;
-    if (photoPosition > 2)
-        buttonNext.classList.toggle('noActiveButton');
-    if (photoPosition == 2 && buttonPrev.classList.contains('noActiveButton')) {
-        buttonPrev.classList.toggle('noActiveButton');
+    if (photoPosition < photoCount) {
+        const largeContainer = document.querySelector('.large');
+        const bigImg = largeContainer.querySelector('img');
+        const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
+        bigImg.src = smallImg.src;
+        photoPosition++;
+        updateButtons();
     }
 });
 
+//Product switch functionality
+function productsSwitch() {
+    var carouselInner = document.getElementById('subProductsDiv');
+    var cardWidth = document.querySelector('.carousel-item').offsetWidth;
+    var scrollItem = cardWidth + 28;
+    var scrollPosition = 0;
+    var carouselScrollWidth = carouselInner.scrollWidth;
+    var carouselWidth = carouselInner.offsetWidth;
+    var totalItems = Math.floor(carouselScrollWidth / scrollItem);
 
-productBuyBtns.forEach(item => {
-    item.addEventListener('click', function (event) {
-        const cardDiv = item.closest('.cardDiv');
-        const countElement = cardDiv.querySelector('.productCount');
-        if (countElement) {
-            let currentCount = parseInt(countElement.innerHTML, 10);
-            if (currentCount > 0) {
-                // AddProductInCart(cardDiv.id, currentCount, /*userId*/ 0);
-                alert(`${cardDiv.id}, ${currentCount}, ${0}`);
-                countElement.innerHTML = '0';
-            } else {
-                alert("Спершу виберіть кількість товару (`U_U`)!");
+    function updateCarousel() {
+        cardWidth = document.querySelector('.carousel-item').offsetWidth;
+        scrollItem = cardWidth + 28;
+        carouselScrollWidth = carouselInner.scrollWidth;
+        carouselWidth = carouselInner.offsetWidth;
+
+        scrollPosition = Math.min(scrollPosition, totalItems * scrollItem - carouselWidth);
+    }
+
+    window.addEventListener('resize', function () {
+        updateCarousel();
+    });
+
+    document.querySelector('.carouselControlNext').addEventListener('click', function () {
+        if (scrollPosition + carouselWidth < carouselScrollWidth) {
+            scrollPosition += scrollItem;
+            if (scrollPosition + carouselWidth > carouselScrollWidth) {
+                scrollPosition = carouselScrollWidth - carouselWidth;
             }
-        }
-    });
-});
-
-cardDivs.forEach(item => {
-    item.addEventListener('click', function (event) {
-        const productControlDiv = item.querySelector('.productControlDiv');
-        if (productControlDiv && !productControlDiv.contains(event.target)) {
-            var productId = 0; //З базы 
-            window.location = "/Goodmeal/ProductPage/" + productId;
-        }
-    });
-    item.addEventListener('mouseenter', function () {
-        item.style.border = '3px solid #FF5722';
-
-        const button = item.getElementsByClassName('productBuyBtn')[0];
-        if (button) {
-            button.style.background = '#FF5722';
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
         }
     });
 
-    item.addEventListener('mouseleave', function () {
-        item.style.border = '3px solid #53B06C';
-
-        const button = item.getElementsByClassName('productBuyBtn')[0];
-        if (button) {
-            button.style.background = '#53B06C';
+    document.querySelector('.carouselControlPrev').addEventListener('click', function () {
+        if (scrollPosition > 0) {
+            scrollPosition -= scrollItem;
+            if (scrollPosition < 0) scrollPosition = 0;
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
         }
     });
-});
+}
 
-productCountDivs.forEach(item => {
-    const minus = item.getElementsByClassName('minus')[0];
-    const plus = item.getElementsByClassName('plus')[0];
-    const count = item.getElementsByClassName('productCount')[0];
-    minus.addEventListener('click', function (event) {
-        event.stopPropagation();
-        let currentCount = parseInt(count.innerHTML);
-        if (currentCount > 0) {
-            count.innerHTML = `${currentCount - 1}`;
-        }
-    });
-
-    plus.addEventListener('click', function (event) {
-        event.stopPropagation();
-        let currentCount = parseInt(count.innerHTML);
-        count.innerHTML = `${currentCount + 1}`;
-    });
-});
-
+//Info arrows
 var info = document.querySelector('.info-section-content');
 var description = document.querySelector('.description');
 function switchAll(index) {
@@ -462,48 +537,12 @@ function toggleDropdown() {
     switchAll(1);
 }
 
-const multipleItemCarousel = document.querySelector('#productsCarousel');
-if (window.innerWidth >= 576) {
-    var carouselInner = document.querySelector('.carousel-inner');
-    var carouselWidth = carouselInner.scrollWidth;
-    var cardWidth = document.querySelector('.carousel-item').offsetWidth;
-
-    var scrollPosition = 0;
-
-    document.querySelector('.carouselControlNext').addEventListener('click', function () {
-        if (scrollPosition < (carouselWidth - (cardWidth * 6))) {
-            scrollPosition += (carouselWidth * 0.065) + (cardWidth * 6) + 18;
-            carouselInner.scrollTo({
-                left: scrollPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-
-    document.querySelector('.carouselControlPrev').addEventListener('click', function () {
-        if (scrollPosition > 0) {
-            scrollPosition -= (carouselWidth * 0.065) + (cardWidth * 6) + 18;
-            carouselInner.scrollTo({
-                left: scrollPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-} else {
-    multipleItemCarousel.classList.add('slide');
-}
-
-window.addEventListener('resize', function () {
-    if (window.innerWidth >= 576) {
-        multipleItemCarousel.classList.remove('slide');
-    } else {
-        multipleItemCarousel.classList.add('slide');
-    }
-});
-
+//Main product Functionality
+const addToCartBtn = document.getElementById('addToCart');
 const minus = document.getElementsByClassName('minusProduct')[0];
 const plus = document.getElementsByClassName('plusProduct')[0];
 const count = document.getElementsByClassName('quantity')[0];
+
 minus.addEventListener('click', function () {
     let currentCount = parseInt(count.innerHTML);
     if (currentCount > 0) {
