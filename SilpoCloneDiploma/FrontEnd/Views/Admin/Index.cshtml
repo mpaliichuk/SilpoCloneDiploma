@@ -1,6 +1,67 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = null; 
+    ViewData["Title"] = "Home Page";
 }
-<h1>Hi admim</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #f0f0f0; 
+        }
+
+        #myLogo {
+            width: 571px;
+            height: 94.54px;
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+
+        h1 {
+            margin-top: 20px; 
+            font-size: 24px; 
+        }
+    </style>
+</head>
+<body>
+    <img id="myLogo"
+         src="~/Admin_Image/Index logo.png"
+         alt="My Logo" />
+
+    <script>
+        
+        function checkToken() {
+          
+            // const token = localStorage.getItem('token'); 
+
+            // if (token) {
+           
+            window.location.href = '/Admin/General'; 
+            // } else {
+            //     
+            //     window.location.href = '/Account/Register'; 
+            // }
+        }
+
+       
+        document.getElementById('myLogo').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('myLogo').style.opacity = '0'; 
+            setTimeout(() => {
+                document.getElementById('myLogo').style.display = 'none'; 
+                checkToken(); 
+            }, 500); 
+        }, 5000); 
+    </script>
+</body>
+</html>

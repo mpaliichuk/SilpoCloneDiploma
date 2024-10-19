@@ -1,8 +1,10 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    // Toggle sidebar visibility on menu button click
-    document.getElementById('menu-toggle').addEventListener('click', function () {
-        document.getElementById('sidebar').classList.toggle('active');
-    });
+﻿//document.addEventListener('DOMContentLoaded', function () {
+//    // Toggle sidebar visibility on menu button click
+//    document.getElementById('menu-toggle').addEventListener('click', function () {
+//        document.getElementById('sidebar').classList.toggle('active');
+//    });
+//});
+
 
     // Add event listener for photo input change
     document.getElementById('photo').addEventListener('change', function (event) {
@@ -36,3 +38,4 @@ function resetForm() {
     // Clear the file input
     document.getElementById('photo').value = '';
 }
+

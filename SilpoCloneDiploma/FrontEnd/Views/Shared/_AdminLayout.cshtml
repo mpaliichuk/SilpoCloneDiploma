@@ -9,34 +9,109 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
+   <a href="Admin/index"></a>
     <div class="wrapper">
         <div class="sidebar">
-            <div class="logo"></div>
-            <img src="~/Admin_Image/logo.png" alt="Logo" class="logo" />
-            <button id="menu-toggle" class="menu-toggle">☰</button>
+            <a href="/Admin/index"> <img src="~/Admin_Image/Goodmeal.png" alt="Logo" class="logo" /></a>
             <ul>
-                <li><a href="/Home/Index"><img src="~/Admin_Image/Home.png" alt="Logo" />  Головна</a></li>
-                <li><a href="/Admin/ToConfirm"><img src="~/Admin_Image/Frame251.png" alt="Logo" />  Заявки на підтвердження</a></li>
-                <li><a href="/Admin/Stores"><img src="~/Admin_Image/basket.png" alt="Logo" />   Магазини</a></li>
-                <li><a href="/Admin/Users"><img src="~/Admin_Image/user.png" alt="Logo" />   Користувачі</a></li>
-                <li><a href="/Admin/Management"><img src="~/Admin_Image/management.png" alt="Logo" />   Менеджмент</a></li>
-                <li><a href="/Admin/EditAttribute">Атрибути</a></li>
-                <li><a href="/Admin/Brand">Бренд</a></li>
-                <li><a href="/Admin/Manufacturer">Виробник</a></li>
-                <li><a href="/Admin/Categories">Категорії</a></li>
-                <li><a href="/Admin/Product">Товар</a></li>
-                <br />
-                <br />
-                <br />
-                <li><a href="/Account/Logout"><img src="~/Admin_Image/SignOut.png" alt="Logo" /> Вийти</a></li>
+                <li><a href="/Admin/general"><img src="~/Admin_Image/IconHome.png" alt="Home Icon" /> Головна</a></li>
+                <li>
+                    <a href="#" class="menu-item">
+                        <img src="~/Admin_Image/shop.png" alt="Shop Icon" /> Магазини
+                        <img src="~/Admin_Image/IconDown.png" alt="Toggle Icon" class="toggle-icon" />
+                    </a>
+                    <div class="dropdown">
+                        <ul>
+                            <li><a href="/Admin/ListShops">Список магазинів</a></li>
+                            <li><a href="/Admin/AddShop">Добавити магазин</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="menu-item">
+                        <img src="~/Admin_Image/IconHuman.png" alt="User Icon" /> Користувачі
+                        <img src="~/Admin_Image/IconDown.png" alt="Toggle Icon" class="toggle-icon" />
+                    </a>
+                    <div class="dropdown">
+                        <ul>
+                            <li><a href="/Admin/Administrators">Адміністратори</a></li>
+                            <li><a href="/Admin/Buyers">Покупці</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="menu-item">
+                        <img src="~/Admin_Image/shopping cart.png" alt="Products Icon" /> Товари
+                        <img src="~/Admin_Image/IconDown.png" alt="Toggle Icon" class="toggle-icon" />
+                    </a>
+                    <div class="dropdown">
+                        <ul>
+                            <li><a href="/Admin/ListOfProducts">Список товарів</a></li>
+                            <li><a href="/Admin/AddProduct">Добавити товар</a></li>
+                            <li><a href="/Admin/ListOfAttributes">Список атрибутів</a></li>
+                            <li><a href="/Admin/AddAttribute">Добавити атрибут</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="/Account/Logout"><img src="~/Admin_Image/Exit.png" alt="Exit Icon" /> Вийти</a></li>
             </ul>
         </div>
-        <div> @RenderBody()</div>
-                   
+
+        <div class="content">
+            <div class="top-section">
+                <div class="admin-info">
+                    @* <img src="@admin.PhotoUrl" alt="Admin" class="admin-avatar"> *@
+                    <div class="admin-name">
+                        <span>@* @admin.Name @admin.Surname *@ User Name</span>
+                        <span>@* @admin.Role *@ Role</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-section">
+                @RenderBody()
+            </div>
+        </div>
     </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/admin_js.js" asp-append-version="true"></script>
+    <script src="~/js/customScript.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            const iconUp = '@Url.Content("~/Admin_Image/IconUp.png")';
+            const iconDown = '@Url.Content("~/Admin_Image/IconDown.png")';
+
+           
+            $('.menu-item').click(function (e) {
+                e.preventDefault();
+                const $dropdown = $(this).siblings('.dropdown');
+                const $toggleIcon = $(this).find('img.toggle-icon');
+
+                if ($dropdown.is(':visible')) {
+                    $dropdown.slideUp();
+                    $toggleIcon.attr('src', iconDown);
+                } else {
+                    $('.dropdown').slideUp(); 
+                    $('.menu-item img.toggle-icon').attr('src', iconDown); 
+                    $dropdown.slideDown(); 
+                    $toggleIcon.attr('src', iconUp); 
+                }
+            });
+
+           
+            $(document).click(function (e) {
+                if (!$(e.target).closest('.menu-item').length) {
+                    $('.dropdown').slideUp(); 
+                    $('.menu-item img.toggle-icon').attr('src', iconDown); 
+                }
+            });
+        });
+
+
+
+    </script>
 </body>
 </html>

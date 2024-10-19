@@ -4,14 +4,7 @@
 }
 
 <div class="content-wrapper">
-    <div class="content">
-        <div class="admin-info">
-            @* <img src="@admin.PhotoUrl" alt="Admin" class="admin-avatar"> *@
-            <div class="admin-name">
-                <span>@* @admin.Name @admin.Surname *@ User Name</span>
-                <span>@* @admin.Role *@ Role</span>
-            </div>
-        </div>
+    
         <div class="form-container">
             <h2 style="color:#004d00;">Редагування атрибуту</h2>
             <form asp-action="EditAttribute" asp-controller="Admin" method="post" enctype="multipart/form-data">
