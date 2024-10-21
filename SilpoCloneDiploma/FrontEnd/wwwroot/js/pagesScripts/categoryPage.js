@@ -207,7 +207,6 @@ function changePageText(pageChangeSymbol) {
 }
 
 /*////////////////////////////      Cards       //////////////////////////////////////////////*/
-
 function addCardsEvents() {
     const cardDivs = document.querySelectorAll('.cardDiv');
     const productCountDivs = document.querySelectorAll('.productCountDiv');
@@ -287,4 +286,35 @@ function addCardsEvents() {
         });
     });
 }
-/*////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/*////////////////////////////////  Filter  //////////////////////////////////////////////////*/
+
+const filterPopUp = document.getElementById('filterPopUp');
+const filterButton = document.getElementById('filterButton');
+const overlayFilterPopUp = document.getElementById('filterOverlay');
+
+//basket.addEventListener('click', function () {
+//    window.location = '/Goodmeal/User/ShoppingCart';
+//});
+
+filterButton.addEventListener('click', function () {
+    filterPopUp.style.display = "flex";
+    setTimeout(() => {
+        filterPopUp.classList.add('showFilter'); 
+    }, 10);
+    overlayFilterPopUp.style.zIndex = 9998;
+    overlayFilterPopUp.style.display = 'block';
+    document.body.classList.add('no-scroll');
+    filterPopUp.focus();
+});
+
+overlayFilterPopUp.addEventListener('click', function () {
+    overlayFilterPopUp.style.display = 'none';
+    filterPopUp.classList.remove('showFilter');
+    setTimeout(() => {
+        filterPopUp.style.display = "none";
+    }, 300);
+    overlayFilterPopUp.style.zIndex = 9990;
+    overlayFilterPopUp.style.display = "none";
+    document.body.classList.remove('no-scroll');
+});

@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="~/css/pagesStyles/productPage.css" asp-append-version="true" />
 
 <div class="content">
+    <div id="overlay"></div>
     <input type="hidden" id="productId" value="@productId">
     <div class="breadcrumb">
         <a class="breadcrumbLink" href="/">Головна</a> 
@@ -37,7 +38,7 @@
 
         <div class="content-info">
             <div class="subInfoDiv">
-                <div id="productTitle" class="name">@* Папайя 100г *@</div>
+                <div id="productTitle" class="name"></div>
                 <div class="rating"><img class="no-select no-drag ratingStar" src="/icons/RatingStar.png" /><span id="ratingScore">4.90</span> <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
                 <div class="accordion">
                     <div class="descriptionTitleDiv no-select no-drag" onclick="toggleDropdownDescription()">
@@ -46,8 +47,6 @@
                     </div>
                     <div class="description active">
                         <span id="descriptionInfo">
-                            @* Має тверду шкірку і жовто-зелений колір. Плід м’який, з легким солодкуватим смаком та ароматом дині.
-                            Рекомендуємо їсти свіжою, разом з лаймом. *@
                         </span>
                     </div>
                 </div>
