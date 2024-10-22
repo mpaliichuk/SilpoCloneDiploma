@@ -673,15 +673,14 @@ footer {
     display: none;
     flex-direction: column;
     align-items: center;
-    padding: 32px;
+    padding: 25px 10px 35px 10px;
     gap: 40px;
     position: fixed;
     width: 490px;
     height: 100vh;
     right: -490px;
     top: 0px;
-    /*background: #FFFEFE;*/
-    background: red;
+    background: #FFFEFE;
     border-radius: 12px 0px 0px 12px;
     z-index: 9999;
     overflow-y: auto;
@@ -697,4 +696,302 @@ footer {
 
 body.no-scroll {
     overflow: hidden;
+}
+
+.titleDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    width: 426px;
+    height: auto;
+    /*Text*/
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 33px;
+    color: #1E1E1E;
+}
+
+.titleCart{
+    display:flex;
+    width:120px;
+}
+
+#cancelDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    gap: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.cancelIcon {
+    width: 20px;
+    height: 20px;
+    cursor:pointer;
+}
+
+.emptyCartDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+    isolation: isolate;
+    width: 340px;
+    height: 418px;
+}
+
+.mainImgDiv {
+    width: 340px;
+    height: 340px;
+}
+
+.emptyCartImg{
+    width:100%;
+    height:100%;
+}
+
+.mainTextDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+    width: 239px;
+    height: 54px;
+}
+
+.subHeaderText {
+    width: 239px;
+    height: 27px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+    color: #1E1E1E;
+    align-self: stretch;
+}
+
+.subBodyText {
+    width: 239px;
+    height: 19px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+    color: #1E1E1E;
+    align-self: stretch;
+}
+
+/*////*/
+.recommendedProductsDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap:25px;
+    padding: 0px;
+    width: 426px;
+    height: auto;
+}
+
+.controllRecommendedProductsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 426px;
+    height: auto;
+    /*Text*/
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 32px;
+    color: #1E1E1E;
+}
+
+.recommendedProductsButtonsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    padding: 0px;
+    gap: 15px;
+    width: 96px;
+    height: 38px;
+}
+
+#recommendButtonPrev, #recommendButtonNext {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 9.5px;
+    gap: 10px;
+    width: 38px;
+    height: 38px;
+    border: 2px solid #CBCBCB;
+    border-radius: 40px;
+    /*Text*/
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+}
+
+#subRecommendedProductsDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    width: 426px;
+    height: auto;
+}
+
+#subRecommendedProducts {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#subRecommendedProducts > *:not(:last-child) {
+    margin-right: 22px;
+}
+
+.carousel-item {
+    display: block;
+    margin-right: 0;
+}
+
+/*////////////////////////////////////////////////////////Cards//////////////////////////////////////////////////*/
+.popUpCardDiv {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 8px;
+    isolation: isolate;
+    width: 202px;
+    height: 275px;
+    background: #FFFFFF;
+    border: 3px solid #53B06C;
+    border-radius: 20px;
+    font-family: 'Noto Sans';
+}
+
+.productIconDiv {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 162px;
+    height: 100px;
+}
+
+.productIcon {
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 80px/2);
+    top: calc(50% - 80px/2);
+}
+
+.productInfoDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+    width: 162px;
+    height: 193px;
+}
+
+.productNameDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0px;
+    gap: 5px;
+    width: 162px;
+    height: 102px;
+}
+
+.productName {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.productFullName {
+    width: 162px;
+    height: 32px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    color: #1E1E1E;
+}
+
+.priceDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 13px;
+    width: 127px;
+    height: 25px;
+}
+
+.subPriceDiv {
+    display: flex;
+    flex-direction: row;
+    width: 66px;
+    height: 25px;
+    gap: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #1E1E1E;
+}
+
+.crossTextDiv {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    width: 100px;
+    height: 20px;
+    gap: 5px;
+}
+
+.crossTextDiv span {
+    padding-top: 4px;
+    width: 80px;
+    height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    text-decoration-line: line-through;
+    color: #888888;
+}
+
+.discountIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
 }

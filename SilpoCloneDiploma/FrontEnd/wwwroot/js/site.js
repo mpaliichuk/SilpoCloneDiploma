@@ -281,6 +281,9 @@ socialIcons.forEach((item) => {
 //Overlay /////////////////////////////////////////////////////////////////////////////////////////////////////
 const overlayPopUp = document.getElementById('overlay');
 overlayPopUp.addEventListener('click', function () {
+    closeCartPopUpEvent();
+});
+function closeCartPopUpEvent() {
     emptyCartPopUp.classList.remove('show');
     setTimeout(() => {
         emptyCartPopUp.style.display = "none";
@@ -295,7 +298,8 @@ overlayPopUp.addEventListener('click', function () {
     overlayPopUp.style.display = "none";
     loginPopup.style.display = "none";
     document.body.classList.remove('no-scroll');
-});
+    document.getElementById("subRecommendedProducts").innerHTML = "";
+}
 
 
 //Cart popUp //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,6 +311,7 @@ const basket = document.getElementById('basketDiv');
 //});
 
 basket.addEventListener('click', function () {
+    GetRecommendedProducts();
     dropdownMenu.classList.remove('show');
     panel.classList.remove('show');
     setTimeout(() => {
@@ -320,6 +325,193 @@ basket.addEventListener('click', function () {
     emptyCartPopUp.focus();
 });
 
+async function GetRecommendedProducts() {
+    var productsByCategory = [];
+
+    try {
+        const response = await fetch("http://localhost:5152/gateway/RecommendedProducts", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            productsByCategory = await response.json();
+            //productsByCategory.forEach(product => {
+            //    const productCard = createpopUpProductCard(product);
+            //    document.getElementById('subProductsDiv').appendChild(productCard);
+            //});
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+
+    var isFirstBool = false;
+    for (var i = 0; i < 8; i++) {
+        if (i == 0) {
+            isFirstBool = true;
+        }
+        const productCard = createpopUpProductCard({
+            productIconSrc: productsByCategory[i].imageUrls[0],
+            productName: productsByCategory[i].title,
+            productFullName: productsByCategory[i].productComposition,
+            price: productsByCategory[i].price,
+            sale: productsByCategory[i].sale,
+            productId: productsByCategory[i].id,
+            isFirst: isFirstBool
+        });
+        document.getElementById('subRecommendedProducts').appendChild(productCard);
+        isFirstBool = false;
+    }
+    popUpCardFunctionality();
+    popUpproductsSwitch();
+}
+function createpopUpProductCard({ productIconSrc, productName, productFullName,
+    price, sale, productId, isFirst, discountIconSrc = '/icons/Discount.png' }) {
+    const PopUpCardDiv = document.createElement('div');
+    PopUpCardDiv.id = `${productId}`;
+    PopUpCardDiv.className = 'popUpCardDiv';
+    //PopUpCardDiv.setAttribute("product-id", productId);
+
+    const productIconDiv = document.createElement('div');
+    productIconDiv.className = 'productIconDiv no-select';
+
+    if (sale > 0) {
+        const discountIcon = document.createElement('img');
+        discountIcon.className = 'discountIcon no-select no-drag';
+        discountIcon.src = discountIconSrc;
+        productIconDiv.appendChild(discountIcon);
+    }
+
+    const productIcon = document.createElement('img');
+    productIcon.className = 'productIcon';
+    productIcon.src = productIconSrc;
+
+    productIconDiv.appendChild(productIcon);
+
+    const productInfoDiv = document.createElement('div');
+    productInfoDiv.className = 'productInfoDiv';
+
+    const productNameDiv = document.createElement('div');
+    productNameDiv.className = 'productNameDiv no-select';
+
+    const productNameElement = document.createElement('div');
+    productNameElement.className = 'productName';
+    productNameElement.textContent = productName;
+
+    const productFullNameElement = document.createElement('div');
+    productFullNameElement.className = 'productFullName';
+    productFullNameElement.textContent = productFullName;
+
+    productNameDiv.appendChild(productNameElement);
+    productNameDiv.appendChild(productFullNameElement);
+
+    const priceDiv = document.createElement('div');
+    priceDiv.className = 'priceDiv no-select';
+
+    if (sale > 0) {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        const discountedPrice = price - (price * (sale / 100));
+        subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
+
+        const crossTextDiv = document.createElement('div');
+        crossTextDiv.className = 'crossTextDiv';
+        crossTextDiv.innerHTML = `<span>${price} грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+        priceDiv.appendChild(crossTextDiv);
+    }
+    else {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        subPriceDiv.innerHTML = `<b>${price}</b><span>грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+    }
+
+    productInfoDiv.appendChild(productNameDiv);
+    productInfoDiv.appendChild(priceDiv);
+
+    PopUpCardDiv.appendChild(productIconDiv);
+    PopUpCardDiv.appendChild(productInfoDiv);
+
+    const carouselPopUpCardDiv = document.createElement('div');
+    if (isFirst) {
+        carouselPopUpCardDiv.className = 'carousel-item active';
+    }
+    else {
+        carouselPopUpCardDiv.className = 'carousel-item';
+    }
+    carouselPopUpCardDiv.appendChild(PopUpCardDiv);
+
+    return carouselPopUpCardDiv;
+}
+function popUpCardFunctionality() {
+    const popUpCardDivs = document.querySelectorAll('.popUpCardDiv');
+
+    popUpCardDivs.forEach(item => {
+        item.addEventListener('click', function (event) {
+            var productId = item.id;
+            window.location = "/Goodmeal/ProductPage/" + productId;
+        });
+        item.addEventListener('mouseenter', function () {
+            item.style.border = '3px solid #FF5722';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#FF5722';
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            item.style.border = '3px solid #53B06C';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#53B06C';
+            }
+        });
+    });
+}
+function popUpproductsSwitch() {
+    var carouselInner = document.getElementById('subRecommendedProducts');
+    var cardWidth = document.querySelector('.carousel-item').offsetWidth;
+    var scrollItem = cardWidth + 22;
+    var scrollPosition = 0;
+    var carouselScrollWidth = carouselInner.scrollWidth;
+    var carouselWidth = carouselInner.offsetWidth;
+
+    document.getElementById('recommendButtonNext').addEventListener('click', function () {
+        if (scrollPosition + carouselWidth < carouselScrollWidth) {
+            scrollPosition += scrollItem;
+            if (scrollPosition + carouselWidth > carouselScrollWidth) {
+                scrollPosition = carouselScrollWidth - carouselWidth;
+            }
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+
+    document.getElementById('recommendButtonPrev').addEventListener('click', function () {
+        if (scrollPosition > 0) {
+            scrollPosition -= scrollItem;
+            if (scrollPosition < 0) scrollPosition = 0;
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
+
+document.getElementById('cancel').addEventListener('click', function () {
+    closeCartPopUpEvent();
+});
 
 //LoginRegister popUp /////////////////////////////////////////////////////////////////////////////////////////
 const profileButton = document.getElementById("profile");
