@@ -190,7 +190,7 @@
 
 }
 
-.rating {
+#rating {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -559,7 +559,7 @@
 }
 
 /*////////////////////////////////////////// Rating styles /////////////////////////////////////////////////*/
-#overlay {
+#ratingOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -574,24 +574,143 @@
     display: none;
     flex-direction: column;
     align-items: center;
-    padding: 32px;
-    gap: 40px;
+    justify-content: space-between;
+    padding: 40px;
     position: fixed;
     width: 490px;
-    height: 100vh;
-    right: 0px;
-    top: 0px;
-    /*background: #FFFEFE;*/
-    background: red;
-    border-radius: 12px 0px 0px 12px;
+    height: 510px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #FFFEFE;
+    border-radius: 12px;
     z-index: 9999;
-    overflow-y: auto;
+    font-family: 'Noto Sans';
+    font-style: normal;
+}
+
+.titleRatingDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    width: 426px;
+    height: 33px;
+    align-self: stretch;
+}
+
+.titleRating {
+    width: auto;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 33px;
+    color: #1E1E1E;
+}
+
+#cancelDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    gap: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.cancelIcon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.ratingPopUpSubDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+    width: 160px;
+    height: 160px;
+    background: #FFF6F3;
+    border-radius: 160px;
+}
+
+#ratingPopUpScore {
+    font-weight: 500;
+    font-size: 50px;
+    line-height: 68px;
+    color: #FF5722;
+}
+
+#ratingPopUpVotes {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 25px;
+    color: #585858;
+}
+
+.infoRatingDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 12px;
+    gap: 10px;
+    width: 426px;
+    height: 38px;
+    border-radius: 12px;
+    /*Text*/
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+    color: #1E1E1E;
+}
+
+#ratingStarsDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:space-around;
+    margin: 20px;
+    width: 290px;
+    height: 44px;
+}
+
+.setRatingStar {
+    width: 44px;
+    height: 44px;
+}
+
+.setRatingDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 426px;
+    height: 35px;
+}
+
+.setRatingBtn {
+    background: #FF5722;
+    border-radius: 30px;
+    border: none;
+    width: 100%;
+    height: 100%;
+    /*Text*/
+
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    color: #FFFEFE;
 }
 
 body.no-scroll {
     overflow: hidden;
 }
-
 
 /*///////////////////////////////////              CARDS               ////////////////////////////////////*/
 #mainProductsDiv {

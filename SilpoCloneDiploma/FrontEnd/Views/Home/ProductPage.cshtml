@@ -39,7 +39,7 @@
         <div class="content-info">
             <div class="subInfoDiv">
                 <div id="productTitle" class="name"></div>
-                <div class="rating"><img class="no-select no-drag ratingStar" src="/icons/RatingStar.png" /><span id="ratingScore">4.90</span> <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
+                <div id="rating"><img class="no-select no-drag ratingStar" src="/icons/RatingStar.png" /><span id="ratingScore">4.90</span> <img class="no-select no-drag" src="/icons/Point.png" /> 12 оцінок</div>
                 <div class="accordion">
                     <div class="descriptionTitleDiv no-select no-drag" onclick="toggleDropdownDescription()">
                         <span>Опис</span>
@@ -105,6 +105,36 @@
                 <button class="carouselControlPrev" type="button"><img src="/icons/Arrow(left).png" /></button>
                 <button class="carouselControlNext" type="button"><img src="/icons/Arrow(right).png" /></button>
             </div>
+        </div>
+    </div>
+
+    <!-- Cart Popup -->
+    <div id="ratingOverlay"></div>
+    <div id="ratingPopUp">
+        <div class="titleRatingDiv">
+            <span class="titleRating">Оцініть товар 🤩</span>
+            <div id="cancelDiv">
+                <img id="cancelRating" class="cancelIcon" src="~/icons/CencelCartIcon.png" />
+            </div>
+        </div>
+        <div class="ratingPopUpSubDiv">
+            <span id="ratingPopUpScore">4.90</span>
+            <span id="ratingPopUpVotes">12 оцінок</span>
+        </div>
+        <div class="infoRatingDiv">
+            Якщо ваша думка зміниться, згодом зможете переоцінити 🌟
+        </div>
+        <div id="mainRatingStarsDiv">
+            <div id="ratingStarsDiv">
+                <img id="1star" class="setRatingStar no-select no-drag" src="/icons/SetRatingStar.png" alt="1 star">
+                <img id="2star" class="setRatingStar no-select no-drag" src="/icons/SetRatingStar.png" alt="2 stars">
+                <img id="3star" class="setRatingStar no-select no-drag" src="/icons/SetRatingStar.png" alt="3 stars">
+                <img id="4star" class="setRatingStar no-select no-drag" src="/icons/SetRatingStar.png" alt="4 stars">
+                <img id="5star" class="setRatingStar no-select no-drag" src="/icons/SetRatingStar.png" alt="5 stars">
+            </div>
+        </div>
+        <div class="setRatingDiv">
+            <button class="setRatingBtn" type="button">Оцінити</button>
         </div>
     </div>
 </div>
