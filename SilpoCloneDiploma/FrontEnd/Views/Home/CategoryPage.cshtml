@@ -94,15 +94,87 @@
 <!-- Filter Popup -->
 <div id="filterOverlay"></div>
 <div id="filterPopUp">
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
-    <h1>Hello this is start version of PopUp</h1>
+    <div class="titleFilterDiv">
+        <span class="titleFilter">Фільтри</span>
+        <div id="cancelDiv">
+            <img id="cancelFilter" class="cancelIcon" src="~/icons/CencelCartIcon.png" />
+        </div>
+    </div>
+    <div class="accordion">
+        <div class="firstFilterDiv filter" onclick="toggleDropdown('sale')">
+            <div class="infoTitleDiv no-select no-drag">
+                <div class="firstInfoSubTitleDiv">
+                    <img class="firstTitleDivIcon no-select no-drag" src="~/icons/Discount.png" />
+                    <span>Акційні пропозиції</span>
+                </div>
+                <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
+            </div>
+            <div id="sale" class="info-section-content">
+                <div id="attributes" class="attributeDivs">
+                    <div class="attribute">
+                        <span>Країна:</span>
+                        <span>Іспанія</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filterDiv filter" onclick="toggleDropdown('tradeMark')">
+            <div class="infoTitleDiv no-select no-drag">
+                <span>Торгова марка</span>
+                <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
+            </div>
+            <div id="tradeMark" class="info-section-content">
+                <div id="attributes" class="attributeDivs">
+                    <div class="attribute">
+                        <span>Країна:</span>
+                        <span>Іспанія</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filterDiv filter" onclick="toggleDropdown('country')">
+            <div class="infoTitleDiv no-select no-drag">
+                <span>Країна</span>
+                <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
+            </div>
+            <div id="country" class="info-section-content">
+                <div id="attributes" class="attributeDivs">
+                    <div class="attribute">
+                        <span>Країна:</span>
+                        <span>Іспанія</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filterDiv filter" onclick="toggleDropdown('priceFilter')">
+            <div class="infoTitleDiv no-select no-drag">
+                <span>Ціна</span>
+                <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
+            </div>
+            <div id="priceFilter" class="info-section-content">
+                <div id="attributes" class="attributeDivs">
+                    <div class="attribute">
+                        <span>Країна:</span>
+                        <span>Іспанія</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filterDiv filter" onclick="toggleDropdown('special')">
+            <div class="infoTitleDiv no-select no-drag">
+                <span>Особливі</span>
+                <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
+            </div>
+            <div id="special" class="info-section-content">
+                <div id="attributes" class="attributeDivs">
+                    <div class="attribute">
+                        <span>Країна:</span>
+                        <span>Іспанія</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="/js/pagesScripts/categoryPage.js"></script>
