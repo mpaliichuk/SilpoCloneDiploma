@@ -156,6 +156,16 @@ public class AdminController : Controller
         //return View(attributes);
         return View();
     }
+    /// <summary>
+    /// Order
+    /// </summary>
+    /// <returns></returns>
+    public IActionResult Order()
+    {
+
+        
+        return View();
+    }
 
     /// <summary>
     /// Exit

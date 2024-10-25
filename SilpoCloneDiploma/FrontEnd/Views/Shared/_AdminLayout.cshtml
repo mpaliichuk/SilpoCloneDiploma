@@ -9,7 +9,6 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
-   <a href="Admin/index"></a>
     <div class="wrapper">
         <div class="sidebar">
             <a href="/Admin/index"> <img src="~/Admin_Image/Goodmeal.png" alt="Logo" class="logo" /></a>
@@ -39,6 +38,7 @@
                         </ul>
                     </div>
                 </li>
+                <li><a href="/Admin/Order"><img src="~/Admin_Image/check.png" alt="Home Icon" /> Замовлення</a></li>
                 <li>
                     <a href="#" class="menu-item">
                         <img src="~/Admin_Image/shopping cart.png" alt="Products Icon" /> Товари
@@ -53,17 +53,21 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="/Account/Logout"><img src="~/Admin_Image/Exit.png" alt="Exit Icon" /> Вийти</a></li>
+                <li class="logout-item">
+                    <a href="/Account/Logout" class="logout-link">
+                        <img src="~/Admin_Image/Exit.png" alt="Exit Icon" />
+                        Вийти
+                    </a>
+                </li>
             </ul>
         </div>
 
         <div class="content">
             <div class="top-section">
                 <div class="admin-info">
-                    @* <img src="@admin.PhotoUrl" alt="Admin" class="admin-avatar"> *@
                     <div class="admin-name">
-                        <span>@* @admin.Name @admin.Surname *@ User Name</span>
-                        <span>@* @admin.Role *@ Role</span>
+                        <span>User Name</span>
+                        <span>Role</span>
                     </div>
                 </div>
             </div>
@@ -84,7 +88,6 @@
             const iconUp = '@Url.Content("~/Admin_Image/IconUp.png")';
             const iconDown = '@Url.Content("~/Admin_Image/IconDown.png")';
 
-           
             $('.menu-item').click(function (e) {
                 e.preventDefault();
                 const $dropdown = $(this).siblings('.dropdown');
@@ -101,7 +104,6 @@
                 }
             });
 
-           
             $(document).click(function (e) {
                 if (!$(e.target).closest('.menu-item').length) {
                     $('.dropdown').slideUp(); 
@@ -109,9 +111,6 @@
                 }
             });
         });
-
-
-
     </script>
 </body>
 </html>
