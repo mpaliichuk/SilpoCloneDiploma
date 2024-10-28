@@ -48,5 +48,17 @@ namespace FrontEnd.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        /// <summary>
+        /// Error page
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        [Route("Home/Error/{statusCode}")]
+        public IActionResult Error(int statusCode)
+        {
+            ViewBag.StatusCode = statusCode;
+            return View("Error");
+        }
     }
 }
