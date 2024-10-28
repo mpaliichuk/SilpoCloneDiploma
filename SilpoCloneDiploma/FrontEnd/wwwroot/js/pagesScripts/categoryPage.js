@@ -207,7 +207,6 @@ function changePageText(pageChangeSymbol) {
 }
 
 /*////////////////////////////      Cards       //////////////////////////////////////////////*/
-
 function addCardsEvents() {
     const cardDivs = document.querySelectorAll('.cardDiv');
     const productCountDivs = document.querySelectorAll('.productCountDiv');
@@ -287,4 +286,72 @@ function addCardsEvents() {
         });
     });
 }
-/*////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/*////////////////////////////////  Filter  //////////////////////////////////////////////////*/
+
+const filterPopUp = document.getElementById('filterPopUp');
+const filterButton = document.getElementById('filterButton');
+const overlayFilterPopUp = document.getElementById('filterOverlay');
+
+function closeRatingPopUpEvent() {
+    overlayFilterPopUp.style.display = 'none';
+    overlayFilterPopUp.style.zIndex = 9990;
+    filterPopUp.style.display = "none";
+    document.body.classList.remove('no-scroll');
+}
+
+filterButton.addEventListener('click', function () {
+    filterPopUp.style.display = "flex";
+    setTimeout(() => {
+        filterPopUp.classList.add('showFilter'); 
+    }, 10);
+    overlayFilterPopUp.style.zIndex = 9998;
+    overlayFilterPopUp.style.display = 'block';
+    document.body.classList.add('no-scroll');
+    filterPopUp.focus();
+});
+
+overlayFilterPopUp.addEventListener('click', function () {
+    closeRatingPopUpEvent();
+});
+
+document.getElementById('cancelFilter').addEventListener('click', function () {
+    closeRatingPopUpEvent();
+});
+
+//Info arrows
+var info = document.querySelectorAll('.info-section-content');
+
+function toggleDropdown(idFilter) {
+    info.forEach(item => {
+        filter = item.closest('.filter');
+        image = filter.querySelector('.ArrowHorisontalImg');
+        if (item.id == idFilter) {
+            item.classList.toggle('active');
+            image.classList.toggle('rotated');
+        }
+        else {
+            if (image.classList.contains('rotated')) {
+                item.classList.toggle('active');
+                image.classList.toggle('rotated');
+            }
+        }
+    });
+    //switch (index) {
+    //    case 0:
+    //        if (info.classList.contains('active')) {
+    //            accordion = info.closest('.accordion');
+    //            image = accordion.querySelector('.ArrowHorisontalImg');
+    //            info.classList.toggle('active');
+    //            image.classList.toggle('rotated');
+    //        }
+    //        image = accordion.querySelector('.ArrowHorisontalImg');
+    //        image.classList.toggle('rotated');
+    //        break;
+    //    case 1:
+            
+    //        break;
+    //    default:
+    //        info.classList.toggle('active');
+    //}
+}

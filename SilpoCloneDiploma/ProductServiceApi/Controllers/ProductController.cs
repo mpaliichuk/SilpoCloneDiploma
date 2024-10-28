@@ -101,6 +101,38 @@ namespace ProductServiceApi.Controllers
         }
 
         /// <summary>
+        /// Get 8 random products.
+        /// </summary>
+        [HttpGet("random-recommendation")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetRandomProductsAsync()
+        {
+            var products = await _service.GetAllProductsAsync();
+            var discountedProducts = products.ToList();
+
+            var randomProducts = discountedProducts
+                .OrderBy(p => Guid.NewGuid())
+                .Take(8)
+                .ToList();
+
+            var productDtos = randomProducts.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Title = p.Title,
+                ProductComposition = p.ProductComposition,
+                GeneralInformation = p.GeneralInformation,
+                ImageUrls = p.ImageUrls,
+                Availability = p.Availability,
+                Count = p.Count,
+                Sale = p.Sale,
+                Price = p.Price,
+                CategoryId = p.CategoryId
+            });
+
+            return Ok(productDtos);
+        }
+        /// <summary>
         /// Get 18 random discounted products.
         /// </summary>
         [HttpGet("random-discounted")]

@@ -432,6 +432,36 @@
                 </div>
             </div>
         </nav>
+        <!-- Cart Popup -->
+        <div id="emptyCartPopUp">
+            <div class="titleDiv">
+                <span class="titleCart">Кошик</span>
+                <div id="cancelDiv">
+                    <img id="cancel" class="cancelIcon" src="~/icons/CencelCartIcon.png"/>
+                </div>
+            </div>
+            <div class="emptyCartDiv">
+                <div class="mainImgDiv">
+                    <img class="emptyCartImg" src="/icons/EmptyBox.jpg"/>
+                </div>
+                <div class="mainTextDiv">
+                    <span class="subHeaderText">Ой, поки що тут пусто!</span>
+                    <span class="subBodyText">Додай улюблені товари 🧡</span>
+                </div>
+            </div>
+            <div class="recommendedProductsDiv">
+                <div class="controllRecommendedProductsDiv">
+                    <span>Рекомендовані товари</span>
+                    <div class="recommendedProductsButtonsDiv">
+                        <button id="recommendButtonPrev"> &lt; </button>
+                        <button id="recommendButtonNext"> &gt; </button>
+                    </div>
+                </div>
+                <div id="subRecommendedProductsDiv" class="carousel">
+                    <div id="subRecommendedProducts" class="carousel-inner"></div>
+                </div>
+            </div>
+        </div>
         <!-- Login Popup -->
         <div id="loginPopup" class="popup-container" style="display: none;">
             <div class="popup-left">

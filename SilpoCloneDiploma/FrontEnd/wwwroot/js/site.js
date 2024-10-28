@@ -3,7 +3,6 @@ const overlay = document.getElementById('overlay');
 var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
 var dropdownItems = document.getElementsByClassName('dropdown-item');
 var panel = document.getElementById('categoryPanel');
-var basket = document.getElementById('basketDiv');
 const socialIcons = document.querySelectorAll('.socialIcons');
 
 dropdownToggle.addEventListener('click', function (event) {
@@ -264,10 +263,6 @@ function createCategoryItem(href, id) {
 }
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-basket.addEventListener('click', function () {
-    window.location = '/Goodmeal/User/ShoppingCart';
-});
-
 socialIcons.forEach((item) => {
     item.addEventListener('mouseenter', function () {
         if (!item.dataset.originalSrc) {
@@ -283,37 +278,269 @@ socialIcons.forEach((item) => {
     });
 });
 
+//Overlay /////////////////////////////////////////////////////////////////////////////////////////////////////
+const overlayPopUp = document.getElementById('overlay');
+overlayPopUp.addEventListener('click', function () {
+    closeCartPopUpEvent();
+});
+function closeCartPopUpEvent() {
+    emptyCartPopUp.classList.remove('show');
+    setTimeout(() => {
+        emptyCartPopUp.style.display = "none";
+    }, 300);
+    panel.innerHTML = '';
+    overlayPopUp.style.display = 'none';
+    if (dropdownMenu.classList.contains('show')) {
+        dropdownMenu.classList.toggle('show');
+        panel.classList.toggle('show');
+    }
+    overlayPopUp.style.zIndex = 9990;
+    overlayPopUp.style.display = "none";
+    loginPopup.style.display = "none";
+    document.body.classList.remove('no-scroll');
+    document.getElementById("subRecommendedProducts").innerHTML = "";
+}
 
-//LoginRegister popUp
+
+//Cart popUp //////////////////////////////////////////////////////////////////////////////////////////////////
+const emptyCartPopUp = document.getElementById('emptyCartPopUp');
+const basket = document.getElementById('basketDiv');
+
+//basket.addEventListener('click', function () {
+//    window.location = '/Goodmeal/User/ShoppingCart';
+//});
+
+basket.addEventListener('click', function () {
+    GetRecommendedProducts();
+    dropdownMenu.classList.remove('show');
+    panel.classList.remove('show');
+    setTimeout(() => {
+        emptyCartPopUp.classList.add('show');
+    }, 10);
+    overlayPopUp.style.zIndex = 9998;
+    emptyCartPopUp.style.display = "flex";
+    overlayPopUp.style.display = 'block';
+
+    document.body.classList.add('no-scroll');
+    emptyCartPopUp.focus();
+});
+
+async function GetRecommendedProducts() {
+    var productsByCategory = [];
+
+    try {
+        const response = await fetch("http://localhost:5152/gateway/RecommendedProducts", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            productsByCategory = await response.json();
+            //productsByCategory.forEach(product => {
+            //    const productCard = createpopUpProductCard(product);
+            //    document.getElementById('subProductsDiv').appendChild(productCard);
+            //});
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+
+    var isFirstBool = false;
+    for (var i = 0; i < 8; i++) {
+        if (i == 0) {
+            isFirstBool = true;
+        }
+        const productCard = createpopUpProductCard({
+            productIconSrc: productsByCategory[i].imageUrls[0],
+            productName: productsByCategory[i].title,
+            productFullName: productsByCategory[i].productComposition,
+            price: productsByCategory[i].price,
+            sale: productsByCategory[i].sale,
+            productId: productsByCategory[i].id,
+            isFirst: isFirstBool
+        });
+        document.getElementById('subRecommendedProducts').appendChild(productCard);
+        isFirstBool = false;
+    }
+    popUpCardFunctionality();
+    popUpproductsSwitch();
+}
+function createpopUpProductCard({ productIconSrc, productName, productFullName,
+    price, sale, productId, isFirst, discountIconSrc = '/icons/Discount.png' }) {
+    const PopUpCardDiv = document.createElement('div');
+    PopUpCardDiv.id = `${productId}`;
+    PopUpCardDiv.className = 'popUpCardDiv';
+    //PopUpCardDiv.setAttribute("product-id", productId);
+
+    const productIconDiv = document.createElement('div');
+    productIconDiv.className = 'productIconDiv no-select';
+
+    if (sale > 0) {
+        const discountIcon = document.createElement('img');
+        discountIcon.className = 'discountIcon no-select no-drag';
+        discountIcon.src = discountIconSrc;
+        productIconDiv.appendChild(discountIcon);
+    }
+
+    const productIcon = document.createElement('img');
+    productIcon.className = 'productIcon';
+    productIcon.src = productIconSrc;
+
+    productIconDiv.appendChild(productIcon);
+
+    const productInfoDiv = document.createElement('div');
+    productInfoDiv.className = 'productInfoDiv';
+
+    const productNameDiv = document.createElement('div');
+    productNameDiv.className = 'productNameDiv no-select';
+
+    const productNameElement = document.createElement('div');
+    productNameElement.className = 'productName';
+    productNameElement.textContent = productName;
+
+    const productFullNameElement = document.createElement('div');
+    productFullNameElement.className = 'productFullName';
+    productFullNameElement.textContent = productFullName;
+
+    productNameDiv.appendChild(productNameElement);
+    productNameDiv.appendChild(productFullNameElement);
+
+    const priceDiv = document.createElement('div');
+    priceDiv.className = 'priceDiv no-select';
+
+    if (sale > 0) {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        const discountedPrice = price - (price * (sale / 100));
+        subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
+
+        const crossTextDiv = document.createElement('div');
+        crossTextDiv.className = 'crossTextDiv';
+        crossTextDiv.innerHTML = `<span>${price} грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+        priceDiv.appendChild(crossTextDiv);
+    }
+    else {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        subPriceDiv.innerHTML = `<b>${price}</b><span>грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+    }
+
+    productInfoDiv.appendChild(productNameDiv);
+    productInfoDiv.appendChild(priceDiv);
+
+    PopUpCardDiv.appendChild(productIconDiv);
+    PopUpCardDiv.appendChild(productInfoDiv);
+
+    const carouselPopUpCardDiv = document.createElement('div');
+    if (isFirst) {
+        carouselPopUpCardDiv.className = 'carousel-item active';
+    }
+    else {
+        carouselPopUpCardDiv.className = 'carousel-item';
+    }
+    carouselPopUpCardDiv.appendChild(PopUpCardDiv);
+
+    return carouselPopUpCardDiv;
+}
+function popUpCardFunctionality() {
+    const popUpCardDivs = document.querySelectorAll('.popUpCardDiv');
+
+    popUpCardDivs.forEach(item => {
+        item.addEventListener('click', function (event) {
+            var productId = item.id;
+            window.location = "/Goodmeal/ProductPage/" + productId;
+        });
+        item.addEventListener('mouseenter', function () {
+            item.style.border = '3px solid #FF5722';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#FF5722';
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            item.style.border = '3px solid #53B06C';
+
+            const button = item.getElementsByClassName('productBuyBtn')[0];
+            if (button) {
+                button.style.background = '#53B06C';
+            }
+        });
+    });
+}
+function popUpproductsSwitch() {
+    var carouselInner = document.getElementById('subRecommendedProducts');
+    var cardWidth = document.querySelector('.carousel-item').offsetWidth;
+    var scrollItem = cardWidth + 22;
+    var scrollPosition = 0;
+    var carouselScrollWidth = carouselInner.scrollWidth;
+    var carouselWidth = carouselInner.offsetWidth;
+
+    document.getElementById('recommendButtonNext').addEventListener('click', function () {
+        if (scrollPosition + carouselWidth < carouselScrollWidth) {
+            scrollPosition += scrollItem;
+            if (scrollPosition + carouselWidth > carouselScrollWidth) {
+                scrollPosition = carouselScrollWidth - carouselWidth;
+            }
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+
+    document.getElementById('recommendButtonPrev').addEventListener('click', function () {
+        if (scrollPosition > 0) {
+            scrollPosition -= scrollItem;
+            if (scrollPosition < 0) scrollPosition = 0;
+            carouselInner.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
+
+document.getElementById('cancel').addEventListener('click', function () {
+    closeCartPopUpEvent();
+});
+
+//LoginRegister popUp /////////////////////////////////////////////////////////////////////////////////////////
 const profileButton = document.getElementById("profile");
-const overlayRegister = document.getElementById('overlay');
 const loginPopup = document.getElementById("loginPopup");
 const closePopupButton = document.getElementById("closePopup");
 const showRegisterLink = document.getElementById("showRegister");
 const showLoginLink = document.getElementById("showLogin");
-const loginForm = document.getElementById("loginPopup");
 const registerForm = document.getElementById("registerPopup");
 
 profileButton.addEventListener("click", function () {
     dropdownMenu.classList.remove('show');
     panel.classList.remove('show');
-    overlayRegister.style.zIndex = 9998;
+    overlayPopUp.style.zIndex = 9998;
     console.log("Profile button clicked");
     loginPopup.style.display = "flex";
-    overlayRegister.style.display = 'block';
+    overlayPopUp.style.display = 'block';
 });
 
 //closePopupButton.addEventListener("click", function() {
 //    console.log("Close button clicked");
 //    loginPopup.style.display = "none";
-//    overlayRegister.style.display = 'none';
-//    overlayRegister.style.zIndex = 9990;
+//    overlayPopUp.style.display = 'none';
+//    overlayPopUp.style.zIndex = 9990;
 //});
 
 //showRegisterLink.addEventListener("click", function(event) {
 //    event.preventDefault();
 //    console.log("Show Register link clicked");
-//    loginForm.style.display = "none";
+//    loginPopup.style.display = "none";
 //    registerForm.style.display = "flex";
 //});
 
@@ -321,7 +548,7 @@ profileButton.addEventListener("click", function () {
 //    event.preventDefault();
 //    console.log("Show Login link clicked");
 //    registerForm.style.display = "none";
-//    loginForm.style.display = "flex";
+//    loginPopup.style.display = "flex";
 //});
 
 window.addEventListener("click", function(event) {
@@ -329,15 +556,4 @@ window.addEventListener("click", function(event) {
         console.log("Clicked outside the popup");
         loginPopup.style.display = "none";
     }
-});
-
-overlayRegister.addEventListener('click', function () {
-    panel.innerHTML = '';
-    overlayRegister.style.display = 'none';
-    if (loginPopup.style.display != "flex") {
-        dropdownMenu.classList.toggle('show');
-        panel.classList.toggle('show');
-    }
-    overlayRegister.style.zIndex = 9990;
-    loginPopup.style.display = "none";
 });

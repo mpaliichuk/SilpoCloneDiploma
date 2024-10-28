@@ -494,6 +494,124 @@ function productsSwitch() {
     });
 }
 
+//Overlay /////////////////////////////////////////////////////////////////////////////////////////////////////
+const overlayRatingPopUp = document.getElementById('ratingOverlay');
+overlayRatingPopUp.addEventListener('click', function () {
+    closeRatingPopUpEvent();
+    clearStars();
+});
+function closeRatingPopUpEvent() {
+    overlayRatingPopUp.style.display = 'none';
+    overlayRatingPopUp.style.zIndex = 9990;
+    ratingPopUp.style.display = "none";
+    document.body.classList.remove('no-scroll');
+}
+
+//Rating popup
+
+const ratingPopUp = document.getElementById('ratingPopUp');
+const rating = document.getElementById('rating');
+
+rating.addEventListener('click', function () {
+    overlayRatingPopUp.style.display = 'block';
+    overlayRatingPopUp.style.zIndex = 9998;
+    ratingPopUp.style.display = "flex";
+
+    document.body.classList.add('no-scroll');
+    ratingPopUp.focus();
+});
+document.getElementById('cancelRating').addEventListener('click', function () {
+    closeRatingPopUpEvent();
+    clearStars();
+});
+
+
+//Rating stars
+const starsDiv = document.getElementById('ratingStarsDiv');
+const mainStarsDiv = document.getElementById('mainRatingStarsDiv');
+const stars = document.querySelectorAll('.setRatingStar');
+var selectedRating = 0;
+
+function highlightStars(starIndex) {
+    stars.forEach((star, index) => {
+        if (index < starIndex) {
+            star.src = "/icons/HoverSetRatingStar.png";
+        } else {
+            star.src = "/icons/SetRatingStar.png";
+        }
+    });
+}
+
+function selectStars(starIndex) {
+    if (!stars[starIndex - 1].classList.contains("selected") || selectedRating != starIndex) {
+        selectedRating = starIndex;
+        stars.forEach((star, index) => {
+            if (index < starIndex) {
+                star.classList.add("selected");
+            } else {
+                star.classList.remove("selected");
+            }
+        });
+    }
+    else {
+        stars.forEach(star => {
+            star.classList.remove("selected");
+        });
+    }
+}
+
+function clearStars(){
+    stars.forEach(star => {
+        star.classList.remove("selected");
+        star.src = "/icons/SetRatingStar.png";
+    }
+)};
+
+stars.forEach(star => {
+    star.addEventListener('click', function (event) {
+        const starId = event.target.id;
+        const starIndex = parseInt(starId);
+        selectStars(starIndex);
+    });
+});
+
+starsDiv.addEventListener('mouseover', function (event) {
+    if (event.target && event.target.classList.contains('setRatingStar')) {
+        const starId = event.target.id;
+        const starIndex = parseInt(starId);
+        highlightStars(starIndex);
+    }
+});
+
+mainStarsDiv.addEventListener('mouseleave', function () {
+    stars.forEach(star => {
+        if (!star.classList.contains("selected"))
+            star.src = "/icons/SetRatingStar.png";
+        else {
+            if (!star.src.includes("Hover"))
+                star.src = "/icons/HoverSetRatingStar.png";
+        }
+    });
+});
+
+async function SetRating() {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/SetRating", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            productsByCategory = await response.json();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 //Info arrows
 var info = document.querySelector('.info-section-content');
 var description = document.querySelector('.description');
