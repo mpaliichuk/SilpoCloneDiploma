@@ -38,9 +38,10 @@ async function GetProduct(productId, productCategoryId) {
         photoCount = product.imageUrls.length;
         if (photoCount > 1)
             document.getElementById("buttonPrev").classList = "noActiveButton";
+
         for (let i = 0; i < photoCount; i++) {
             var smallPhotoId = "productSmallImg" + (i + 1).toString();
-            var child = createSmallRow(smallPhotoId, product.imageUrls[i]);
+            var child = createSmallRow(smallPhotoId, product.imageUrls[i], i + 1);
             document.querySelector('.small-row').appendChild(child);
         }
         document.getElementById("ratingScore").innerText = product.rating;
@@ -154,12 +155,12 @@ async function AddProductInCart(productId, productCount, userId) {
 }
 //Controls
 
-function createSmallRow(id, src) {
-    let smallRow = document.createElement('div');
-    smallRow.className = 'small-row';
-
+function createSmallRow(id, src, count) {
     let photoDiv = document.createElement('div');
-    photoDiv.className = 'photo small';
+    if (count == 1)
+        photoDiv.className = 'photo small selected';
+    else
+        photoDiv.className = 'photo small';
 
     let img = document.createElement('img');
     img.className = 'productPhoto smallPhoto';
@@ -172,6 +173,10 @@ function createSmallRow(id, src) {
             const bigImg = largeContainer.querySelector('img');
             bigImg.src = event.target.src;
 
+            cleerImgBorder();
+            const photoSmallDiv = event.target.closest('.photo.small');
+            photoSmallDiv.classList.add('selected');
+
             const imgId = event.target.id;
             const lastDigit = imgId.match(/\d+$/);
             photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
@@ -181,10 +186,7 @@ function createSmallRow(id, src) {
     });
 
     photoDiv.appendChild(img);
-
-    smallRow.appendChild(photoDiv);
-
-    return smallRow;
+    return photoDiv;
 }
 function generatePriceNoDiscount(oldPrice, discountPercentage) {
     const priceNoDiscountDiv = document.getElementById("priceNoDiscountDiv");
@@ -430,6 +432,10 @@ buttonPrev.addEventListener('click', function () {
         const bigImg = largeContainer.querySelector('img');
         const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
         bigImg.src = smallImg.src;
+
+        cleerImgBorder();
+        const photoSmallDiv = smallImg.closest('.photo.small');
+        photoSmallDiv.classList.add('selected');
         photoPosition--;
         updateButtons();
     }
@@ -441,10 +447,22 @@ buttonNext.addEventListener('click', function () {
         const bigImg = largeContainer.querySelector('img');
         const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
         bigImg.src = smallImg.src;
+
+        cleerImgBorder();
+        const photoSmallDiv = smallImg.closest('.photo.small');
+        photoSmallDiv.classList.add('selected');
         photoPosition++;
         updateButtons();
     }
 });
+
+function cleerImgBorder(){
+    const photosSmall = document.querySelectorAll('.photo.small');
+    photosSmall.forEach(item => {
+        if (item.classList.contains('selected'))
+            item.classList.remove('selected')
+    });
+}
 
 //Product switch functionality
 function productsSwitch() {
@@ -687,12 +705,4 @@ addToCartBtn.addEventListener('click', function () {
             alert("Спершу виберіть кількість товар (`U_U`)!");
         }
     }
-});
-
-addToCartBtn.addEventListener('mouseenter', function () {
-    addToCartBtn.style.background = '#FF5722';
-});
-
-addToCartBtn.addEventListener('mouseleave', function () {
-    addToCartBtn.style.background = '#4CAF50';
 });
