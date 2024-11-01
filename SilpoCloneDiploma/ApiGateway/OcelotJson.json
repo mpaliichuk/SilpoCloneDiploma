@@ -93,7 +93,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Rating",
+      "UpstreamPathTemplate": "/gateway/SetRating",
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {

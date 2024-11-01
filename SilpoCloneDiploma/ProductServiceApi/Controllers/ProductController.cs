@@ -8,6 +8,7 @@ using ProductServiceApi.Models.Dto;
 using ProductServiceApi.Models.Dto.ProductServiceApi.Dtos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProductServiceApi.Controllers
@@ -18,11 +19,13 @@ namespace ProductServiceApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _service;
+        private readonly IRatingRepository _serviceRating;
         private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IProductRepository service, ILogger<ProductController> logger)
+        public ProductController(IProductRepository service, IRatingRepository serviceRating, ILogger<ProductController> logger)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
+            _serviceRating = serviceRating ?? throw new ArgumentNullException(nameof(serviceRating));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -184,6 +187,12 @@ namespace ProductServiceApi.Controllers
                 return NotFound();
             }
 
+            var ratings = await _serviceRating.GetAllRatingsAsync();
+
+            var productRatings = ratings.Where(r => r.IdProduct == product.Id).ToList();
+            double averageRating = productRatings.Any() ? productRatings.Average(r => r.Value) : 0;
+            int ratingCount = productRatings.Count;
+
             var productDto = new ProductDto
             {
                 Title = product.Title,
@@ -194,7 +203,9 @@ namespace ProductServiceApi.Controllers
                 Count = product.Count,
                 Sale = product.Sale,
                 Price = product.Price,
-                CategoryId = product.CategoryId
+                CategoryId = product.CategoryId,
+                AverageRating = averageRating,
+                RatingCount = ratingCount
             };
 
             return Ok(productDto);

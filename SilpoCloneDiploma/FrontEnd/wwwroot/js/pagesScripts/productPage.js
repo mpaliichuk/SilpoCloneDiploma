@@ -20,7 +20,8 @@ async function GetProduct(productId, productCategoryId) {
             imageUrls: responseProduct.imageUrls,
             price: responseProduct.price,
             discountPercentage: responseProduct.sale,
-            rating: 4.5,
+            rating: responseProduct.averageRating,
+            ratingCount: responseProduct.ratingCount,
             category_id: responseProduct.categoryId,
             attributes: [
                 { key: "Колір", value: "Помаранчевий" },
@@ -34,6 +35,10 @@ async function GetProduct(productId, productCategoryId) {
         document.getElementById("productTitle").innerText = product.title;
         document.getElementById("descriptionInfo").innerText = product.description;
         document.getElementById("productMainImg").src = product.imageUrls[0];
+        document.getElementById("ratingScore").innerText = product.rating;
+        document.getElementById("ratingCount").innerText = product.ratingCount + " оцінок";
+        document.getElementById("ratingPopUpScore").innerText = product.rating;
+        document.getElementById("ratingPopUpVotes").innerText = product.ratingCount + " оцінок";
 
         photoCount = product.imageUrls.length;
         if (photoCount > 1)
@@ -68,8 +73,10 @@ async function GetProduct(productId, productCategoryId) {
             });
         }
 
-        let finalPrice = product.price - (product.price * (product.discountPercentage / 100));
-        document.getElementById("productPrice").innerText = finalPrice.toFixed(2) + " грн";
+        const discountedPrice = product.price - (product.price * (product.discountPercentage / 100));
+        let finalPrice = discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2);
+
+        document.getElementById("productPrice").innerText = finalPrice + " грн";
 
         // if sale
         if (product.discountPercentage > 0) {
@@ -523,6 +530,7 @@ function closeRatingPopUpEvent() {
     overlayRatingPopUp.style.zIndex = 9990;
     ratingPopUp.style.display = "none";
     document.body.classList.remove('no-scroll');
+    clearStars();
 }
 
 //Rating popup
@@ -540,7 +548,6 @@ rating.addEventListener('click', function () {
 });
 document.getElementById('cancelRating').addEventListener('click', function () {
     closeRatingPopUpEvent();
-    clearStars();
 });
 
 
@@ -548,7 +555,14 @@ document.getElementById('cancelRating').addEventListener('click', function () {
 const starsDiv = document.getElementById('ratingStarsDiv');
 const mainStarsDiv = document.getElementById('mainRatingStarsDiv');
 const stars = document.querySelectorAll('.setRatingStar');
+const ratingBtn = document.querySelector('.setRatingBtn');
 var selectedRating = 0;
+
+ratingBtn.addEventListener('click', function () {
+    if (selectedRating != 0)
+        SetRating(selectedRating, "тут має бути id користувача а не рейтинг", productId);
+    closeRatingPopUpEvent();
+});
 
 function highlightStars(starIndex) {
     stars.forEach((star, index) => {
@@ -574,6 +588,7 @@ function selectStars(starIndex) {
     else {
         stars.forEach(star => {
             star.classList.remove("selected");
+            selectedRating = 0;
         });
     }
 }
@@ -582,6 +597,7 @@ function clearStars(){
     stars.forEach(star => {
         star.classList.remove("selected");
         star.src = "/icons/SetRatingStar.png";
+        selectedRating = 0;
     }
 )};
 
@@ -612,23 +628,30 @@ mainStarsDiv.addEventListener('mouseleave', function () {
     });
 });
 
-async function SetRating() {
+async function SetRating(rating, comment, productId) {
     try {
         const response = await fetch("http://localhost:5152/gateway/SetRating", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",       
+            },
+            body: JSON.stringify({
+                value: rating,
+                comment: comment,
+                idProduct: productId,
+            })
         });
         if (response.ok) {
-            productsByCategory = await response.json();
+
         }
     } catch (error) {
         console.error('Error:', error);
         throw error;
     }
 }
+
+
 
 //Info arrows
 var info = document.querySelector('.info-section-content');
