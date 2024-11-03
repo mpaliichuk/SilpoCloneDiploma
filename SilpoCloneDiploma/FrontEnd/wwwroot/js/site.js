@@ -530,6 +530,28 @@ profileButton.addEventListener("click", function () {
     overlayPopUp.style.display = 'block';
 });
 
+//Show Register/Login
+document.getElementById("showRegister").addEventListener("click", function () {
+    document.getElementById("loginPopup").style.display = "none";
+    document.getElementById("registerPopup").style.display = "flex";
+});
+
+document.getElementById("showLogin").addEventListener("click", function () {
+    document.getElementById("registerPopup").style.display = "none";
+    document.getElementById("loginPopup").style.display = "flex";
+});
+
+showRegisterLink.addEventListener("click", function () {
+    loginPopup.style.display = "none";
+    registerPopup.style.display = "flex";
+});
+
+showLoginLink.addEventListener("click", function () {
+    registerPopup.style.display = "none";
+    loginPopup.style.display = "flex";
+});
+
+
 //closePopupButton.addEventListener("click", function() {
 //    console.log("Close button clicked");
 //    loginPopup.style.display = "none";
@@ -552,8 +574,11 @@ profileButton.addEventListener("click", function () {
 //});
 
 window.addEventListener("click", function(event) {
-    if (event.target === loginPopup) {
-        console.log("Clicked outside the popup");
+    if (event.target === overlayPopUp) {
+        console.log("Clicked outside both popups");
         loginPopup.style.display = "none";
+        registerPopup.style.display = "none";
+        overlayPopUp.style.display = 'none';
     }
 });
+

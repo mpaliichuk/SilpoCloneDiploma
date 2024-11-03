@@ -405,12 +405,12 @@
                         <div class="dropdown-menu dropdown-menu-fullscreen" aria-labelledby="navbarDropdownMenuLink">
                             <div class="category-list">
                                 @* <a class="dropdown-item category-item" href="#"><img class="miniCategoryIcon"
-                                        src="~/icons/Fruit.png" />Фрукти</a> *@
+                                src="~/icons/Fruit.png" />Фрукти</a> *@
                             </div>
                             <div id="categoryPanel">
                                 @* <div class="categoryDivCard">
-                                    <div class="categorIconDiv"><img class="categortIcon" src="~/icons/Cart.png"/></div>
-                                    <div class="categorTextDiv"><span class="categoryText">Риба і М'ясо</span></div>
+                                <div class="categorIconDiv"><img class="categortIcon" src="~/icons/Cart.png"/></div>
+                                <div class="categorTextDiv"><span class="categoryText">Риба і М'ясо</span></div>
                                 </div> *@
                             </div>
                         </div>
@@ -437,12 +437,12 @@
             <div class="titleDiv">
                 <span class="titleCart">Кошик</span>
                 <div id="cancelDiv">
-                    <img id="cancel" class="cancelIcon" src="~/icons/CencelCartIcon.png"/>
+                    <img id="cancel" class="cancelIcon" src="~/icons/CencelCartIcon.png" />
                 </div>
             </div>
             <div class="emptyCartDiv">
                 <div class="mainImgDiv">
-                    <img class="emptyCartImg" src="/icons/EmptyBox.jpg"/>
+                    <img class="emptyCartImg" src="/icons/EmptyBox.jpg" />
                 </div>
                 <div class="mainTextDiv">
                     <span class="subHeaderText">Ой, поки що тут пусто!</span>
@@ -492,7 +492,6 @@
                     </div>
                     <button class="login-button">Увійти</button>
                 </div>
-                <!-- <img class="decorative-shape-left" src="~/icons/loginRightVector.png" alt="Decorative Shape Left"> -->
             </div>
             <div class="popup-right">
                 <div class="popup-right-content">
@@ -502,26 +501,14 @@
                     </div>
                     <button id="showRegister" class="register-buttonLogin">Зареєструватись</button>
                 </div>
-                <!-- <img class="decorative-shape-right" src="~/icons/loginRightVector.png" alt="Decorative Shape Right"> -->
             </div>
         </div>
         <!-- Register Popup -->
-        <div id="registerPopup" class="register-popup-container" style="display: none;">
-            <div class="register-left">
-                <div class="register-content">
-                    <div class="register-header">
-                        <div class="register-titleWelcome">З Поверненням!</div>
-                        <div class="register-infoWelcome">
-                            Якщо у вас вже є аккаунт ви можете<br>увійти натиснувши на кнопку “Увійти”
-                        </div>
-                        <button class="register-buttonLogin">Увійти</button>
-                    </div>
-                </div>
-            </div>
-            <div class="register-right">
-                <div class="register-content">
-                    <div class="register-header">
-                        <div class="register-title">Реєстрація</div>
+        <div id="registerPopup" class="popup-container" style="display: none;">
+            <div class="popup-left">
+                <div class="popup-content">
+                    <div class="popup-header">
+                        <div class="header-title">Реєстрація</div>
                         <div class="social-login">
                             <div class="social-icon facebook">
                                 <img src="~/icons/facebookIcon.png" alt="Facebook">
@@ -533,22 +520,30 @@
                                 <img src="~/icons/appleIcon.png" alt="Apple">
                             </div>
                         </div>
-                        <div class="register-info">або використовуйте ваш емейл для рєстрації</div>
+                        <div class="login-info">або використовуйте ваш емейл для реєстрації</div>
                     </div>
-                    <div class="register-form">
-                        <div class="form-groupRegister">
+                    <div class="login-form">
+                        <div class="form-input">
                             <input type="text" id="registerName" placeholder="Імʼя">
                         </div>
-                        <div class="form-groupRegister">
+                        <div class="form-input">
                             <input type="email" id="registerEmail" placeholder="Емейл">
                         </div>
-                        <div class="form-groupRegister">
+                        <div class="form-input">
                             <input type="password" id="registerPassword" placeholder="Пароль">
                         </div>
-                        <button class="register-button">Зареєструватись</button>
                     </div>
+                    <button class="login-button">Зареєструватись</button>
                 </div>
-                @* <div class="decorative-shape decorative-shape-left"></div> *@
+            </div>
+            <div class="popup-right">
+                <div class="popup-right-content">
+                    <div class="greeting-title">З Поверненням!</div>
+                    <div class="greeting-info">
+                        Якщо у вас вже є аккаунт ви можете<br>увійти натиснувши на кнопку “Увійти”
+                    </div>
+                    <button id="showLogin" class="register-buttonLogin">Увійти</button>
+                </div>
             </div>
         </div>
     </header>
