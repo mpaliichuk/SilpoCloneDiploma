@@ -73,7 +73,7 @@
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamPathTemplate": "/api/category/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -81,7 +81,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Categories/{id}",
+      "UpstreamPathTemplate": "/gateway/CategoryById/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
     {

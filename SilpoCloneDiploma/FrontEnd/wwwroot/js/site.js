@@ -525,7 +525,6 @@ profileButton.addEventListener("click", function () {
     dropdownMenu.classList.remove('show');
     panel.classList.remove('show');
     overlayPopUp.style.zIndex = 9998;
-    console.log("Profile button clicked");
     loginPopup.style.display = "flex";
     overlayPopUp.style.display = 'block';
 });
@@ -551,31 +550,8 @@ showLoginLink.addEventListener("click", function () {
     loginPopup.style.display = "flex";
 });
 
-
-//closePopupButton.addEventListener("click", function() {
-//    console.log("Close button clicked");
-//    loginPopup.style.display = "none";
-//    overlayPopUp.style.display = 'none';
-//    overlayPopUp.style.zIndex = 9990;
-//});
-
-//showRegisterLink.addEventListener("click", function(event) {
-//    event.preventDefault();
-//    console.log("Show Register link clicked");
-//    loginPopup.style.display = "none";
-//    registerForm.style.display = "flex";
-//});
-
-//showLoginLink.addEventListener("click", function(event) {
-//    event.preventDefault();
-//    console.log("Show Login link clicked");
-//    registerForm.style.display = "none";
-//    loginPopup.style.display = "flex";
-//});
-
 window.addEventListener("click", function(event) {
     if (event.target === overlayPopUp) {
-        console.log("Clicked outside both popups");
         loginPopup.style.display = "none";
         registerPopup.style.display = "none";
         overlayPopUp.style.display = 'none';

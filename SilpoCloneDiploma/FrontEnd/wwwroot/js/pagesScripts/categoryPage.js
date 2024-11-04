@@ -9,6 +9,38 @@ var newPage = true;
 var pageChangeSymbol = "plus";
 
 GetProducts();
+async function GetCategoryInfo(categoryId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            categoryInfo = await response.json();
+
+            var mainCategory = document.getElementById("productMainCategory");
+            var subcategory = document.getElementById("productSubCategory");
+
+            if (categoryInfo.parentCategoryId != 0) {
+                mainCategory.innerText = categoryInfo.parentCategoryName;
+                mainCategory.style.display = "flex";
+                mainCategory.href = "/Goodmeal/Category/" + categoryInfo.parentCategoryId;
+                subcategory.innerText = categoryInfo.name;
+                subcategory.style.display = "flex";
+                subcategory.href = "/Goodmeal/Category/" + categoryInfo.id;
+                document.getElementById("productSubCategoryArrow").style.display = "flex";
+            }
+            else
+                mainCategory.innerText = categoryInfo.name;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
 async function GetProducts() {
     var productsByDiscount = [];
 

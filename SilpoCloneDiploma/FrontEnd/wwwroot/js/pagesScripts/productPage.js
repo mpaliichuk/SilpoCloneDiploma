@@ -90,7 +90,7 @@ async function GetProduct(productId, productCategoryId) {
         }
 
         document.getElementById("addToCart").setAttribute("product-id", product.id);
-        //GetCategory(product.category_id);
+        GetCategoryInfo(product.category_id);
         GetProductsBySameCategory(productCategoryId);
     }
 }
@@ -136,6 +136,39 @@ async function GetProductsBySameCategory(productCategoryId) {
     }
     cardFunctionality();
     productsSwitch();
+}
+
+async function GetCategoryInfo(categoryId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            categoryInfo = await response.json();
+
+            var mainCategory = document.getElementById("productMainCategory");
+            var subcategory = document.getElementById("productSubCategory");
+
+            if (categoryInfo.parentCategoryId != 0) {
+                mainCategory.innerText = categoryInfo.parentCategoryName;
+                mainCategory.style.display = "flex";
+                mainCategory.href = "/Goodmeal/Category/" + categoryInfo.parentCategoryId;
+                subcategory.innerText = categoryInfo.name;
+                subcategory.style.display = "flex";
+                subcategory.href = "/Goodmeal/Category/" + categoryInfo.id;
+                document.getElementById("productSubCategoryArrow").style.display = "flex";
+            }
+            else
+                mainCategory.innerText = categoryInfo.name;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
 }
 
 async function AddProductInCart(productId, productCount, userId) {
@@ -560,7 +593,7 @@ var selectedRating = 0;
 
 ratingBtn.addEventListener('click', function () {
     if (selectedRating != 0)
-        SetRating(selectedRating, "тут має бути id користувача а не рейтинг", productId);
+        SetRating(selectedRating, "тут має бути id користувача а не текст", productId);
     closeRatingPopUpEvent();
 });
 

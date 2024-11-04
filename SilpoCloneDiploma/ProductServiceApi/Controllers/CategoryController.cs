@@ -12,7 +12,7 @@ namespace ProductServiceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _service;
@@ -49,7 +49,7 @@ namespace ProductServiceApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CategoryDto>> GetCategoryByIdAsync(int id)
         {
             var category = await _service.GetCategoryByIdAsync(id);
@@ -62,8 +62,19 @@ namespace ProductServiceApi.Controllers
             {
                 Id = category.Id,
                 Name = category.Name,
-                ParentCategoryId = category.ParentCategoryId
+                ParentCategoryId = category.ParentCategoryId,
+                ParentCategoryName = ""
             };
+
+            if (categoryDto.ParentCategoryId != 0)
+            {
+                var parentCategory = await _service.GetCategoryByIdAsync((int)categoryDto.ParentCategoryId);
+                if (parentCategory != null)
+                {
+                    categoryDto.ParentCategoryName = parentCategory.Name;
+                }
+            }
+
             return Ok(categoryDto);
         }
 

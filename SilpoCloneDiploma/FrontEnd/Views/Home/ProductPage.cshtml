@@ -10,11 +10,11 @@
     <div class="breadcrumb">
         <a class="breadcrumbLink" href="/">Головна</a> 
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-        @*Db info*@
-        <a class="breadcrumbLink" href="#">Фрукти</a> 
-        <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-        <a class="breadcrumbLink" href="#">Всі</a> 
-        @*Db info*@
+        <a id="productMainCategory" class="breadcrumbLink" href="#"></a>
+        @*if sub category*@
+        <img style="display: none" id="productSubCategoryArrow" class="breadcrumbArrow" src="/icons/Arrow(right).png">
+        <a style="display: none" id="productSubCategory" class="breadcrumbLink" href="#"></a>
+        @*if sub category*@
         <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
         <a id="productRouteName" class="breadcrumbLink">Папайя</a>
     </div>
@@ -138,4 +138,4 @@
         </div>
     </div>
 </div>
-<script src="~/js/pagesScripts/productPage.js"></script>
+<script src="~/js/pagesScripts/productPage.js" asp-append-version="true"></script>
