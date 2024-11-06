@@ -41,6 +41,33 @@ async function GetCategoryInfo(categoryId) {
         throw error;
     }
 }
+async function AddProductInCart(productId, productCount, userId) {
+    const userIdInt = userId.toString();
+    const productIdInt = parseInt(productId, 10);
+    const productCountInt = parseInt(productCount, 10);
+
+    try {
+        const response = await fetch("http://localhost:5152/gateway/AddToCart", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cartHeader: { userId: userIdInt },
+                cartDetails: [
+                    { productId: productIdInt, count: productCountInt }
+                ]
+            })
+        });
+        if (response.ok) {
+            alert("Товар додано в кошик!");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
 async function GetProducts() {
     var productsByDiscount = [];
 
@@ -252,8 +279,7 @@ function addCardsEvents() {
             if (count) {
                 let currentCount = parseInt(count.innerHTML);
                 if (currentCount > 0) {
-                    //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
-                    alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
+                    AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 1);
                     count.innerHTML = '0';
                 }
                 else {
