@@ -73,6 +73,18 @@
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {
+      "DownstreamPathTemplate": "/api/category",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/AllCategories",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/category/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

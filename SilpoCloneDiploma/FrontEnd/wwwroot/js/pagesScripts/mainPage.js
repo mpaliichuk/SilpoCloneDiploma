@@ -80,25 +80,6 @@ async function AddProductInCart(productId, productCount, userId) {
         throw error;
     }
 }
-async function addCertificatesToCart(certificates) {
-    try {
-        const response = await fetch('/api/Cart/AddCertificates', {
-            method: 'POST',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(certificates)
-        });
-        if (response.ok) {
-            alert("Сертифікати додано в кошик!");
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
-
 function createProductCard({ productIconSrc, productName, productFullName,
     price, sale, productId, discountIconSrc = 'icons/Discount.png' })
 {
@@ -319,6 +300,34 @@ function cardFunctionality() {
 
 }
 
+/*///////////////////////     Сertificate       //////////////////////////*/
+
+async function addCertificatesToCart(certificates) {
+    var certificateDTO = {
+        cartHeader: { userId: certificates[0].userId.toString() },
+        cartDetails: []
+    };
+    certificates.forEach(item => {
+        certificateDTO.cartDetails.push({ productId: parseInt(item.productId, 10), count: item.productCount });
+    });
+    try {
+        const response = await fetch('http://localhost:5152/gateway/AddToCart', {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(certificateDTO)
+        });
+        if (response.ok) {
+            alert("Сертифікати додано в кошик!");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 certificateButtons.forEach(certificate => {
     certificate.addEventListener('click', function (event) {
         event.target.classList.toggle('selectedCertificate');
@@ -328,7 +337,7 @@ certificateButtons.forEach(certificate => {
                 items = [];
             }
             /*items.push({ productId: productId, productCount: 1, userId: userId });*/
-            items.push({ productId: event.target.id, productCount: 1, userId: 0 });
+            items.push({ productId: event.target.id, productCount: 1, userId: 1 });
             localStorage.setItem('certificates', JSON.stringify(items));
             alert('Сертифікат на суму ' + event.target.id + 'грн було збережено (´ ω `♡)');
         }
@@ -343,16 +352,16 @@ certificateButtons.forEach(certificate => {
 certificateBuy.forEach(item => {
     item.addEventListener('click', async function (event) {
         let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
-        let message = '';
+        /*let message = '';*/
         if (certificates.length > 0) {
-            certificates.forEach(certificate => {
-                message += `Сертифікат на суму ${certificate.productId} грн ${certificate.userId} було додано в кошик (*^ω^) \n`;
-            });
-            if (message) {
-                alert(message);
-            }
+            //certificates.forEach(certificate => {
+            //    message += `Сертифікат на суму ${certificate.productId} грн ${certificate.userId} було додано в кошик (*^ω^) \n`;
+            //});
+            //if (message) {
+            //    alert(message);
+            //}
 
-            //addCertificatesToCart(certificates);
+            addCertificatesToCart(certificates);
             await certificateButtons.forEach(certificateButton => {
                 certificateButton.classList.remove('selectedCertificate');
             });
@@ -364,6 +373,7 @@ certificateBuy.forEach(item => {
         }
     });
 });
+
 
 accordionButtons.forEach(item => {
     const img = item.querySelector('img');
