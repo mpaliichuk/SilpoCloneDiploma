@@ -1,5 +1,6 @@
 {
   "Routes": [
+    //////////////////Product/////////////////////
     {
       "DownstreamPathTemplate": "/api/Product",
       "DownstreamScheme": "http",
@@ -60,6 +61,7 @@
       "UpstreamPathTemplate": "/gateway/Products/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
+    ////////////////Category///////////////////
     {
       "DownstreamPathTemplate": "/api/categorie",
       "DownstreamScheme": "http",
@@ -97,6 +99,19 @@
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
     {
+      "DownstreamPathTemplate": "/api/category/getParent/{parentId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/CategoryByParentId/{parentId}",
+      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
+    },
+    ////////////////Rating////////////////////////
+    {
       "DownstreamPathTemplate": "/api/rating",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -120,6 +135,7 @@
       "UpstreamPathTemplate": "/gateway/Rating/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
+    /////////////////Cart////////////////////////////
     {
       "DownstreamPathTemplate": "/api/cart/upsert",
       "DownstreamScheme": "http",

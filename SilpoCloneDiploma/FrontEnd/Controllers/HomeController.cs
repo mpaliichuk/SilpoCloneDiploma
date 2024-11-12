@@ -33,16 +33,6 @@ namespace FrontEnd.Controllers
             return View("CategoryPage");
         }
 
-        [Route("Goodmeal/Category/{id}/{subCategoryName}")]
-        public IActionResult SubCategoryPage(string id, string subCategoryName)
-        {
-            var subName = subCategoryName;
-            var categoryId = id;
-            ViewBag.CategoryId = categoryId;
-            ViewBag.SubCategoryName = subName;
-            return View("CategoryPage");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

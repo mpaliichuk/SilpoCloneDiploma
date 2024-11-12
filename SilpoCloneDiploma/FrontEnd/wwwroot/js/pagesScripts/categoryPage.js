@@ -1,14 +1,11 @@
-﻿var categoryName = document.getElementById("subCategoryName").value;
-if (categoryName != "All") {
-    document.getElementById("categoryNameDiv").innerText = categoryName;
-}
-
-var currentPage = 1;
+﻿var currentPage = 1;
 var pageSize = 18;
 var newPage = true;
 var pageChangeSymbol = "plus";
 
+GetCategoryInfo(document.getElementById("categoryId").value);
 GetProducts();
+
 async function GetCategoryInfo(categoryId) {
     try {
         const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
@@ -19,12 +16,13 @@ async function GetCategoryInfo(categoryId) {
             }
         });
         if (response.ok) {
-            categoryInfo = await response.json();
+            const categoryInfo = await response.json();
+            document.getElementById("categoryNameDiv").innerHTML = categoryInfo.name;
 
             var mainCategory = document.getElementById("productMainCategory");
             var subcategory = document.getElementById("productSubCategory");
 
-            if (categoryInfo.parentCategoryId != 0) {
+            if (categoryInfo.parentCategoryId != null) {
                 mainCategory.innerText = categoryInfo.parentCategoryName;
                 mainCategory.style.display = "flex";
                 mainCategory.href = "/Goodmeal/Category/" + categoryInfo.parentCategoryId;
@@ -33,8 +31,31 @@ async function GetCategoryInfo(categoryId) {
                 subcategory.href = "/Goodmeal/Category/" + categoryInfo.id;
                 document.getElementById("productSubCategoryArrow").style.display = "flex";
             }
-            else
+            else {
                 mainCategory.innerText = categoryInfo.name;
+                mainCategory.style.display = "flex";
+                mainCategory.href = "/Goodmeal/Category/" + categoryInfo.id;
+            }
+            CategoryByParentId(categoryInfo.id.toString());
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+async function CategoryByParentId(parentId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/CategoryByParentId/" + parentId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            const getCategories = await response.json();
+            console.log(getCategories);         
+            generateSubCategoryMarkup(getCategories);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -208,6 +229,30 @@ function createProductCard({ productIconSrc, productName, productFullName,
     cardDiv.appendChild(productInfoDiv);
 
     return cardDiv;
+}
+function generateSubCategoryMarkup(subCategories) {
+    const container = document.createElement("div");
+    container.className = "controlSubCategoriesDis";
+
+    subCategories.forEach(subCategory => {
+        const a = document.createElement("a");
+        a.className = "subCategory";
+        a.href = "/Goodmeal/Category/" + subCategory.id;
+
+        const nameSpan = document.createElement("span");
+        nameSpan.id = "subCategoryNameText";
+        nameSpan.textContent = subCategory.name;
+
+        const countSpan = document.createElement("span");
+        countSpan.id = "subCategoryCount";
+        countSpan.textContent = subCategory.count;
+
+        a.appendChild(nameSpan);
+        a.appendChild(countSpan);
+        container.appendChild(a);
+    });
+
+    document.querySelector(".controlItemsDis").appendChild(container);
 }
 
 const moreItemsBtn = document.getElementById('moreItems');

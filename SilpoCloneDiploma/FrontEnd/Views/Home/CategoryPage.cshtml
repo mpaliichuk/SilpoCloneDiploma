@@ -1,41 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Category Page";
-    var categoryId = "0";
-    var subCategoryName = "All";
-    @if (ViewBag.SubCategoryName != null)
-    {
-        categoryId = ViewBag.CategoryId;
-        subCategoryName = ViewBag.SubCategoryName;
-    }
-    else{
-        categoryId = ViewBag.CategoryId;
-    }
+    var categoryId = ViewBag.CategoryId;
 }
 <link rel="stylesheet" href="~/css/pagesStyles/categoryPage.css" asp-append-version="true" />
 <div class="mainCategoryDiv">
-    <input type="hidden" id="subCategoryName" value="@subCategoryName">
+    <div class="topOrange"></div>
     <input type="hidden" id="categoryId" value="@categoryId">
     <div class="mainItemsDiv">
         <div class="breadcrumb">
             <a class="breadcrumbLink" href="/">Головна</a>
             <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-            @if (subCategoryName != "All")
-            {
-                <a class="breadcrumbLink" href="/Goodmeal/Category/@categoryId">Фрукти</a>
-                <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-                <a class="breadcrumbLink">@subCategoryName</a>
-            }
-            else
-            {
-                <a class="breadcrumbLink">Фрукти</a>
-                <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-                <a class="breadcrumbLink">Всі</a>
-            }
+            <a id="productMainCategory" class="breadcrumbLink" href="#">Категорія</a>
+            <img style="display:none" id="productSubCategoryArrow" class="breadcrumbArrow" src="/icons/Arrow(right).png">
+            <span style="display:none" id="productSubCategory" class="breadcrumbLink">Всі</span>
         </div>
         <div class="subItemsDiv">
             <div class="controlItemsDis">
                 <div id="categoryNameDiv">Назва категорії</div>
-                <div class="controlSubCategoriesDis">
+                @* <div class="controlSubCategoriesDis">
                     <button class="subCategory">
                         <span id="subCategoryNameText">Фрукти</span>
                         <span id="subCategoryCount">30</span>
@@ -48,7 +30,7 @@
                         <span id="subCategoryNameText">Фрукти</span>
                         <span id="subCategoryCount">30</span>
                     </button>
-                </div>
+                </div> *@
             </div>
 
             <div class="itemsDiv">

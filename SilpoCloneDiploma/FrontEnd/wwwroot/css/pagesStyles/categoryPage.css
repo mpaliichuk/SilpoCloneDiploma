@@ -8,6 +8,15 @@
     height: auto;
 }
 
+.topOrange {
+    margin-top: -120px;
+    margin-bottom: -50px;
+    background: #FF5722;
+    width: 100vw;
+    height: 300px;
+    border-radius: 40px;
+}
+
 .mainItemsDiv {
     display: flex;
     flex-direction: column;
@@ -137,7 +146,7 @@
     padding: 0px;
     gap: 28px;
     width: 100%;
-    height: 152px;
+    height: auto;
 }
 
 #categoryNameDiv {
@@ -169,26 +178,39 @@
     flex-direction: row;
     align-items: flex-end;
     padding: 8px 16px;
-    gap: 4px;
-    width: 109px;
+    gap: 10px;
+    width: auto;
+    min-width: 100px;
     height: 38px;
-    background: #4CAF50;
+    background: #FFFEFE;
     border-radius: 24px;
-    border: 0px;
+    border: 2px solid #CBCBCB;
     /*Text*/
     font-family: 'Noto Sans';
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 16px;
-    line-height: 22px;
+    line-height: 20px;
+    color: inherit;
+    text-decoration: inherit;
 }
 
-#subCategoryNameText {
+.subCategory:hover {
+    border: 2px solid #FF5722;
+    background: #FF5722;
+}
+
+.subCategory:hover #subCategoryNameText,
+.subCategory:hover #subCategoryCount {
     color: #FFFEFE;
 }
 
+#subCategoryNameText {
+    color: #1E1E1E;
+}
+
 #subCategoryCount {
-    color: rgba(255, 255, 255, 0.8);
+    color: #1E1E1E;
 }
 
 .itemsDiv {
