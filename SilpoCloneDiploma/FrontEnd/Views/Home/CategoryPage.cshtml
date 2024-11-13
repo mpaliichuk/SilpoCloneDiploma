@@ -10,7 +10,7 @@
         <div class="breadcrumb">
             <a class="breadcrumbLink" href="/">Головна</a>
             <img class="breadcrumbArrow" src="/icons/Arrow(right).png">
-            <a id="productMainCategory" class="breadcrumbLink" href="#">Категорія</a>
+            <a id="productMainCategory" class="breadcrumbLink" href="#"></a>
             <img style="display:none" id="productSubCategoryArrow" class="breadcrumbArrow" src="/icons/Arrow(right).png">
             <span style="display:none" id="productSubCategory" class="breadcrumbLink">Всі</span>
         </div>
@@ -82,9 +82,33 @@
             <img id="cancelFilter" class="cancelIcon" src="~/icons/CencelCartIcon.png" />
         </div>
     </div>
+    <div class="selectedFiltersDiv">
+        <div class="selectedFiltersTitleDiv">
+            <span class="selectedTitleFilter">Ви обрали</span>
+            <span id="clearAllFilters">Очистити все</span>
+        </div>
+        <div id="selectedFiltersList">
+            <div class="selectedFilter">
+                <span class="selectedFilterText">Нові Акції</span>
+                <span class="selectedFilterDelete">x</span>
+            </div>
+            <div class="selectedFilter">
+                <span class="selectedFilterText">Домінікана</span>
+                <span class="selectedFilterDelete">x</span>
+            </div>
+            <div class="selectedFilter">
+                <span class="selectedFilterText">Домініканська Республіка</span>
+                <span class="selectedFilterDelete">x</span>
+            </div>
+            <div class="selectedFilter">
+                <span class="selectedFilterText">Гвіней</span>
+                <span class="selectedFilterDelete">x</span>
+            </div>
+        </div>
+    </div>
     <div class="accordion">
-        <div class="firstFilterDiv filter" onclick="toggleDropdown('sale')">
-            <div class="infoTitleDiv no-select no-drag">
+        <div class="firstFilterDiv filter">
+            <div class="infoTitleDiv no-select no-drag" onclick="toggleDropdown('sale')">
                 <div class="firstInfoSubTitleDiv">
                     <img class="firstTitleDivIcon no-select no-drag" src="~/icons/Discount.png" />
                     <span>Акційні пропозиції</span>
@@ -92,70 +116,117 @@
                 <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
             </div>
             <div id="sale" class="info-section-content">
-                <div id="attributes" class="attributeDivs">
-                    <div class="attribute">
-                        <span>Країна:</span>
-                        <span>Іспанія</span>
-                    </div>
+                <div class="checkboxesMainDiv">
+                    <label class="checkboxContainer">
+                        <span class="filterName">Нові Акції</span>
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="filterCount">10</span>
+                    </label>
+                    <label class="checkboxContainer">
+                        <span class="filterName">Новорічні пропозиції</span>
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="filterCount">20</span>
+                    </label>
                 </div>
             </div>
         </div>
-        <div class="filterDiv filter" onclick="toggleDropdown('tradeMark')">
-            <div class="infoTitleDiv no-select no-drag">
+        <div class="filterDiv filter">
+            <div class="infoTitleDiv no-select no-drag" onclick="toggleDropdown('tradeMark')">
                 <span>Торгова марка</span>
                 <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
             </div>
             <div id="tradeMark" class="info-section-content">
-                <div id="attributes" class="attributeDivs">
-                    <div class="attribute">
-                        <span>Країна:</span>
-                        <span>Іспанія</span>
-                    </div>
-                </div>
+                <label class="checkboxContainer">
+                    <span class="filterName">Домінікана</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">10</span>
+                </label>
+                <label class="checkboxContainer">
+                    <span class="filterName">Мадейрус</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">12</span>
+                </label>
+                <label class="checkboxContainer">
+                    <span class="filterName">Гвіней</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">16</span>
+                </label>
+                <label class="checkboxContainer">
+                    <span class="filterName">Каірн</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">8</span>
+                </label>
             </div>
         </div>
-        <div class="filterDiv filter" onclick="toggleDropdown('country')">
-            <div class="infoTitleDiv no-select no-drag">
+        <div class="filterDiv filter">
+            <div class="infoTitleDiv no-select no-drag" onclick="toggleDropdown('country')">
                 <span>Країна</span>
                 <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
             </div>
             <div id="country" class="info-section-content">
-                <div id="attributes" class="attributeDivs">
-                    <div class="attribute">
-                        <span>Країна:</span>
-                        <span>Іспанія</span>
-                    </div>
-                </div>
+                <label class="checkboxContainer">
+                    <span class="filterName">Домініканська Республіка</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">10</span>
+                </label>
+                <label class="checkboxContainer">
+                    <span class="filterName">Італія</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">20</span>
+                </label>
+                <label class="checkboxContainer">
+                    <span class="filterName">Іспанія</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">10</span>
+                </label>
             </div>
         </div>
-        <div class="filterDiv filter" onclick="toggleDropdown('priceFilter')">
-            <div class="infoTitleDiv no-select no-drag">
+        <div class="filterDiv filter">
+            <div class="infoTitleDiv no-select no-drag" onclick="toggleDropdown('priceFilter')">
                 <span>Ціна</span>
                 <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
             </div>
             <div id="priceFilter" class="info-section-content">
-                <div id="attributes" class="attributeDivs">
-                    <div class="attribute">
-                        <span>Країна:</span>
-                        <span>Іспанія</span>
-                    </div>
-                </div>
+                <label class="checkboxContainer">
+                    <span class="filterName">Тут буде ціна</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">10</span>
+                </label>
             </div>
         </div>
-        <div class="filterDiv filter" onclick="toggleDropdown('special')">
-            <div class="infoTitleDiv no-select no-drag">
+        <div class="filterDiv filter">
+            <div class="infoTitleDiv no-select no-drag" onclick="toggleDropdown('special')">
                 <span>Особливі</span>
                 <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
             </div>
             <div id="special" class="info-section-content">
-                <div id="attributes" class="attributeDivs">
-                    <div class="attribute">
-                        <span>Країна:</span>
-                        <span>Іспанія</span>
-                    </div>
-                </div>
+                <label class="checkboxContainer">
+                    <span class="filterName">"Власне виробництво"</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">35</span>
+                </label>
+                <label class="checkboxContainer">
+                    <span class="filterName">Партнери</span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="filterCount">120</span>
+                </label>
             </div>
         </div>
+    </div>
+    <div class="buttonFilterDiv">
+        <button class="submitFiltersButton">Показати результати: <span id="selectedItems">10</span></button>
     </div>
 </div>
 

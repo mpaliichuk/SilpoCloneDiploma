@@ -257,6 +257,7 @@ namespace ProductServiceApi.Controllers
             var (products, totalCount) = await _service.GetProductsByPageAsync(pageNumber, pageSize);
             var productDtos = products.Select(p => new ProductDto
             {
+                Id = p.Id,
                 Title = p.Title,
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,

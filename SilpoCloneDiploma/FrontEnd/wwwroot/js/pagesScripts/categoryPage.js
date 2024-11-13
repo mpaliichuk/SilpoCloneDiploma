@@ -90,43 +90,44 @@ async function AddProductInCart(productId, productCount, userId) {
     }
 }
 async function GetProducts() {
-    var productsByDiscount = [];
+    var productsOnPage = [];
 
-    /*try {
-        const response = await fetch("/api/Products/ProductsByDiscount", {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/GetPage/" + 1 + "/" + 18, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         });
         if (response.ok) {
-            const productsByDiscount = await response.json();
-            productsByDiscount.forEach(product => {
-                const productCard = createProductCard(product);
-                document.getElementById('subProductsDiv').appendChild(productCard);
-            });
+            productsOnPage = await response.json();
+            console.log(productsOnPage);
+            //productsOnPage.forEach(product => {
+            //    const productCard = createProductCard(product);
+            //    document.getElementById('subProductsDiv').appendChild(productCard);
+            //});
         }
     } catch (error) {
         console.error('Error:', error);
         throw error;
-    }*/
+    }
     if (newPage)
         document.getElementById('subProductsDiv').innerText = '';
     for (var i = 0; i < 18; i++) {
         const productCard = createProductCard({
-            productIconSrc: '/icons/ProductIcon.png',
-            productName: 'Сьомга Norven',
-            productFullName: 'Сьомга Norven слабосолена в/у, 120г',
-            currentPrice: '256',
-            oldPrice: '315',
-            productId: '123'
+            productIconSrc: productsOnPage.products[i].imageUrls[0],
+            productName: productsOnPage.products[i].title,
+            productFullName: productsOnPage.products[i].productComposition,
+            price: productsOnPage.products[i].price,
+            sale: productsOnPage.products[i].sale,
+            productId: productsOnPage.products[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
     }
     addCardsEvents();
 }
 function createProductCard({ productIconSrc, productName, productFullName,
-    currentPrice, oldPrice, productId, discountIconSrc = '/icons/Discount.png' }) {
+    price, sale, productId, discountIconSrc = '/icons/Discount.png' }) {
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
     cardDiv.className = 'cardDiv';
@@ -135,15 +136,17 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const productIconDiv = document.createElement('div');
     productIconDiv.className = 'productIconDiv no-select';
 
-    const discountIcon = document.createElement('img');
-    discountIcon.className = 'discountIcon no-select no-drag';
-    discountIcon.src = discountIconSrc;
+    if (sale > 0) {
+        const discountIcon = document.createElement('img');
+        discountIcon.className = 'discountIcon no-select no-drag';
+        discountIcon.src = discountIconSrc;
+        productIconDiv.appendChild(discountIcon);
+    }
 
     const productIcon = document.createElement('img');
     productIcon.className = 'productIcon';
     productIcon.src = productIconSrc;
 
-    productIconDiv.appendChild(discountIcon);
     productIconDiv.appendChild(productIcon);
 
     const productInfoDiv = document.createElement('div');
@@ -166,16 +169,26 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const priceDiv = document.createElement('div');
     priceDiv.className = 'priceDiv no-select';
 
-    const subPriceDiv = document.createElement('div');
-    subPriceDiv.className = 'subPriceDiv';
-    subPriceDiv.innerHTML = `<b>${currentPrice}</b><span>грн</span>`;
+    if (sale > 0) {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        const discountedPrice = price - (price * (sale / 100));
+        subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
 
-    const crossTextDiv = document.createElement('div');
-    crossTextDiv.className = 'crossTextDiv';
-    crossTextDiv.innerHTML = `<span>${oldPrice} грн</span>`;
+        const crossTextDiv = document.createElement('div');
+        crossTextDiv.className = 'crossTextDiv';
+        crossTextDiv.innerHTML = `<span>${price} грн</span>`;
 
-    priceDiv.appendChild(subPriceDiv);
-    priceDiv.appendChild(crossTextDiv);
+        priceDiv.appendChild(subPriceDiv);
+        priceDiv.appendChild(crossTextDiv);
+    }
+    else {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        subPriceDiv.innerHTML = `<b>${price}</b><span>грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+    }
 
     const productControlDiv = document.createElement('div');
     productControlDiv.className = 'productControlDiv';
