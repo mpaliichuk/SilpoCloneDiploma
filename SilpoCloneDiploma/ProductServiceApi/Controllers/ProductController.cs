@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
-using ProductServiceApi.Models.Dto;
-using ProductServiceApi.Models.Dto.ProductServiceApi.Dtos;
+using ProductServiceApi.Dtos;
+using ProductServiceApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,7 +43,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
-                Availability = p.Availability,
+                Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
                 Sale = p.Sale,
                 Price = p.Price,
@@ -90,7 +90,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
-                Availability = p.Availability,
+                Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
                 Sale = p.Sale,
                 Price = p.Price,
@@ -123,7 +123,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
-                Availability = p.Availability,
+                Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
                 Sale = p.Sale,
                 Price = p.Price,
@@ -155,7 +155,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
-                Availability = p.Availability,
+                Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
                 Sale = p.Sale,
                 Price = p.Price,
@@ -190,7 +190,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = product.ProductComposition,
                 GeneralInformation = product.GeneralInformation,
                 ImageUrls = product.ImageUrls,
-                Availability = product.Availability,
+                Availability = (Dtos.Availability)product.Availability,
                 Count = product.Count,
                 Sale = product.Sale,
                 Price = product.Price,
@@ -223,7 +223,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = product.ProductComposition,
                 GeneralInformation = product.GeneralInformation,
                 ImageUrls = product.ImageUrls,
-                Availability = product.Availability,
+                Availability = (Dtos.Availability)product.Availability,
                 Count = product.Count,
                 Sale = product.Sale,
                 Price = product.Price,
@@ -250,7 +250,7 @@ namespace ProductServiceApi.Controllers
                 ProductComposition = p.ProductComposition,
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
-                Availability = p.Availability,
+                Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
                 Sale = p.Sale,
                 Price = p.Price,
@@ -285,7 +285,7 @@ namespace ProductServiceApi.Controllers
                     ProductComposition = productDto.ProductComposition,
                     GeneralInformation = productDto.GeneralInformation,
                     ImageUrls = productDto.ImageUrls,
-                    Availability = productDto.Availability,
+                    Availability = (Models.Availability)productDto.Availability,
                     Count = productDto.Count,
                     Sale = productDto.Sale,
                     Price = productDto.Price,
@@ -301,7 +301,7 @@ namespace ProductServiceApi.Controllers
                     ProductComposition = product.ProductComposition,
                     GeneralInformation = product.GeneralInformation,
                     ImageUrls = product.ImageUrls,
-                    Availability = product.Availability,
+                    Availability = (Dtos.Availability)product.Availability,
                     Count = product.Count,
                     Sale = product.Sale,
                     Price = product.Price,
@@ -349,7 +349,7 @@ namespace ProductServiceApi.Controllers
                 existingProduct.ProductComposition = productDto.ProductComposition;
                 existingProduct.GeneralInformation = productDto.GeneralInformation;
                 existingProduct.ImageUrls = productDto.ImageUrls;
-                existingProduct.Availability = productDto.Availability;
+                existingProduct.Availability = (Models.Availability)productDto.Availability;
                 existingProduct.Count = productDto.Count;
                 existingProduct.Sale = productDto.Sale;
                 existingProduct.Price = productDto.Price;

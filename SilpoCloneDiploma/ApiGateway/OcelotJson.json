@@ -61,7 +61,7 @@
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/categorie",
+      "DownstreamPathTemplate": "/api/category",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -69,11 +69,11 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Categories",
+      "UpstreamPathTemplate": "/gateway/category",
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamPathTemplate": "/api/category/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -81,7 +81,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Categories/{id}",
+      "UpstreamPathTemplate": "/gateway/category/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
     {

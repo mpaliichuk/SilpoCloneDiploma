@@ -125,7 +125,16 @@ void ApplyMigrations()
     {
         var context = scope.ServiceProvider.GetRequiredService<ProductCategoryContext>();
 
-        if (context.Database.GetPendingMigrations().Any())
+        var pendingMigrations = context.Database.GetPendingMigrations().ToList();
+
+        if (pendingMigrations.Any())
+        {
+            Console.WriteLine("Applying migrations...");
             context.Database.Migrate();
+        }
+        else
+        {
+            Console.WriteLine("No pending migrations found.");
+        }
     }
 }

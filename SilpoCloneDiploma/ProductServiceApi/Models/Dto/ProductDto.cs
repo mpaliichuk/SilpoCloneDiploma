@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace ProductServiceApi.Models.Dto
-{
-   
 
 namespace ProductServiceApi.Dtos
+{
+    public enum Availability
     {
-        public class ProductDto
+        OutOfStock,
+        InStock,
+    }
+    public class ProductDto
         {
             [Required]
             public int Id { get; set; }
@@ -39,7 +41,7 @@ namespace ProductServiceApi.Dtos
 
             public int CategoryId { get; set; }
         }
-    }
-
 }
+
+
 

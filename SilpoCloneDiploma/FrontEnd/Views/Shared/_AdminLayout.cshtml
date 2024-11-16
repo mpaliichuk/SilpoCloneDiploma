@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,6 +47,7 @@
                     </a>
                     <div class="dropdown">
                         <ul>
+                            <li><a href="/Admin/Category">Добавити категорію</a></li>
                             <li><a href="/Admin/ListOfProducts">Список товарів</a></li>
                             <li><a href="/Admin/AddProduct">Добавити товар</a></li>
                             <li><a href="/Admin/ListOfAttributes">Список атрибутів</a></li>
@@ -97,17 +99,17 @@
                     $dropdown.slideUp();
                     $toggleIcon.attr('src', iconDown);
                 } else {
-                    $('.dropdown').slideUp(); 
-                    $('.menu-item img.toggle-icon').attr('src', iconDown); 
-                    $dropdown.slideDown(); 
-                    $toggleIcon.attr('src', iconUp); 
+                    $('.dropdown').slideUp();
+                    $('.menu-item img.toggle-icon').attr('src', iconDown);
+                    $dropdown.slideDown();
+                    $toggleIcon.attr('src', iconUp);
                 }
             });
 
             $(document).click(function (e) {
                 if (!$(e.target).closest('.menu-item').length) {
-                    $('.dropdown').slideUp(); 
-                    $('.menu-item img.toggle-icon').attr('src', iconDown); 
+                    $('.dropdown').slideUp();
+                    $('.menu-item img.toggle-icon').attr('src', iconDown);
                 }
             });
         });

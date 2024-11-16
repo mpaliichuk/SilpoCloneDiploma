@@ -1,0 +1,275 @@
+﻿body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 280px auto;
+    height: 100vh;
+}
+
+.sidebar {
+    padding: 40px 30px;
+    margin: 20px 0 40px 10px;
+    gap: 30px;
+    border-radius: 20px;
+    border: 3px solid #4caf50;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+}
+
+    .sidebar img.logo {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .sidebar li {
+        padding: 10px;
+    }
+
+        .sidebar li a {
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+            .sidebar li a img {
+                margin: 10px;
+            }
+
+            .sidebar li a:hover {
+                color: #FF5722;
+            }
+
+        .sidebar li:hover img {
+            filter: brightness(0) saturate(100%) invert(42%) sepia(71%) saturate(477%) hue-rotate(337deg) brightness(96%) contrast(95%);
+        }
+
+        .sidebar li:last-child {
+            margin-top: auto;
+        }
+
+.content {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 20px;
+}
+
+.top-section, .bottom-section {
+    background-color: #fff;
+    padding: 40px 30px;
+    margin: 0 10px 20px 0;
+    border-radius: 20px;
+    border: 3px solid #4caf50;
+    display: flex;
+}
+
+.dropdown {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        margin: 20px;
+    }
+
+    .sidebar {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        z-index: 1000;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .content {
+        width: 100%;
+        padding: 20px;
+        flex-grow: 1;
+        margin: 20px;
+    }
+
+    .top-section {
+        display: none;
+    }
+
+    .logout-item {
+        margin-top: auto;
+    }
+
+    .logout-link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        text-decoration: none;
+    }
+
+        .logout-link img {
+            margin-right: 10px;
+        }
+}
+
+.mainAddProductContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 15px;
+    max-width: 800px;
+    margin: auto;
+    margin-left: 0;
+}
+
+.form-control {
+    width: 250%;
+    max-width: none;
+    min-width: 300px;
+    border: 3px solid #4caf50;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.nameLabel {
+    width: 100%;
+    text-align: center;
+}
+
+.nameTable {
+    color: orange;
+}
+
+.tablesWrapper {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+.leftTable {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+.rightTable {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.imgAddWindow {
+    margin-bottom: 20px;
+}
+
+.photoPreviews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.fileNames {
+    margin-top: 10px;
+    display: block;
+}
+
+.buttonTable {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btnStyleAdd {
+    border: 3px solid #4caf50;
+    border-radius: 20px;
+    background-color: white;
+    color: #4caf50;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.orStyle {
+    color: #4caf50;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.buttonWrapper {
+    display: flex;
+    justify-content: center; /* Центрує кнопки */
+    align-items: center;
+    gap: 15px; /* Відстань між кнопками */
+    margin-top: 20px;
+}
+
+.buttonCencelTable, .buttonTable {
+    display: flex;
+    align-items: center;
+}
+
+    .buttonCencelTable .btn.alert, {
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        cursor: pointer;
+        display: inline-block;
+        width: 150px;
+        height: 50px;
+        margin: 0;
+    }
+
+    .buttonTable .btn.btn-success {
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        cursor: pointer;
+        display: inline-block;
+        width: 200px;
+        height: 50px;
+        margin: 0;
+    }
+
+    .buttonCencelTable .btn.alert {
+        background-color: white;
+        color: red;
+        border: 3px solid red;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .buttonCencelTable .btn.alert:hover {
+            background-color: red;
+            color: white;
+        }
+
+    .buttonTable .btn.btn-success {
+        background-color: white;
+        color: #4caf50;
+        border: 3px solid #4caf50;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .buttonTable .btn.btn-success:hover {
+            background-color: #4caf50;
+            color: white;
+        }

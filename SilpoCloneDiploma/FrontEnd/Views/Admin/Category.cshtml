@@ -1,0 +1,200 @@
+﻿@model IEnumerable<FrontEnd.Models.Dto.CategoryDto>
+@using FrontEnd.Models.Dto
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="success-message" class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="categoryContainer">
+    <div class="leftPanel">
+        <h3>Список категорій</h3>
+
+        <div class="search-container">
+            <input type="text" id="search-input" class="form-control" placeholder="Пошук за назвою категорії" oninput="searchCategories()">
+        </div>
+
+        <ul id="category-list" class="categoryList">
+            @foreach (var category in Model)
+            {
+                <li>
+                    <span>@category.Id - @category.Name</span>
+                    <button class="editBtn" onclick="editCategory(@category.Id, '@category.Name', @category.ParentCategoryId)">Редагувати</button>
+                    <button class="deleteBtn" onclick="deleteCategory(@category.Id)">Видалити</button>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="rightPanel">
+        <h3 id="form-title">Додати нову категорію</h3>
+        <form id="category-form" asp-action="Category" asp-controller="Admin" method="post">
+            <input type="hidden" id="category-id" name="Id" />
+            <div class="form-group">
+                <label for="category-name">Назва категорії</label>
+                <input type="text" id="category-name" name="Name" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="parent-category-id">ID батьківської категорії (необов'язково)</label>
+                <input type="number" id="parent-category-id" name="ParentCategoryId" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-success" id="save-btn">Зберегти</button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">Очистити</button>
+        </form>
+    </div>
+</div>
+
+<script>
+   
+    let allCategories = @Html.Raw(Json.Serialize(Model));
+    let filteredCategories = [...allCategories]; 
+
+    function updateCategoryList(categories) {
+        const categoryList = document.getElementById("category-list");
+        categoryList.innerHTML = ""; 
+
+        if (categories.length === 0) {
+            categoryList.innerHTML = "<li>Немає категорій, що відповідають пошуковому запиту.</li>";
+        } else {
+            categories.forEach(category => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                                <span>ID:${category.id} - ${category.name}</span>
+                        <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId})">Редагувати</button>
+                        <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
+                    `;
+                categoryList.appendChild(li);
+            });
+        }
+    }
+
+    function searchCategories() {
+        const searchTerm = document.getElementById("search-input").value.toLowerCase();
+
+        if (searchTerm === "") {
+            filteredCategories = [...allCategories];
+        } else {
+            filteredCategories = allCategories.filter(category => category.name.toLowerCase().includes(searchTerm));
+        }
+
+        updateCategoryList(filteredCategories); 
+    }
+
+    function editCategory(id, name, parentId) {
+        document.getElementById("category-id").value = id;
+        document.getElementById("category-name").value = name;
+        document.getElementById("parent-category-id").value = parentId || "";
+        document.getElementById("form-title").textContent = "Редагувати категорію";
+        document.getElementById("save-btn").textContent = "Зберегти зміни";
+    }
+
+    function deleteCategory(id) {
+        if (confirm("Ви дійсно хочете видалити цю категорію?")) {
+            console.log(`Категорія з ID ${id} видалена`);
+        }
+    }
+
+    function resetForm() {
+        document.getElementById("category-id").value = "";
+        document.getElementById("category-name").value = "";
+        document.getElementById("parent-category-id").value = "";
+        document.getElementById("form-title").textContent = "Додати нову категорію";
+        document.getElementById("save-btn").textContent = "Зберегти";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateCategoryList(filteredCategories); 
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var successMessage = document.getElementById("success-message");
+        if (successMessage) {
+            
+            successMessage.style.display = "block";
+
+          
+            setTimeout(function () {
+                successMessage.style.display = "none";
+            }, 3000); 
+        }
+    });
+</script>
+
+<!-- CSS -->
+<style>
+    .categoryContainer {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .leftPanel {
+        flex: 3;
+        border-right: 1px solid #ddd;
+        padding-right: 20px;
+    }
+
+    .rightPanel {
+        flex: 1;
+        padding-left: 20px;
+    }
+
+    .categoryList {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .categoryList li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .editBtn, .deleteBtn {
+        margin-left: 10px;
+        
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+    .btn {
+        
+    }
+
+    .search-container {
+        margin-bottom: 15px;
+    }
+
+    #success-message {
+        display: none; /* Приховуємо повідомлення спочатку */
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        padding: 15px;
+        background-color: #28a745; /* Зелений колір */
+        color: white;
+        border-radius: 20px;
+        font-size: 16px;
+        opacity: 0.7;
+        
+    }
+
+       
+
+</style>

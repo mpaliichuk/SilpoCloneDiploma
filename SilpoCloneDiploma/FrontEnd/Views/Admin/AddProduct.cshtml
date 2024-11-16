@@ -1,5 +1,139 @@
-﻿@{
+﻿@using FrontEnd.Models.Dto;
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    // var admin = ViewBag.Admin as AdminModel; // Розкоментуйте, якщо будете використовувати дані адміністратора
 }
-<h1>Add product</h1>
+@model ProductDto
+
+
+<div class="mainAddProductContainer" id="mainAddProductContainer">
+    <div class="nameLabel" id="nameLabel">
+        <h3 class="nameTable">Інформація про товар</h3>
+    </div>
+    <form asp-action="AddProduct" asp-controller="Admin" method="post" enctype="multipart/form-data">
+        <div class="tablesWrapper">
+            <div class="leftTable" id="leftTable">
+                <div class="imgAddWindow">
+                    <input type="file" id="photos" name="imageFiles" class="form-control-file" multiple style="display: none;" />
+                    <div id="photo-previews" class="photoPreviews" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+                        <img id="default-image" src="~/Admin_Image/def.png" alt="Зображення за замовчуванням" style="max-width: 200px; margin-bottom: 10px;" />
+                    </div>
+                    <span id="file-names" class="fileNames">Шлях до файлів</span>
+                </div>
+                <div class="orConteiner">
+                    <div class="orStyle">
+                        АБО
+                    </div>
+                </div>
+                <div class="buttonTable" id="buttonTable">
+                    <button type="submit" class="btn btn-success">Оберіть файл</button>
+                </div>
+            </div>
+
+            <div class="rightTable" id="rightTable">
+                <div class="form-group">
+                    <label for="title">Назва продукту</label>
+                    <input type="text" id="title" name="Title" class="form-control" required />
+                    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="productComposition">Склад продукту</label>
+                    <textarea id="productComposition" name="ProductComposition" class="form-control" rows="3"></textarea>
+                    @Html.ValidationMessageFor(m => m.ProductComposition, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="generalInformation">Загальна інформація</label>
+                    <textarea id="generalInformation" name="GeneralInformation" class="form-control" rows="3"></textarea>
+                    @Html.ValidationMessageFor(m => m.GeneralInformation, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="availability">Статус наявності</label>
+                    <select id="availability" name="Availability" class="form-control" required>
+                        <option value="">Оберіть статус</option>
+                        <option value="InStock">В наявності</option>
+                        <option value="OutOfStock">Немає в наявності</option>
+                    </select>
+                    @Html.ValidationMessageFor(m => m.Availability, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="count">Кількість</label>
+                    <input type="number" id="count" name="Count" class="form-control" step="0.01" required />
+                    @Html.ValidationMessageFor(m => m.Count, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="sale">Знижка (%)</label>
+                    <input type="number" id="sale" name="Sale" class="form-control" step="0.01" />
+                    @Html.ValidationMessageFor(m => m.Sale, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="price">Ціна</label>
+                    <input type="number" id="price" name="Price" class="form-control" step="0.01" required />
+                    @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" asp-items="Model.CategorySelectList" class="form-control">
+                        <option value="">Оберіть категорію</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                
+
+                <div class="buttonWrapper">
+                    <div class="buttonCencelTable">
+                        <button type="reset" class="btn alert">Reset</button>
+                    </div>
+                    <div class="buttonTable">
+                        <button type="submit" class="btn btn-success">Додати продукт</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </form>
+</div>
+
+<script>
+    document.getElementById("photos").addEventListener("change", function () {
+        const previewsContainer = document.getElementById("photo-previews");
+        const fileNames = document.getElementById("file-names");
+        const defaultImage = document.getElementById("default-image");
+
+        // Clear previous previews
+        previewsContainer.innerHTML = "";
+
+        const files = this.files;
+        let fileNamesText = '';
+
+        if (files.length > 0) {
+            // Сховати зображення за замовчуванням
+            defaultImage.style.display = 'none';
+        } else {
+            // Відобразити зображення за замовчуванням
+            defaultImage.style.display = 'block';
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            fileNamesText += file.name + (i < files.length - 1 ? ', ' : '');
+
+            // Створити попередній перегляд зображення
+            const imgPreview = document.createElement("img");
+            imgPreview.style.maxWidth = "100px";
+            imgPreview.style.marginRight = "10px";
+            imgPreview.style.marginBottom = "10px";
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            previewsContainer.appendChild(imgPreview);
+        }
+
+        // Показати імена файлів
+        fileNames.textContent = fileNamesText || "Шлях до файлів";
+    });
+</script>  со ми використовуємо @Html.

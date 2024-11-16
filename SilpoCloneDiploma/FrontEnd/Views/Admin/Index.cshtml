@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null; 
+    Layout = null;
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,59 +9,61 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+
     <style>
         body {
             margin: 0;
             display: flex;
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            background-color: #f0f0f0; 
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
 
-        #myLogo {
-            width: 571px;
-            height: 94.54px;
-            opacity: 1;
+        #loading-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: opacity 0.5s;
         }
 
-        h1 {
-            margin-top: 20px; 
-            font-size: 24px; 
+        .logo {
+            width: 571px;
+            height: auto; /* Висота автоматично підлаштовується під ширину */
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <img id="myLogo"
-         src="~/Admin_Image/Index logo.png"
-         alt="My Logo" />
+    <div id="loading-logo">
+        <img src="~/Admin_Image/Index logo.png" alt="Logo" class="logo" />
+    </div>
 
     <script>
-        
+        // Функція перевірки токена
         function checkToken() {
-          
-            // const token = localStorage.getItem('token'); 
+            const token = localStorage.getItem('token'); // Отримуємо токен з локального сховища
 
-            // if (token) {
-           
-            window.location.href = '/Admin/General'; 
-            // } else {
-            //     
-            //     window.location.href = '/Account/Register'; 
-            // }
+            // Якщо токен є, переходимо на сторінку адміністратора
+            if (token) {
+                window.location.href = '/Admin/General';
+            } else {
+                // Інакше переходимо на сторінку реєстрації
+                window.location.href = '/Admin/General';
+            }
         }
 
-       
-        document.getElementById('myLogo').style.display = 'block';
+        // Логіка анімації логотипа
+        const loadingLogo = document.getElementById('loading-logo');
+        loadingLogo.style.display = 'block';
+
         setTimeout(() => {
-            document.getElementById('myLogo').style.opacity = '0'; 
+            loadingLogo.style.opacity = '0'; // Зменшуємо прозорість логотипа
             setTimeout(() => {
-                document.getElementById('myLogo').style.display = 'none'; 
-                checkToken(); 
-            }, 500); 
-        }, 5000); 
+                loadingLogo.style.display = 'none'; // Приховуємо логотип
+                checkToken(); // Викликаємо функцію перевірки токена
+            }, 500); // Затримка перед приховуванням логотипа
+        }, 2000); // Час очікування перед зменшенням прозорості
     </script>
 </body>
 </html>

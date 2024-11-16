@@ -39,7 +39,7 @@ body, html {
     }
 
         .sidebar li a {
-            color: black; 
+            color: black;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -47,18 +47,19 @@ body, html {
         }
 
             .sidebar li a img {
-                margin: 10px; 
+                margin: 10px;
             }
 
             .sidebar li a:hover {
-                color: #FF5722; 
+                color: #FF5722;
             }
+
         .sidebar li:hover img {
             filter: brightness(0) saturate(100%) invert(42%) sepia(71%) saturate(477%) hue-rotate(337deg) brightness(96%) contrast(95%);
         }
 
         .sidebar li:last-child {
-            margin-top: auto; 
+            margin-top: auto;
         }
 
 .content {
@@ -109,19 +110,19 @@ body, html {
     .top-section {
         display: none;
     }
+
     .logout-item {
-        margin-top: auto; /* Відштовхує елемент донизу */
+        margin-top: auto; 
     }
 
     .logout-link {
         display: flex;
         align-items: center;
-        justify-content: flex-start; /* Вирівнювання значка та тексту */
-        text-decoration: none; /* Прибирає підкреслення */
+        justify-content: flex-start; 
+        text-decoration: none; 
     }
 
         .logout-link img {
-            margin-right: 10px; /* Відступ між зображенням і текстом */
+            margin-right: 10px;
         }
-
 }
