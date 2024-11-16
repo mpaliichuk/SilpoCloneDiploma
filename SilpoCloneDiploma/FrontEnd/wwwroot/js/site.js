@@ -5,6 +5,71 @@ var dropdownItems = document.getElementsByClassName('dropdown-item');
 var panel = document.getElementById('categoryPanel');
 const socialIcons = document.querySelectorAll('.socialIcons');
 
+var categories = {
+    1: { name: '', icon: '/icons/CategoryIcons/SmallFruitIcon.png', parentCategoryId: null },
+    2: { name: '', link: '/icons/CategoryIcons/SeasonalFruits.png', parentCategoryId: 0 },
+    3: { name: '', link: '/icons/CategoryIcons/Smoothies.png', parentCategoryId: 0 },
+    4: { name: '', link: '/icons/CategoryIcons/FruitSnacks.png', parentCategoryId: 0 },
+    5: { name: '', link: '/icons/CategoryIcons/Berries.png', parentCategoryId: 0 },
+    6: { name: '', link: '/icons/CategoryIcons/Nuts.png', parentCategoryId: 0 },
+
+    7: { name: '', icon: '/icons/CategoryIcons/SmallHealthyFoodIcon.png', parentCategoryId: null },
+    8: { name: '', link: '/icons/CategoryIcons/Lactose-free.png', parentCategoryId: 0 },
+    9: { name: '', link: '/icons/CategoryIcons/Vegan.png', parentCategoryId: 0 },
+    10: { name: '', link: '/icons/CategoryIcons/Organic.png', parentCategoryId: 0 },
+    11: { name: '', link: '/icons/CategoryIcons/Gluten-free.png', parentCategoryId: 0 },
+    12: { name: '', link: '/icons/CategoryIcons/NoAddedSugar.png', parentCategoryId: 0 },
+
+    13: { name: '', icon: '/icons/CategoryIcons/SmallVegetablesIcon.png', parentCategoryId: null },
+    14: { name: '', link: '/icons/CategoryIcons/SeasonalVegetables.png', parentCategoryId: 0 },
+    15: { name: '', link: '/icons/CategoryIcons/GreensAndSalads.png', parentCategoryId: 0 },
+    16: { name: '', link: '/icons/CategoryIcons/Pickles.png', parentCategoryId: 0 },
+    17: { name: '', link: '/icons/CategoryIcons/Mushrooms.png', parentCategoryId: 0 },
+
+    18: { name: 'Бакалія та консерви', icon: '/icons/CategoryIcons/SmallGroceryIcon.png', parentCategoryId: null },
+    19: { name: 'Риба', icon: '/icons/CategoryIcons/SmallFishIcon.png', parentCategoryId: null },
+    20: { name: 'Соуси та спеції', icon: '/icons/CategoryIcons/SmallSaucesIcon.png', parentCategoryId: null },
+    21: { name: 'Мʼясо', icon: '/icons/CategoryIcons/SmallMeatIcon.png', parentCategoryId: null },
+    22: { name: 'Солодощі', icon: '/icons/CategoryIcons/SmallSweetsIcon.png', parentCategoryId: null },
+    23: { name: 'Снеки', icon: '/icons/CategoryIcons/SmallSnacksIcon.png', parentCategoryId: null },
+    24: { name: 'Заморожені продукти', icon: '/icons/CategoryIcons/SmallFrozenFoodIcon.png', parentCategoryId: null },
+    25: { name: 'Вода та напої', icon: '/icons/CategoryIcons/SmallWaterIcon.png', parentCategoryId: null },
+    26: { name: 'Тютюнові вироби', icon: '/icons/CategoryIcons/SmallTobaccoIcon.png', parentCategoryId: null },
+    27: { name: 'Алкогольні напої', icon: '/icons/CategoryIcons/SmallAlcoholIcon.png', parentCategoryId: null },
+    28: { name: 'Гігієна та краса', icon: '/icons/CategoryIcons/SmallHygieneIcon.png', parentCategoryId: null },
+    29: { name: 'Кава та чай', icon: '/icons/CategoryIcons/SmallCoffeeTeaIcon.png', parentCategoryId: null },
+    30: { name: 'Товари для дому', icon: '/icons/CategoryIcons/SmallHomeGoodsIcon.png', parentCategoryId: null },
+    31: { name: 'Товари для дітей', icon: '/icons/CategoryIcons/SmallChildrensGoodsIcon.png', parentCategoryId: null },
+    32: { name: 'Молочні продукти', icon: '/icons/CategoryIcons/SmallDairyProductsIcon.png', parentCategoryId: null },
+};
+
+async function GetCategories() {
+    var categoriesRespons = [];
+
+    try {
+        const response = await fetch("http://localhost:5152/gateway/AllCategories", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            categoriesRespons = await response.json();
+        }
+
+        categoriesRespons.forEach(item => {
+            categories[item.id].name = item.name;
+            categories[item.id].parentCategoryId = item.parentCategoryId;
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+
 dropdownToggle.addEventListener('click', function (event) {
     event.preventDefault();
     dropdownMenu.classList.toggle('show');
@@ -27,129 +92,20 @@ dropdownToggle.addEventListener('mouseout', () => {
     categoriesLogo.src = '/icons/List.png'; 
 });
 
-const categories = {
-    0: {
-        name: 'Фрукти',
-        icon: '/icons/CategoryIcons/SmallFruitIcon.png',
-        items: [
-            { name: 'Сезонні фрукти', link: '/icons/CategoryIcons/SeasonalFruits.png', route: 'SeasonalFruits' },
-            { name: 'Ягоди', link: '/icons/CategoryIcons/Berries.png', route: 'Berries' },
-            { name: 'Смузі та фреші', link: '/icons/CategoryIcons/Smoothies.png', route: 'Smoothies' },
-            { name: 'Фруктові снеки', link: '/icons/CategoryIcons/FruitSnacks.png', route: 'FruitSnacks' },
-            { name: 'Горіхи', link: '/icons/CategoryIcons/Nuts.png', route: 'Nuts' },
-            { name: 'Всі продукти', link: '/icons/CategoryIcons/AllProducts.png', route: '' }
-        ]
-    },
-    1: {
-        name: 'Здорове харчування',
-        icon: '/icons/CategoryIcons/SmallHealthyFoodIcon.png',
-        items: [
-            { name: 'Безлактозні продукти', link: '/icons/CategoryIcons/Lactose-free.png', route: 'Lactose-free' },
-            { name: 'Веганські продукти', link: '/icons/CategoryIcons/Vegan.png', route: 'Vegan' },
-            { name: 'Органічна їжа', link: '/icons/CategoryIcons/Organic.png', route: 'Organic' },
-            { name: 'Безглютенові продукти', link: '/icons/CategoryIcons/Gluten-free.png', route: 'Gluten-free' },
-            { name: 'Без додаткового цукру', link: '/icons/CategoryIcons/NoAddedSugar.png', route: 'NoAddedSugar' },
-            { name: 'Всі продукти', link: '/icons/CategoryIcons/AllProducts.png', route: '' }
-        ]
-    },
-    2: {
-        name: 'Овочі',
-        icon: '/icons/CategoryIcons/SmallVegetablesIcon.png',
-        items: [
-            { name: 'Сезонні овочі', link: '/icons/CategoryIcons/SeasonalVegetables.png', route: 'SeasonalVegetables' },
-            { name: 'Зелень і салати', link: '/icons/CategoryIcons/GreensAndSalads.png', route: 'GreensAndSalads' },
-            { name: 'Соління', link: '/icons/CategoryIcons/Pickles.png', route: 'Pickles' },
-            { name: 'Гриби', link: '/icons/CategoryIcons/Mushrooms.png', route: 'Mushrooms' },
-            { name: 'Всі продукти', link: '/icons/CategoryIcons/AllProducts.png', route: '' }
-        ]
-    },
-    3:{
-        name: 'Бакалія та консерви',
-        icon: '/icons/CategoryIcons/SmallGroceryIcon.png',
-        items: []
-    },
-    4: {
-        name: 'Риба',
-        icon: '/icons/CategoryIcons/SmallFishIcon.png',
-        items: []
-    },
-    5: {
-        name: 'Соуси та спеції',
-        icon: '/icons/CategoryIcons/SmallSaucesIcon.png',
-        items: []
-    },
-    6: {
-        name: 'Мʼясо',
-        icon: '/icons/CategoryIcons/SmallMeatIcon.png',
-        items: []
-    },
-    7: {
-        name: 'Солодощі',
-        icon: '/icons/CategoryIcons/SmallSweetsIcon.png',
-        items: []
-    },
-    8: {
-        name: 'Снеки',
-        icon: '/icons/CategoryIcons/SmallSnacksIcon.png',
-        items: []
-    },
-    9: {
-        name: 'Заморожені продукти',
-        icon: '/icons/CategoryIcons/SmallFrozenFoodIcon.png',
-        items: []
-    },
-    10: {
-        name: 'Вода та напої',
-        icon: '/icons/CategoryIcons/SmallWaterIcon.png',
-        items: []
-    },
-    11: {
-        name: 'Тютюнові вироби',
-        icon: '/icons/CategoryIcons/SmallTobaccoIcon.png',
-        items: []
-    },
-    12: {
-        name: 'Алкогольні напої',
-        icon: '/icons/CategoryIcons/SmallAlcoholIcon.png',
-        items: []
-    },
-    13: {
-        name: 'Гігієна та краса',
-        icon: '/icons/CategoryIcons/SmallHygieneIcon.png',
-        items: []
-    },
-    14: {
-        name: 'Кава та чай',
-        icon: '/icons/CategoryIcons/SmallCoffeeTeaIcon.png',
-        items: []
-    },
-    15: {
-        name: 'Товари для дому',
-        icon: '/icons/CategoryIcons/SmallHomeGoodsIcon.png',
-        items: []
-    },
-    16: {
-        name: 'Товари для дітей',
-        icon: '/icons/CategoryIcons/SmallChildrensGoodsIcon.png',
-        items: []
-    },
-    17: {
-        name: 'Молочні продукти',
-        icon: '/icons/CategoryIcons/SmallDairyProductsIcon.png',
-        items: []
-    },
-};
 var delay = 300;
 var hoverTimeout;
 var elementBefore;
 
-function generateCategoryInitialisator() {
+async function generateCategoryInitialisator() {
+    await GetCategories();
     const categoryList = document.querySelector('.category-list');
     categoryList.innerHTML = '';
     const categoryValues = Object.values(categories);
 
-    for (var categoryId = 0; categoryId < categoryValues.length; categoryId++) {
-        createCategoryItem(`/Goodmeal/Category/${categoryId}`, categoryId);
+    for (var categoryId = 1; categoryId <= categoryValues.length; categoryId++) {
+        if (categories[categoryId].parentCategoryId == null) {
+            createCategoryItem(`/Goodmeal/Category/${categoryId}`, categoryId);
+        }
     }
 
     for (var categoryId = 0; categoryId < dropdownItems.length; categoryId++) {
@@ -189,21 +145,18 @@ function generateCategoryInitialisator() {
 
 function generateCategoryPanel(categoryId) {
     panel.innerHTML = '';
-    if (categories[categoryId].items.length > 0) {
-        categories[categoryId].items.forEach((item) => {
-            generateCategoryCard(item.link, item.name, categoryId, item.route);    
-        });
-    } else {
-        generateCategoryCard('/icons/CategoryIcons/AllProducts.png', 'Всі продукти', categoryId); 
-    }
+    const categoryItems = Array.isArray(categories) ? categories : Object.values(categories);
+    categoryItems.forEach((item, index) => {
+        if (item.parentCategoryId == categoryId)
+            generateCategoryCard(item.link, item.name, index + 1);    
+    });
+    generateCategoryCard('/icons/CategoryIcons/AllProducts.png', 'Всі продукти', categoryId); 
 }
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-function generateCategoryCard(iconSrc, categoryText, id, route) {
+function generateCategoryCard(iconSrc, categoryText, id) {
+    console.log(id);
     const categoryDivCard = document.createElement('a');
-    if (route)
-        categoryDivCard.href = `/Goodmeal/Category/${id}/${route}`;
-    else
-        categoryDivCard.href = `/Goodmeal/Category/${id}`;
+    categoryDivCard.href = `/Goodmeal/Category/${id}`;
 
     categoryDivCard.className = 'categoryDivCard';
 
@@ -525,35 +478,36 @@ profileButton.addEventListener("click", function () {
     dropdownMenu.classList.remove('show');
     panel.classList.remove('show');
     overlayPopUp.style.zIndex = 9998;
-    console.log("Profile button clicked");
     loginPopup.style.display = "flex";
     overlayPopUp.style.display = 'block';
 });
 
-//closePopupButton.addEventListener("click", function() {
-//    console.log("Close button clicked");
-//    loginPopup.style.display = "none";
-//    overlayPopUp.style.display = 'none';
-//    overlayPopUp.style.zIndex = 9990;
-//});
+//Show Register/Login
+document.getElementById("showRegister").addEventListener("click", function () {
+    document.getElementById("loginPopup").style.display = "none";
+    document.getElementById("registerPopup").style.display = "flex";
+});
 
-//showRegisterLink.addEventListener("click", function(event) {
-//    event.preventDefault();
-//    console.log("Show Register link clicked");
-//    loginPopup.style.display = "none";
-//    registerForm.style.display = "flex";
-//});
+document.getElementById("showLogin").addEventListener("click", function () {
+    document.getElementById("registerPopup").style.display = "none";
+    document.getElementById("loginPopup").style.display = "flex";
+});
 
-//showLoginLink.addEventListener("click", function(event) {
-//    event.preventDefault();
-//    console.log("Show Login link clicked");
-//    registerForm.style.display = "none";
-//    loginPopup.style.display = "flex";
-//});
+showRegisterLink.addEventListener("click", function () {
+    loginPopup.style.display = "none";
+    registerPopup.style.display = "flex";
+});
+
+showLoginLink.addEventListener("click", function () {
+    registerPopup.style.display = "none";
+    loginPopup.style.display = "flex";
+});
 
 window.addEventListener("click", function(event) {
-    if (event.target === loginPopup) {
-        console.log("Clicked outside the popup");
+    if (event.target === overlayPopUp) {
         loginPopup.style.display = "none";
+        registerPopup.style.display = "none";
+        overlayPopUp.style.display = 'none';
     }
 });
+

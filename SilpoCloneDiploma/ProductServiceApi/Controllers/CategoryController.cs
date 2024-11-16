@@ -17,11 +17,13 @@ namespace ProductServiceApi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _service;
+        private readonly IProductRepository _serviceProduct;
         private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryRepository service, ILogger<CategoryController> logger)
+        public CategoryController(ICategoryRepository service, IProductRepository serviceProduct, ILogger<CategoryController> logger)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
+            _serviceProduct = serviceProduct ?? throw new ArgumentNullException(nameof(serviceProduct));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -65,13 +67,54 @@ namespace ProductServiceApi.Controllers
             {
                 Id = category.Id,
                 Name = category.Name,
-                ParentCategoryId = category.ParentCategoryId
+                ParentCategoryId = category.ParentCategoryId,
+                ParentCategoryName = ""
             };
+
+            if (categoryDto.ParentCategoryId != null)
+            {
+                var parentCategory = await _service.GetCategoryByIdAsync((int)categoryDto.ParentCategoryId);
+                if (parentCategory != null)
+                {
+                    categoryDto.ParentCategoryName = parentCategory.Name;
+                }
+            }
+
             return Ok(categoryDto);
         }
 
         /// <summary>
-        /// Retrieves a category by its name.
+        /// Gets a category by ID.
+        /// </summary>
+        /// <param name="id">The ID of the category.</param>
+        [HttpGet("getParent/{parentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<SubCategoryDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<SubCategoryDto>>> GetParentCategoryByIdAsync(int parentId)
+        {
+            var categories = await _service.GetAllCategoriesAsync();
+            var products = await _serviceProduct.GetAllProductsAsync();
+
+            var subCategories = categories.Where(c => c.ParentCategoryId == parentId);
+
+            if (!subCategories.Any())
+            {
+                return NotFound();
+            }
+
+            var categoryDtos = subCategories.Select(c => new SubCategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                ParentCategoryId = c.ParentCategoryId,
+                Count = products.Count(p => p.CategoryId == c.Id),
+            });
+
+            return Ok(categoryDtos);
+        }
+
+        /// <summary>
+        /// Get a category by name.
         /// </summary>
         /// <param name="name">The name of the category to retrieve.</param>
         /// <returns>The requested category.</returns>

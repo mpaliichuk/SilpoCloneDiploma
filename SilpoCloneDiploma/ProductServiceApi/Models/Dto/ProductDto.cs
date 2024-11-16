@@ -35,6 +35,9 @@ namespace ProductServiceApi.Dtos
 
             public double? Sale { get; set; }
 
+            public double AverageRating { get; set; }
+            public int RatingCount { get; set; }
+
             [Required]
             [Range(0, double.MaxValue)]
             public double Price { get; set; }

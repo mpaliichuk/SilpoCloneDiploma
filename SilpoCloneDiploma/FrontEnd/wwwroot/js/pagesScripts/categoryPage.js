@@ -1,52 +1,133 @@
-﻿var categoryName = document.getElementById("subCategoryName").value;
-if (categoryName != "All") {
-    document.getElementById("categoryNameDiv").innerText = categoryName;
-}
-
-var currentPage = 1;
+﻿var currentPage = 1;
 var pageSize = 18;
 var newPage = true;
 var pageChangeSymbol = "plus";
 
+GetCategoryInfo(document.getElementById("categoryId").value);
 GetProducts();
-async function GetProducts() {
-    var productsByDiscount = [];
 
-    /*try {
-        const response = await fetch("/api/Products/ProductsByDiscount", {
+async function GetCategoryInfo(categoryId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            const categoryInfo = await response.json();
+            document.getElementById("categoryNameDiv").innerHTML = categoryInfo.name;
+
+            var mainCategory = document.getElementById("productMainCategory");
+            var subcategory = document.getElementById("productSubCategory");
+
+            if (categoryInfo.parentCategoryId != null) {
+                mainCategory.innerText = categoryInfo.parentCategoryName;
+                mainCategory.style.display = "flex";
+                mainCategory.href = "/Goodmeal/Category/" + categoryInfo.parentCategoryId;
+                subcategory.innerText = categoryInfo.name;
+                subcategory.style.display = "flex";
+                subcategory.href = "/Goodmeal/Category/" + categoryInfo.id;
+                document.getElementById("productSubCategoryArrow").style.display = "flex";
+            }
+            else {
+                mainCategory.innerText = categoryInfo.name;
+                mainCategory.style.display = "flex";
+                mainCategory.href = "/Goodmeal/Category/" + categoryInfo.id;
+            }
+            CategoryByParentId(categoryInfo.id.toString());
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+async function CategoryByParentId(parentId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/CategoryByParentId/" + parentId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            const getCategories = await response.json();
+            console.log(getCategories);         
+            generateSubCategoryMarkup(getCategories);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+async function AddProductInCart(productId, productCount, userId) {
+    const userIdInt = userId.toString();
+    const productIdInt = parseInt(productId, 10);
+    const productCountInt = parseInt(productCount, 10);
+
+    try {
+        const response = await fetch("http://localhost:5152/gateway/AddToCart", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cartHeader: { userId: userIdInt },
+                cartDetails: [
+                    { productId: productIdInt, count: productCountInt }
+                ]
+            })
+        });
+        if (response.ok) {
+            alert("Товар додано в кошик!");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+async function GetProducts() {
+    var productsOnPage = [];
+
+    try {
+        const response = await fetch("http://localhost:5152/gateway/GetPage/" + 1 + "/" + 18, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         });
         if (response.ok) {
-            const productsByDiscount = await response.json();
-            productsByDiscount.forEach(product => {
-                const productCard = createProductCard(product);
-                document.getElementById('subProductsDiv').appendChild(productCard);
-            });
+            productsOnPage = await response.json();
+            console.log(productsOnPage);
+            //productsOnPage.forEach(product => {
+            //    const productCard = createProductCard(product);
+            //    document.getElementById('subProductsDiv').appendChild(productCard);
+            //});
         }
     } catch (error) {
         console.error('Error:', error);
         throw error;
-    }*/
+    }
     if (newPage)
         document.getElementById('subProductsDiv').innerText = '';
     for (var i = 0; i < 18; i++) {
         const productCard = createProductCard({
-            productIconSrc: '/icons/ProductIcon.png',
-            productName: 'Сьомга Norven',
-            productFullName: 'Сьомга Norven слабосолена в/у, 120г',
-            currentPrice: '256',
-            oldPrice: '315',
-            productId: '123'
+            productIconSrc: productsOnPage.products[i].imageUrls[0],
+            productName: productsOnPage.products[i].title,
+            productFullName: productsOnPage.products[i].productComposition,
+            price: productsOnPage.products[i].price,
+            sale: productsOnPage.products[i].sale,
+            productId: productsOnPage.products[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
     }
     addCardsEvents();
 }
 function createProductCard({ productIconSrc, productName, productFullName,
-    currentPrice, oldPrice, productId, discountIconSrc = '/icons/Discount.png' }) {
+    price, sale, productId, discountIconSrc = '/icons/Discount.png' }) {
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
     cardDiv.className = 'cardDiv';
@@ -55,15 +136,17 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const productIconDiv = document.createElement('div');
     productIconDiv.className = 'productIconDiv no-select';
 
-    const discountIcon = document.createElement('img');
-    discountIcon.className = 'discountIcon no-select no-drag';
-    discountIcon.src = discountIconSrc;
+    if (sale > 0) {
+        const discountIcon = document.createElement('img');
+        discountIcon.className = 'discountIcon no-select no-drag';
+        discountIcon.src = discountIconSrc;
+        productIconDiv.appendChild(discountIcon);
+    }
 
     const productIcon = document.createElement('img');
     productIcon.className = 'productIcon';
     productIcon.src = productIconSrc;
 
-    productIconDiv.appendChild(discountIcon);
     productIconDiv.appendChild(productIcon);
 
     const productInfoDiv = document.createElement('div');
@@ -86,16 +169,26 @@ function createProductCard({ productIconSrc, productName, productFullName,
     const priceDiv = document.createElement('div');
     priceDiv.className = 'priceDiv no-select';
 
-    const subPriceDiv = document.createElement('div');
-    subPriceDiv.className = 'subPriceDiv';
-    subPriceDiv.innerHTML = `<b>${currentPrice}</b><span>грн</span>`;
+    if (sale > 0) {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        const discountedPrice = price - (price * (sale / 100));
+        subPriceDiv.innerHTML = `<b>${discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2)}</b><span>грн</span>`;
 
-    const crossTextDiv = document.createElement('div');
-    crossTextDiv.className = 'crossTextDiv';
-    crossTextDiv.innerHTML = `<span>${oldPrice} грн</span>`;
+        const crossTextDiv = document.createElement('div');
+        crossTextDiv.className = 'crossTextDiv';
+        crossTextDiv.innerHTML = `<span>${price} грн</span>`;
 
-    priceDiv.appendChild(subPriceDiv);
-    priceDiv.appendChild(crossTextDiv);
+        priceDiv.appendChild(subPriceDiv);
+        priceDiv.appendChild(crossTextDiv);
+    }
+    else {
+        const subPriceDiv = document.createElement('div');
+        subPriceDiv.className = 'subPriceDiv';
+        subPriceDiv.innerHTML = `<b>${price}</b><span>грн</span>`;
+
+        priceDiv.appendChild(subPriceDiv);
+    }
 
     const productControlDiv = document.createElement('div');
     productControlDiv.className = 'productControlDiv';
@@ -149,6 +242,30 @@ function createProductCard({ productIconSrc, productName, productFullName,
     cardDiv.appendChild(productInfoDiv);
 
     return cardDiv;
+}
+function generateSubCategoryMarkup(subCategories) {
+    const container = document.createElement("div");
+    container.className = "controlSubCategoriesDis";
+
+    subCategories.forEach(subCategory => {
+        const a = document.createElement("a");
+        a.className = "subCategory";
+        a.href = "/Goodmeal/Category/" + subCategory.id;
+
+        const nameSpan = document.createElement("span");
+        nameSpan.id = "subCategoryNameText";
+        nameSpan.textContent = subCategory.name;
+
+        const countSpan = document.createElement("span");
+        countSpan.id = "subCategoryCount";
+        countSpan.textContent = subCategory.count;
+
+        a.appendChild(nameSpan);
+        a.appendChild(countSpan);
+        container.appendChild(a);
+    });
+
+    document.querySelector(".controlItemsDis").appendChild(container);
 }
 
 const moreItemsBtn = document.getElementById('moreItems');
@@ -220,8 +337,7 @@ function addCardsEvents() {
             if (count) {
                 let currentCount = parseInt(count.innerHTML);
                 if (currentCount > 0) {
-                    //AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 0);
-                    alert(`${cardDiv.id}, ${count.innerHTML}, ${0}`);
+                    AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 1);
                     count.innerHTML = '0';
                 }
                 else {

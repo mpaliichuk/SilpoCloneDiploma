@@ -73,22 +73,25 @@ namespace ShopingCartServiceApi.Controllers
                 }
                 else
                 {
-                    var cartDetails = await _context.CartDetails.AsNoTracking().FirstOrDefaultAsync(
-                                      u => u.ProductId == cartDto.CartDetails.First().ProductId
-                                       && u.CartHeaderId == cartHeader.CartHeaderId);
-                    if (cartDetails == null)
+                    foreach (var cartDetails in cartDto.CartDetails)
                     {
-                        cartDto.CartDetails.First().CartHeaderId = cartHeader.CartHeaderId;
-                        _context.CartDetails.Add(maper.Map<CartDetails>(cartDto.CartDetails.First()));
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        cartDto.CartDetails.First().Count += cartDetails.Count;
-                        cartDto.CartDetails.First().CartHeaderId = cartDetails.CartHeaderId;
-                        cartDto.CartDetails.First().CartDetailsId = cartDetails.CartDetailsId;
-                        _context.CartDetails.Update(maper.Map<CartDetails>(cartDto.CartDetails.First()));
-                        await _context.SaveChangesAsync();
+                        var cartDetailsFromDb = await _context.CartDetails.AsNoTracking().FirstOrDefaultAsync(
+                                                       u => u.ProductId == cartDetails.ProductId
+                                                       && u.CartHeaderId == cartHeader.CartHeaderId);
+                        if (cartDetailsFromDb == null)
+                        {
+                            cartDetails.CartHeaderId = cartHeader.CartHeaderId;
+                            _context.CartDetails.Add(maper.Map<CartDetails>(cartDetails));
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            cartDetailsFromDb.Count += cartDetails.Count;
+                            cartDetailsFromDb.CartHeaderId = cartDetailsFromDb.CartHeaderId;
+                            cartDetailsFromDb.CartDetailsId = cartDetailsFromDb.CartDetailsId;
+                            _context.CartDetails.Update(maper.Map<CartDetails>(cartDetailsFromDb));
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
                 response.Result = cartDto;

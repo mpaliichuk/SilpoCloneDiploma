@@ -12,7 +12,7 @@ namespace ProductServiceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class RatingController : ControllerBase
     {
         private readonly IRatingRepository _service;
@@ -89,7 +89,7 @@ namespace ProductServiceApi.Controllers
         /// </summary>
         /// <param name="ratingDto">The rating to add.</param>
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RatingDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<RatingDto>> AddRating([FromBody] RatingDto ratingDto)

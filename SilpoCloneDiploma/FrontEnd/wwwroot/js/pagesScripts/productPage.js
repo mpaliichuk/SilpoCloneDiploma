@@ -20,7 +20,8 @@ async function GetProduct(productId, productCategoryId) {
             imageUrls: responseProduct.imageUrls,
             price: responseProduct.price,
             discountPercentage: responseProduct.sale,
-            rating: 4.5,
+            rating: responseProduct.averageRating,
+            ratingCount: responseProduct.ratingCount,
             category_id: responseProduct.categoryId,
             attributes: [
                 { key: "Колір", value: "Помаранчевий" },
@@ -34,13 +35,18 @@ async function GetProduct(productId, productCategoryId) {
         document.getElementById("productTitle").innerText = product.title;
         document.getElementById("descriptionInfo").innerText = product.description;
         document.getElementById("productMainImg").src = product.imageUrls[0];
+        document.getElementById("ratingScore").innerText = product.rating;
+        document.getElementById("ratingCount").innerText = product.ratingCount + " оцінок";
+        document.getElementById("ratingPopUpScore").innerText = product.rating;
+        document.getElementById("ratingPopUpVotes").innerText = product.ratingCount + " оцінок";
 
         photoCount = product.imageUrls.length;
         if (photoCount > 1)
             document.getElementById("buttonPrev").classList = "noActiveButton";
+
         for (let i = 0; i < photoCount; i++) {
             var smallPhotoId = "productSmallImg" + (i + 1).toString();
-            var child = createSmallRow(smallPhotoId, product.imageUrls[i]);
+            var child = createSmallRow(smallPhotoId, product.imageUrls[i], i + 1);
             document.querySelector('.small-row').appendChild(child);
         }
         document.getElementById("ratingScore").innerText = product.rating;
@@ -67,8 +73,10 @@ async function GetProduct(productId, productCategoryId) {
             });
         }
 
-        let finalPrice = product.price - (product.price * (product.discountPercentage / 100));
-        document.getElementById("productPrice").innerText = finalPrice.toFixed(2) + " грн";
+        const discountedPrice = product.price - (product.price * (product.discountPercentage / 100));
+        let finalPrice = discountedPrice % 1 === 0 ? discountedPrice.toFixed(0) : discountedPrice.toFixed(2);
+
+        document.getElementById("productPrice").innerText = finalPrice + " грн";
 
         // if sale
         if (product.discountPercentage > 0) {
@@ -82,7 +90,7 @@ async function GetProduct(productId, productCategoryId) {
         }
 
         document.getElementById("addToCart").setAttribute("product-id", product.id);
-        //GetCategory(product.category_id);
+        GetCategoryInfo(product.category_id);
         GetProductsBySameCategory(productCategoryId);
     }
 }
@@ -130,7 +138,44 @@ async function GetProductsBySameCategory(productCategoryId) {
     productsSwitch();
 }
 
+async function GetCategoryInfo(categoryId) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            categoryInfo = await response.json();
+
+            var mainCategory = document.getElementById("productMainCategory");
+            var subcategory = document.getElementById("productSubCategory");
+
+            if (categoryInfo.parentCategoryId != 0) {
+                mainCategory.innerText = categoryInfo.parentCategoryName;
+                mainCategory.style.display = "flex";
+                mainCategory.href = "/Goodmeal/Category/" + categoryInfo.parentCategoryId;
+                subcategory.innerText = categoryInfo.name;
+                subcategory.style.display = "flex";
+                subcategory.href = "/Goodmeal/Category/" + categoryInfo.id;
+                document.getElementById("productSubCategoryArrow").style.display = "flex";
+            }
+            else
+                mainCategory.innerText = categoryInfo.name;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 async function AddProductInCart(productId, productCount, userId) {
+    const userIdInt = userId.toString();
+    const productIdInt = parseInt(productId, 10);
+    const productCountInt = parseInt(productCount, 10);
+
     try {
         const response = await fetch("http://localhost:5152/gateway/AddToCart", {
             method: "POST",
@@ -139,9 +184,10 @@ async function AddProductInCart(productId, productCount, userId) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                productId: productId,
-                productCount: productCount,
-                userId: userId
+                cartHeader: { userId: userIdInt },
+                cartDetails: [
+                    { productId: productIdInt, count: productCountInt }
+                ]
             })
         });
         if (response.ok) {
@@ -154,12 +200,12 @@ async function AddProductInCart(productId, productCount, userId) {
 }
 //Controls
 
-function createSmallRow(id, src) {
-    let smallRow = document.createElement('div');
-    smallRow.className = 'small-row';
-
+function createSmallRow(id, src, count) {
     let photoDiv = document.createElement('div');
-    photoDiv.className = 'photo small';
+    if (count == 1)
+        photoDiv.className = 'photo small selected';
+    else
+        photoDiv.className = 'photo small';
 
     let img = document.createElement('img');
     img.className = 'productPhoto smallPhoto';
@@ -172,6 +218,10 @@ function createSmallRow(id, src) {
             const bigImg = largeContainer.querySelector('img');
             bigImg.src = event.target.src;
 
+            cleerImgBorder();
+            const photoSmallDiv = event.target.closest('.photo.small');
+            photoSmallDiv.classList.add('selected');
+
             const imgId = event.target.id;
             const lastDigit = imgId.match(/\d+$/);
             photoPosition = lastDigit ? parseInt(lastDigit[0], 10) : null;
@@ -181,10 +231,7 @@ function createSmallRow(id, src) {
     });
 
     photoDiv.appendChild(img);
-
-    smallRow.appendChild(photoDiv);
-
-    return smallRow;
+    return photoDiv;
 }
 function generatePriceNoDiscount(oldPrice, discountPercentage) {
     const priceNoDiscountDiv = document.getElementById("priceNoDiscountDiv");
@@ -430,6 +477,10 @@ buttonPrev.addEventListener('click', function () {
         const bigImg = largeContainer.querySelector('img');
         const smallImg = document.getElementById("productSmallImg" + (photoPosition - 1).toString());
         bigImg.src = smallImg.src;
+
+        cleerImgBorder();
+        const photoSmallDiv = smallImg.closest('.photo.small');
+        photoSmallDiv.classList.add('selected');
         photoPosition--;
         updateButtons();
     }
@@ -441,10 +492,22 @@ buttonNext.addEventListener('click', function () {
         const bigImg = largeContainer.querySelector('img');
         const smallImg = document.getElementById("productSmallImg" + (photoPosition + 1).toString());
         bigImg.src = smallImg.src;
+
+        cleerImgBorder();
+        const photoSmallDiv = smallImg.closest('.photo.small');
+        photoSmallDiv.classList.add('selected');
         photoPosition++;
         updateButtons();
     }
 });
+
+function cleerImgBorder(){
+    const photosSmall = document.querySelectorAll('.photo.small');
+    photosSmall.forEach(item => {
+        if (item.classList.contains('selected'))
+            item.classList.remove('selected')
+    });
+}
 
 //Product switch functionality
 function productsSwitch() {
@@ -505,6 +568,7 @@ function closeRatingPopUpEvent() {
     overlayRatingPopUp.style.zIndex = 9990;
     ratingPopUp.style.display = "none";
     document.body.classList.remove('no-scroll');
+    clearStars();
 }
 
 //Rating popup
@@ -522,7 +586,6 @@ rating.addEventListener('click', function () {
 });
 document.getElementById('cancelRating').addEventListener('click', function () {
     closeRatingPopUpEvent();
-    clearStars();
 });
 
 
@@ -530,7 +593,14 @@ document.getElementById('cancelRating').addEventListener('click', function () {
 const starsDiv = document.getElementById('ratingStarsDiv');
 const mainStarsDiv = document.getElementById('mainRatingStarsDiv');
 const stars = document.querySelectorAll('.setRatingStar');
+const ratingBtn = document.querySelector('.setRatingBtn');
 var selectedRating = 0;
+
+ratingBtn.addEventListener('click', function () {
+    if (selectedRating != 0)
+        SetRating(selectedRating, "тут має бути id користувача а не текст", productId);
+    closeRatingPopUpEvent();
+});
 
 function highlightStars(starIndex) {
     stars.forEach((star, index) => {
@@ -556,6 +626,7 @@ function selectStars(starIndex) {
     else {
         stars.forEach(star => {
             star.classList.remove("selected");
+            selectedRating = 0;
         });
     }
 }
@@ -564,6 +635,7 @@ function clearStars(){
     stars.forEach(star => {
         star.classList.remove("selected");
         star.src = "/icons/SetRatingStar.png";
+        selectedRating = 0;
     }
 )};
 
@@ -594,23 +666,30 @@ mainStarsDiv.addEventListener('mouseleave', function () {
     });
 });
 
-async function SetRating() {
+async function SetRating(rating, comment, productId) {
     try {
         const response = await fetch("http://localhost:5152/gateway/SetRating", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",       
+            },
+            body: JSON.stringify({
+                value: rating,
+                comment: comment,
+                idProduct: productId,
+            })
         });
         if (response.ok) {
-            productsByCategory = await response.json();
+
         }
     } catch (error) {
         console.error('Error:', error);
         throw error;
     }
 }
+
+
 
 //Info arrows
 var info = document.querySelector('.info-section-content');
@@ -679,20 +758,11 @@ addToCartBtn.addEventListener('click', function () {
     if (count) {
         let currentCount = parseInt(count.innerHTML, 10);
         if (currentCount > 0) {
-            //AddProductInCart(addToCartBtn.getAttribute('product-id'), count.innerHTML, /*userId*/ 0);
-            alert(`${addToCartBtn.getAttribute('product-id')}, ${count.innerHTML}, ${0}`);
+            AddProductInCart(addToCartBtn.getAttribute('product-id'), count.innerHTML, /*userId*/ 1);
             count.innerHTML = '0';
         }
         else {
             alert("Спершу виберіть кількість товар (`U_U`)!");
         }
     }
-});
-
-addToCartBtn.addEventListener('mouseenter', function () {
-    addToCartBtn.style.background = '#FF5722';
-});
-
-addToCartBtn.addEventListener('mouseleave', function () {
-    addToCartBtn.style.background = '#4CAF50';
 });

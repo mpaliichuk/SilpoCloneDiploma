@@ -1,5 +1,6 @@
 {
   "Routes": [
+    //////////////////Product/////////////////////
     {
       "DownstreamPathTemplate": "/api/Product",
       "DownstreamScheme": "http",
@@ -49,6 +50,18 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
+      "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Product/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -60,6 +73,7 @@
       "UpstreamPathTemplate": "/gateway/Products/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
+    ////////////////Category///////////////////
     {
       "DownstreamPathTemplate": "/api/category",
       "DownstreamScheme": "http",
@@ -73,7 +87,7 @@
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/category/{id}",
+      "DownstreamPathTemplate": "/api/category",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -81,9 +95,22 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/category/{id}",
+      "UpstreamPathTemplate": "/gateway/AllCategories",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/CategoryByParentId/{parentId}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
+    ////////////////Rating////////////////////////
     {
       "DownstreamPathTemplate": "/api/rating",
       "DownstreamScheme": "http",
@@ -93,7 +120,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Rating",
+      "UpstreamPathTemplate": "/gateway/SetRating",
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {
@@ -108,6 +135,7 @@
       "UpstreamPathTemplate": "/gateway/Rating/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
+    /////////////////Cart////////////////////////////
     {
       "DownstreamPathTemplate": "/api/cart/upsert",
       "DownstreamScheme": "http",
