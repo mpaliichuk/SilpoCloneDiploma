@@ -20,7 +20,7 @@ namespace ProductServiceApi.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddProductAsync(Product product) // Додано Async
+        public async Task AddProductAsync(Product product) 
         {
             if (product == null)
             {
@@ -53,7 +53,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync() // Додано Async
+        public async Task<IEnumerable<Product>> GetAllProductsAsync() 
         {
             try
             {
@@ -66,7 +66,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Product> GetProductByIdAsync(int id) // Додано Async
+        public async Task<Product> GetProductByIdAsync(int id) 
         {
             try
             {
@@ -79,7 +79,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId) // Додано Async
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId) 
         {
             try
             {
@@ -92,7 +92,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task RemoveProductAsync(int id) // Додано Async
+        public async Task RemoveProductAsync(int id) 
         {
             var product = await GetProductByIdAsync(id);
             if (product != null)
@@ -116,7 +116,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Product> GetProductByNameAsync(string title) // Додано Async
+        public async Task<Product> GetProductByNameAsync(string title) 
         {
             try
             {
@@ -129,7 +129,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task UpdateProductAsync(Product product) // Додано Async
+        public async Task UpdateProductAsync(Product product) 
         {
             if (product == null)
             {
@@ -149,25 +149,67 @@ namespace ProductServiceApi.Models
                 throw new Exception("Error occurred while updating product in database", ex);
             }
         }
+        /// will come in handy
+        //public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize)
+        //{
+        //    try
+        //    {
+        //        var totalCount = await _context.Products.CountAsync();
+        //        var products = await _context.Products
+        //            .Skip((pageNumber - 1) * pageSize)
+        //            .Take(pageSize)
+        //            .ToListAsync();
 
-        public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize) // Додано Async
+        //        _logger.LogInformation("Retrieved page {PageNumber} of products with page size {PageSize}", pageNumber, pageSize);
+        //        return (products, totalCount);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, $"Error occurred while retrieving products page {pageNumber} with size {pageSize}");
+        //        throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize}", ex);
+        //    }
+        //}
+
+        public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize, int categoryId)
         {
             try
             {
-                var totalCount = await _context.Products.CountAsync();
-                var products = await _context.Products
-                    .Skip((pageNumber - 1) * pageSize)
+                if (categoryId <= 0)
+                {
+                    throw new ArgumentException("Invalid categoryId", nameof(categoryId));
+                }
+
+                var query = _context.Products
+                    .Include(p => p.Category)
+                    .Where(p => p.CategoryId == categoryId || p.Category.ParentCategoryId == categoryId);
+
+                var totalCount = await query.CountAsync();
+
+                var skipCount = (pageNumber - 1) * pageSize;
+                if (skipCount >= totalCount)
+                {
+                    return (new List<Product>(), totalCount);
+                }
+
+                var products = await query
+                    .Skip(skipCount)
                     .Take(pageSize)
                     .ToListAsync();
 
-                _logger.LogInformation("Retrieved page {PageNumber} of products with page size {PageSize}", pageNumber, pageSize);
+                _logger.LogInformation("Retrieved {Count} products on page {PageNumber} with page size {PageSize} for category {CategoryId}",
+                    products.Count, pageNumber, pageSize, categoryId);
+
                 return (products, totalCount);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving products page {pageNumber} with size {pageSize}");
-                throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize}", ex);
+                _logger.LogError(ex, $"Error occurred while retrieving products page {pageNumber} with size {pageSize} for category {categoryId}");
+                throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize} for category {categoryId}", ex);
             }
         }
+
     }
+
+
 }
+

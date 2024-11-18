@@ -149,7 +149,7 @@ namespace ProductServiceApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CategoryDto>> AddCategoryAsync([FromBody] CategoryDto categoryDto)
-        {
+        { //microService Category Add
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -185,7 +185,7 @@ namespace ProductServiceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
        // [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] CategoryDto categoryDto)
-        {
+        {//microService Category update
             if (id != categoryDto.Id)
             {
                 return BadRequest();
@@ -215,7 +215,7 @@ namespace ProductServiceApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
        // [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCategoryAsync(int id)
-        {
+        {//microService Category Delete
             var category = await _service.GetCategoryByIdAsync(id);
             if (category == null)
             {

@@ -12,6 +12,6 @@ namespace ProductServiceApi.Dtos
 
         public int? ParentCategoryId { get; set; }
 
-        public string ParentCategoryName { get; set; }
+        public string? ParentCategoryName { get; set; }
     }
 }

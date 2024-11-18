@@ -19,7 +19,7 @@ namespace ProductServiceApi.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddRatingAsync(Rating rating) // Додано Async
+        public async Task AddRatingAsync(Rating rating) 
         {
             if (rating == null)
             {
@@ -40,7 +40,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Rating>> GetAllRatingsAsync() // Додано Async
+        public async Task<IEnumerable<Rating>> GetAllRatingsAsync() 
         {
             try
             {
@@ -53,7 +53,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Rating> GetRatingByIdAsync(int id) // Додано Async
+        public async Task<Rating> GetRatingByIdAsync(int id) 
         {
             try
             {
@@ -66,7 +66,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task RemoveRatingAsync(int id) // Додано Async
+        public async Task RemoveRatingAsync(int id) 
         {
             var rating = await GetRatingByIdAsync(id);
             if (rating != null)
@@ -91,7 +91,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task UpdateRatingAsync(Rating rating) // Додано Async
+        public async Task UpdateRatingAsync(Rating rating) 
         {
             if (rating == null)
             {

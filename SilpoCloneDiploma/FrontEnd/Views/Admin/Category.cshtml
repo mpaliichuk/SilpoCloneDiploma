@@ -49,13 +49,13 @@
 </div>
 
 <script>
-   
+
     let allCategories = @Html.Raw(Json.Serialize(Model));
-    let filteredCategories = [...allCategories]; 
+    let filteredCategories = [...allCategories];
 
     function updateCategoryList(categories) {
         const categoryList = document.getElementById("category-list");
-        categoryList.innerHTML = ""; 
+        categoryList.innerHTML = "";
 
         if (categories.length === 0) {
             categoryList.innerHTML = "<li>Немає категорій, що відповідають пошуковому запиту.</li>";
@@ -63,10 +63,10 @@
             categories.forEach(category => {
                 const li = document.createElement("li");
                 li.innerHTML = `
-                                <span>ID:${category.id} - ${category.name}</span>
-                        <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId})">Редагувати</button>
-                        <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
-                    `;
+                                    <span>ID:${category.id} - ${category.name}</span>
+                            <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId})">Редагувати</button>
+                            <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
+                        `;
                 categoryList.appendChild(li);
             });
         }
@@ -81,7 +81,7 @@
             filteredCategories = allCategories.filter(category => category.name.toLowerCase().includes(searchTerm));
         }
 
-        updateCategoryList(filteredCategories); 
+        updateCategoryList(filteredCategories);
     }
 
     function editCategory(id, name, parentId) {
@@ -107,19 +107,19 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        updateCategoryList(filteredCategories); 
+        updateCategoryList(filteredCategories);
     });
 
     document.addEventListener("DOMContentLoaded", function () {
         var successMessage = document.getElementById("success-message");
         if (successMessage) {
-            
+            // Покажемо повідомлення
             successMessage.style.display = "block";
 
-          
+            // Через 3 секунди ховаємо його
             setTimeout(function () {
                 successMessage.style.display = "none";
-            }, 3000); 
+            }, 3000);
         }
     });
 </script>
@@ -158,7 +158,6 @@
 
     .editBtn, .deleteBtn {
         margin-left: 10px;
-        
     }
 
     .form-group {
@@ -172,7 +171,6 @@
     }
 
     .btn {
-        
     }
 
     .search-container {
@@ -192,9 +190,6 @@
         border-radius: 20px;
         font-size: 16px;
         opacity: 0.7;
-        
     }
-
-       
 
 </style>

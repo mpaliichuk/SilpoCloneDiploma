@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
 using ProductServiceApi.Dtos;
-using ProductServiceApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace ProductServiceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _service;
@@ -24,9 +23,9 @@ namespace ProductServiceApi.Controllers
 
         public ProductController(IProductRepository service, IRatingRepository serviceRating, ILogger<ProductController> logger)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
-            _serviceRating = serviceRating ?? throw new ArgumentNullException(nameof(serviceRating));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _service = service ?? throw new ArgumentNullException(nameof(service), "Product service cannot be null");
+            _serviceRating = serviceRating ?? throw new ArgumentNullException(nameof(serviceRating), "Rating service cannot be null");
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null");
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace ProductServiceApi.Controllers
         [HttpGet("random-same-category/{productId}/{categoryId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetRandomProductsByCategoryAsync(int productId ,int categoryId)
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetRandomProductsByCategoryAsync(int productId, int categoryId)
         {
             var products = await _service.GetAllProductsAsync();
 
@@ -252,25 +251,35 @@ namespace ProductServiceApi.Controllers
         [HttpGet("page/{pageNumber}/size/{pageSize}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [AllowAnonymous]
-        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize)
-        {
-            var (products, totalCount) = await _service.GetProductsByPageAsync(pageNumber, pageSize);
-            var productDtos = products.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Title = p.Title,
-                ProductComposition = p.ProductComposition,
-                GeneralInformation = p.GeneralInformation,
-                ImageUrls = p.ImageUrls,
-                Availability = (Dtos.Availability)p.Availability,
-                Count = p.Count,
-                Sale = p.Sale,
-                Price = p.Price,
-                CategoryId = p.CategoryId
-            });
 
-            _logger.LogInformation($"Retrieved page {pageNumber} of products with page size {pageSize}");
-            return Ok(new { Products = productDtos, TotalCount = totalCount });
+
+        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize, int categoryId)
+        {
+            try
+            {
+                var (products, totalCount) = await _service.GetProductsByPageAsync(pageNumber, pageSize, categoryId);
+
+                var productDtos = products.Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    ProductComposition = p.ProductComposition,
+                    GeneralInformation = p.GeneralInformation,
+                    ImageUrls = p.ImageUrls,
+                    Availability = (Dtos.Availability)p.Availability,
+                    Count = p.Count,
+                    Sale = p.Sale,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId
+                });
+
+                return Ok(new { Products = productDtos, TotalCount = totalCount });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving products.");
+                return StatusCode(500, "An error occurred while retrieving products.");
+            }
         }
 
         /// <summary>
@@ -280,7 +289,7 @@ namespace ProductServiceApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult<ProductDto>> AddProductAsync([FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -338,7 +347,7 @@ namespace ProductServiceApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "Administrator")]
+        // [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateProductAsync(int id, [FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -386,7 +395,7 @@ namespace ProductServiceApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Administrator")]
+        // [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
             try
@@ -413,46 +422,5 @@ namespace ProductServiceApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while removing the product.");
             }
         }
-
-        /// <summary>
-        /// Get products by category or subcategory.
-        /// </summary>
-        /// <param name="categoryId">The ID of the main category or subcategory.</param>
-        /// <returns>List of products in the specified category or its subcategories.</returns>
-        [HttpGet("by-category/{categoryId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsByCategoryAsync(int categoryId)
-        {
-            var products = await _service.GetAllProductsAsync();
-
-            var filteredProducts = products
-                .Where(p => p.CategoryId == categoryId || p.Category?.ParentCategoryId == categoryId)
-                .ToList();
-
-            if (!filteredProducts.Any())
-            {
-                _logger.LogWarning($"No products found for category ID {categoryId}.");
-                return NotFound($"No products found for category ID {categoryId}.");
-            }
-
-            var productDtos = filteredProducts.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Title = p.Title,
-                ProductComposition = p.ProductComposition,
-                GeneralInformation = p.GeneralInformation,
-                ImageUrls = p.ImageUrls,
-                Availability = (Dtos.Availability)p.Availability,
-                Count = p.Count,
-                Sale = p.Sale,
-                Price = p.Price,
-                CategoryId = p.CategoryId
-            });
-
-            return Ok(productDtos);
-        }
-
     }
 }

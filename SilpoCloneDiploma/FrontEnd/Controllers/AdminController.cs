@@ -68,7 +68,7 @@ public class AdminController : Controller
     /// </summary>
     [HttpGet]
     public async Task<IActionResult> Category()
-    {
+    {//microService Admin Get
         var categories = await _productCategoryRatingService.GetCategoriesAsync();
 
         // Перевірка на null або порожність категорій
@@ -86,7 +86,7 @@ public class AdminController : Controller
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> Category(CategoryDto categoryDto)
-    {
+    {//microService Category post
         if (!ModelState.IsValid)
         {
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
@@ -112,13 +112,22 @@ public class AdminController : Controller
 
 
     /// <summary>
-    /// Handle category deletion
+    /// Handle category delete
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> DeleteCategory(int id)
-    {
-        await _productCategoryRatingService.DeleteCategoryAsync(id);
-        return RedirectToAction("CategoryManagement");
+    {//microService Category Delete
+        var success = await _productCategoryRatingService.DeleteCategoryAsync(id);
+        if (success)
+        {
+            TempData["SuccessMessage"] = "Категорія успішно видалена";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Помилка при видаленні категорії";
+        }
+
+        return RedirectToAction("Index");
     }
 
     /// <summary>
