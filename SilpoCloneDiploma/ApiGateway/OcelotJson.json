@@ -62,6 +62,22 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
+      "Routes": [
+        {
+          "DownstreamPathTemplate": "/api/product/by-category/{categoryId}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "localhost",
+              "Port": 5296
+            }
+          ],
+          "UpstreamPathTemplate": "/api/gateway/product/by-category/{categoryId}",
+          "UpstreamHttpMethod": [ "GET" ]
+        }
+      ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Product/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
