@@ -413,5 +413,46 @@ namespace ProductServiceApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while removing the product.");
             }
         }
+
+        /// <summary>
+        /// Get products by category or subcategory.
+        /// </summary>
+        /// <param name="categoryId">The ID of the main category or subcategory.</param>
+        /// <returns>List of products in the specified category or its subcategories.</returns>
+        [HttpGet("by-category/{categoryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsByCategoryAsync(int categoryId)
+        {
+            var products = await _service.GetAllProductsAsync();
+
+            var filteredProducts = products
+                .Where(p => p.CategoryId == categoryId || p.Category?.ParentCategoryId == categoryId)
+                .ToList();
+
+            if (!filteredProducts.Any())
+            {
+                _logger.LogWarning($"No products found for category ID {categoryId}.");
+                return NotFound($"No products found for category ID {categoryId}.");
+            }
+
+            var productDtos = filteredProducts.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Title = p.Title,
+                ProductComposition = p.ProductComposition,
+                GeneralInformation = p.GeneralInformation,
+                ImageUrls = p.ImageUrls,
+                Availability = (Dtos.Availability)p.Availability,
+                Count = p.Count,
+                Sale = p.Sale,
+                Price = p.Price,
+                CategoryId = p.CategoryId
+            });
+
+            return Ok(productDtos);
+        }
+
     }
 }
