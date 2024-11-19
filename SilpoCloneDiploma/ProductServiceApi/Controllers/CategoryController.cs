@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProductServiceApi.Controllers
 {
-    [Route("gateway/category")]
+    [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
     public class CategoryController : ControllerBase

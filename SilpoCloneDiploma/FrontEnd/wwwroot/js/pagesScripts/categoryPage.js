@@ -4,7 +4,7 @@ var newPage = true;
 var pageChangeSymbol = "plus";
 
 GetCategoryInfo(document.getElementById("categoryId").value);
-GetProducts();
+GetProducts(document.getElementById("categoryId").value);
 
 async function GetCategoryInfo(categoryId) {
     try {
@@ -89,11 +89,11 @@ async function AddProductInCart(productId, productCount, userId) {
         throw error;
     }
 }
-async function GetProducts() {
+async function GetProducts(categoryId) {
     var productsOnPage = [];
 
     try {
-        const response = await fetch("http://localhost:5152/gateway/GetPage/" + 1 + "/" + 18, {
+        const response = await fetch("http://localhost:5152/gateway/GetPage/" + 1 + "/" + 18 + "/" + categoryId, {
             method: "GET",
             headers: {
                 "Accept": "application/json"

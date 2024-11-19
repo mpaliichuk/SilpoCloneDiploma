@@ -50,7 +50,7 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}",
+      "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}/category/{categoryId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -58,24 +58,8 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}",
+      "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}/{categoryId}",
       "UpstreamHttpMethod": [ "GET" ]
-    },
-    {
-      "Routes": [
-        {
-          "DownstreamPathTemplate": "/api/product/by-category/{categoryId}",
-          "DownstreamScheme": "http",
-          "DownstreamHostAndPorts": [
-            {
-              "Host": "localhost",
-              "Port": 5296
-            }
-          ],
-          "UpstreamPathTemplate": "/api/gateway/product/by-category/{categoryId}",
-          "UpstreamHttpMethod": [ "GET" ]
-        }
-      ]
     },
     {
       "DownstreamPathTemplate": "/api/Product/{id}",
@@ -91,7 +75,7 @@
     },
     ////////////////Category///////////////////
     {
-      "DownstreamPathTemplate": "/api/category",
+      "DownstreamPathTemplate": "/api/categorie",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -99,7 +83,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/category",
+      "UpstreamPathTemplate": "/gateway/Categories",
       "UpstreamHttpMethod": [ "POST", "GET" ]
     },
     {
@@ -115,7 +99,19 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamPathTemplate": "/api/category/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/CategoryById/{id}",
+      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/category/getParent/{parentId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
