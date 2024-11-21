@@ -1,10 +1,12 @@
 ﻿var currentPage = 1;
-var pageSize = 18;
+/*var pageSize = 18;*/
+var pageSize = 6;
 var newPage = true;
 var pageChangeSymbol = "plus";
+var categoryId = document.getElementById("categoryId").value;
 
-GetCategoryInfo(document.getElementById("categoryId").value);
-GetProducts(document.getElementById("categoryId").value);
+GetCategoryInfo(categoryId);
+GetProducts(categoryId);
 
 async function GetCategoryInfo(categoryId) {
     try {
@@ -93,7 +95,7 @@ async function GetProducts(categoryId) {
     var productsOnPage = [];
 
     try {
-        const response = await fetch("http://localhost:5152/gateway/GetPage/" + 1 + "/" + 18 + "/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/GetPage/" + currentPage + "/" + pageSize + "/" + categoryId, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -113,7 +115,7 @@ async function GetProducts(categoryId) {
     }
     if (newPage)
         document.getElementById('subProductsDiv').innerText = '';
-    for (var i = 0; i < 18; i++) {
+    for (var i = 0; i < pageSize; i++) {
         const productCard = createProductCard({
             productIconSrc: productsOnPage.products[i].imageUrls[0],
             productName: productsOnPage.products[i].title,
@@ -275,14 +277,13 @@ const buttonNext = document.getElementById('buttonNext');
 
 moreItemsBtn.addEventListener("click", function () {
     newPage = false;
-    GetProducts();
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
+    GetProducts(categoryId);
 });
 
 buttonNext.addEventListener("click", function () {
     newPage = true;
-    GetProducts();
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
     window.scrollTo({
@@ -290,11 +291,11 @@ buttonNext.addEventListener("click", function () {
         left: 0,
         behavior: 'smooth'
     });
+    GetProducts(categoryId);
 });
 
 buttonPrev.addEventListener("click", function () {
     newPage = true;
-    GetProducts();
     pageChangeSymbol = "minus";
     changePageText(pageChangeSymbol);
     window.scrollTo({
@@ -302,6 +303,7 @@ buttonPrev.addEventListener("click", function () {
         left: 0,
         behavior: 'smooth'
     });
+    GetProducts(categoryId);
 });
 
 function changePageText(pageChangeSymbol) {
@@ -471,3 +473,111 @@ function toggleDropdown(idFilter) {
     //        info.classList.toggle('active');
     //}
 }
+
+
+//Slider
+const slider = document.querySelector(".range-slider");
+const progress = slider.querySelector(".progress");
+const minPriceInput = slider.querySelector(".min-price");
+const maxPriceInput = slider.querySelector(".max-price");
+const minInput = slider.querySelector(".min-input");
+const maxInput = slider.querySelector(".max-input");
+
+const updateProgress = () => {
+    const minValue = parseInt(minInput.value);
+    const maxValue = parseInt(maxInput.value);
+
+    const range = maxInput.max - minInput.min;
+    const valueRange = maxValue - minValue;
+    const width = (valueRange / range) * 100;
+    const minOffset = ((minValue - minInput.min) / range) * 100;
+
+    progress.style.width = width + "%";
+    progress.style.left = minOffset + "%";
+
+    minPriceInput.value = minValue;
+    maxPriceInput.value = maxValue;
+};
+
+const updateRange = (event) => {
+    const input = event.target;
+
+    let min = parseInt(minPriceInput.value);
+    let max = parseInt(maxPriceInput.value);
+
+    if (input === minPriceInput && min > max) {
+        max = min;
+        maxPriceInput.value = max;
+    } else if (input === maxPriceInput && max < min) {
+        min = max;
+        minPriceInput.value = min;
+    }
+
+    minInput.value = min;
+    maxInput.value = max;
+
+    updateProgress();
+};
+
+minPriceInput.addEventListener("input", updateRange);
+maxPriceInput.addEventListener("input", updateRange);
+
+minInput.addEventListener("input", () => {
+    if (parseInt(minInput.value) >= parseInt(maxInput.value)) {
+        maxInput.value = minInput.value;
+    }
+    updateProgress();
+});
+
+maxInput.addEventListener("input", () => {
+    if (parseInt(maxInput.value) <= parseInt(minInput.value)) {
+        minInput.value = maxInput.value;
+    }
+    updateProgress();
+});
+
+let isDragging = false;
+let startOffsetX;
+
+progress.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+
+    isDragging = true;
+
+    startOffsetX = e.clientX - progress.getBoundingClientRect().left;
+
+    slider.classList.toggle("dragging", isDragging);
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        const sliderRect = slider.getBoundingClientRect();
+        const progressWidth = parseFloat(progress.style.width || 0);
+
+        let newLeft =
+            ((e.clientX - sliderRect.left - startOffsetX) / sliderRect.width) * 100;
+
+        newLeft = Math.min(Math.max(newLeft, 0), 100 - progressWidth);
+
+        progress.style.left = newLeft + "%";
+
+        const range = maxInput.max - minInput.min;
+        const newMin = Math.round((newLeft / 100) * range) + parseInt(minInput.min);
+        const newMax = newMin + parseInt(maxInput.value) - parseInt(minInput.value);
+
+        minInput.value = newMin;
+        maxInput.value = newMax;
+
+        updateProgress();
+    }
+    slider.classList.toggle("dragging", isDragging);
+});
+
+document.addEventListener("mouseup", () => {
+    if (isDragging) {
+        isDragging = false;
+    }
+    slider.classList.toggle("dragging", isDragging);
+});
+
+updateProgress();
