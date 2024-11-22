@@ -45,17 +45,23 @@
     align-items: center;
     padding: 14px 40px;
     gap: 8px;
-    width: 210px;
+    width: 250px;
     height: 55px;
-    border: 0px;
-    background: #4CAF50;
+    border: 3px solid #CBCBCB;
+    background: #FFFEFE;
     border-radius: 30px;
     /*Text*/
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
     text-align: center;
+    color: #1E1E1E;
+}
+
+.moreItemsDiv:hover {
+    background: #4CAF50;
     color: #FFFEFE;
+    border: 3px solid #4CAF50;
 }
 
 #pagesControlDiv {
@@ -64,15 +70,21 @@
     align-items: center;
     justify-content: space-between;
     padding: 0px;
-    gap: 20px;
+    gap: 30px;
     width: auto;
     height: auto;
 }
 
-.pageControlButtons{
-    border:0px;
+.pageControlButtons {
+    border: 0px;
     background: none;
-    font-size:30px;
+    font-size: 30px;
+    color: #909090;
+    transform: scaleY(1.4);
+}
+
+.pageControlButtons:hover {
+    color: #1E1E1E;
 }
 
 .pages{
@@ -80,21 +92,25 @@
     justify-content:center;
     align-items:center;
     gap:5%;
+    padding-bottom:1.5px;
 }
 
-.pageButton, .lastPageButton, .selectorButton {
+.pageButton, .lastPageButton, .selectorButtonLeft, .selectorButtonRight, .selectedPage {
     border: 0px;
     background: none;
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
+    font-size: 20px;
     text-align: center;
-    color: #1E1E1E;
+    color: #909090;
 }
 
-.selectorButton {
+.selectorButtonLeft, .selectorButtonRight {
     cursor: default;
+}
+
+.selectedPage {
+    color: #1E1E1E;
 }
 
 .breadcrumb {
