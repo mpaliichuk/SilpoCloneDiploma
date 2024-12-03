@@ -511,3 +511,203 @@ window.addEventListener("click", function(event) {
     }
 });
 
+//Register/Login backend
+const apiUrl = "http://localhost:5145/api/Auth";
+
+const loginButton = document.querySelector(".login-button");
+const registerButton = document.querySelector("#registerPopup .login-button");
+
+const loginErrorDiv = document.createElement("div");
+loginErrorDiv.style.color = "red";
+loginErrorDiv.style.marginTop = "10px";
+loginErrorDiv.style.display = "none";
+loginButton.insertAdjacentElement("afterend", loginErrorDiv);
+
+const registerErrorDiv = document.createElement("div");
+registerErrorDiv.style.color = "red";
+registerErrorDiv.style.marginTop = "10px";
+registerErrorDiv.style.display = "none";
+registerButton.insertAdjacentElement("afterend", registerErrorDiv);
+
+showRegisterLink.addEventListener("click", function () {
+    document.getElementById("loginPopup").style.display = "none";
+    document.getElementById("registerPopup").style.display = "flex";
+});
+
+showLoginLink.addEventListener("click", function () {
+    document.getElementById("registerPopup").style.display = "none";
+    document.getElementById("loginPopup").style.display = "flex";
+});
+
+registerButton.addEventListener("click", async function () {
+    const name = document.getElementById("registerName").value;
+    const email = document.getElementById("registerEmail").value;
+    const password = document.getElementById("registerPassword").value;
+
+    const data = {
+        name: name,
+        email: email,
+        password: password,
+        surname: "TestSurname",
+        phoneNumber: "0123456789",
+    };
+
+    try {
+        const response = await fetch(`${apiUrl}/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log("Register Response:", result);
+
+        if (response.ok) {
+            alert("Registration successful! Please log in.");
+            closeRegisterPopup();
+        } else {
+            clearRegisterErrors();
+
+            if (result.errors) {
+                for (const [field, messages] of Object.entries(result.errors)) {
+                    const errorElement = document.getElementById("registerMessage");
+                    errorElement.textContent += `${field.charAt(0).toUpperCase() + field.slice(1)}: ${messages.join(', ')}` + "\n";
+                    errorElement.style.display = "block";
+                }
+            } else {
+                document.getElementById("registerMessage").textContent = result.message || "Registration failed.";
+                document.getElementById("registerMessage").style.display = "block";
+            }
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("registerMessage").textContent = "Network error during registration.";
+        document.getElementById("registerMessage").style.display = "block";
+    }
+});
+
+function clearRegisterErrors() {
+    document.getElementById("registerMessage").textContent = "";
+    document.getElementById("registerMessage").style.display = "none";
+}
+
+loginButton.addEventListener("click", async function () {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const data = {
+        email: email,
+        password: password
+    };
+
+    try {
+        loginErrorDiv.style.display = "none";
+        loginErrorDiv.textContent = "";
+
+        const response = await fetch(`${apiUrl}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log("Login Response:", result);
+
+        if (response.ok) {
+            localStorage.setItem("userName", result.user.name);
+
+            closeLoginPopup();
+            overlayPopUp.style.display = 'none';
+
+            const profileSpan = document.getElementById("accountName");
+            if (profileSpan) {
+                profileSpan.textContent = result.user.name || "Акаунт";
+            }
+        } else {
+            loginErrorDiv.textContent = result.message || "Помилка входу. Перевірте емейл та пароль.";
+            loginErrorDiv.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        loginErrorDiv.textContent = "Помилка мережі при вході.";
+        loginErrorDiv.style.display = "block";
+    }
+});
+
+function displayLoginError(message) {
+    loginErrorDiv.textContent = message;
+    loginErrorDiv.style.display = "block";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const savedName = localStorage.getItem("userName");
+    if (savedName) {
+        const profileSpan = document.getElementById("accountName");
+        if (profileSpan) {
+            profileSpan.textContent = savedName;
+        }
+    }
+});
+
+function closeRegisterPopup() {
+    document.getElementById("registerPopup").style.display = "none";
+    document.getElementById("overlayPopUp").style.display = "none";
+}
+
+function closeLoginPopup() {
+    document.getElementById("loginPopup").style.display = "none";
+    document.getElementById("overlayPopUp").style.display = "none";
+}
+
+document.getElementById("loginButton").addEventListener("click", loginUser);
+document.getElementById("registerButton").addEventListener("click", registerUser);
+
+async function loginUser() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const response = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        const userName = data.name;
+
+        closeLoginPopup();
+
+        const profileSpan = document.querySelector("#headerDiv2 span");
+        if (profileSpan) {
+            profileSpan.textContent = userName;
+        }
+    } else {
+        const errorData = await response.json();
+        loginErrorDiv.textContent = errorData.message || "Не вдалося увійти.";
+        loginErrorDiv.style.display = "block";
+    }
+}
+
+function displayLoginError(message) {
+    const loginErrorElement = document.getElementById("loginError");
+    if (!loginErrorElement) {
+        const errorElement = document.createElement("div");
+        errorElement.id = "loginError";
+        errorElement.textContent = message;
+        errorElement.style.color = "red";
+        errorElement.style.marginTop = "10px";
+        document.querySelector(".login-form").appendChild(errorElement);
+    } else {
+        loginErrorElement.textContent = message;
+    }
+}
