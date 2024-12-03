@@ -566,6 +566,7 @@ registerButton.addEventListener("click", async function () {
 
         if (response.ok) {
             alert("Registration successful! Please log in.");
+            overlayPopUp.style.display = 'none';
             closeRegisterPopup();
         } else {
             clearRegisterErrors();
@@ -618,6 +619,7 @@ loginButton.addEventListener("click", async function () {
         console.log("Login Response:", result);
 
         if (response.ok) {
+            overlayPopUp.style.display = 'none';
             localStorage.setItem("userName", result.user.name);
 
             closeLoginPopup();
