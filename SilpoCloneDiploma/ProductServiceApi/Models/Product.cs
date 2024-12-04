@@ -33,7 +33,7 @@ namespace ProductServiceApi.Models
 
         public double Count { get; set; }
 
-        public double? Sale { get; set; }
+        public double? Discount { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
         [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number")]

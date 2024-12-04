@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace ProductServiceApi.Controllers
 {
@@ -47,7 +48,7 @@ namespace ProductServiceApi.Controllers
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
-                Sale = p.Sale,
+                Discount = p.Discount,
                 Price = p.Price,
                 CategoryId = p.CategoryId
             });
@@ -94,7 +95,7 @@ namespace ProductServiceApi.Controllers
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
-                Sale = p.Sale,
+                Discount = p.Discount,
                 Price = p.Price,
                 CategoryId = p.CategoryId
             });
@@ -127,7 +128,7 @@ namespace ProductServiceApi.Controllers
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
-                Sale = p.Sale,
+                Discount = p.Discount,
                 Price = p.Price,
                 CategoryId = p.CategoryId
             });
@@ -143,7 +144,7 @@ namespace ProductServiceApi.Controllers
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetRandomDiscountedProductsAsync()
         {
             var products = await _service.GetAllProductsAsync();
-            var discountedProducts = products.Where(p => p.Sale > 0);
+            var discountedProducts = products.Where(p => p.Discount > 0);
 
             var randomProducts = discountedProducts
                 .OrderBy(p => Guid.NewGuid())
@@ -159,7 +160,7 @@ namespace ProductServiceApi.Controllers
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
                 Count = p.Count,
-                Sale = p.Sale,
+                Discount = p.Discount,
                 Price = p.Price,
                 CategoryId = p.CategoryId
             });
@@ -200,7 +201,7 @@ namespace ProductServiceApi.Controllers
                 ImageUrls = product.ImageUrls,
                 Availability = (Dtos.Availability)product.Availability,
                 Count = product.Count,
-                Sale = product.Sale,
+                Discount = product.Discount,
                 Price = product.Price,
                 CategoryId = product.CategoryId,
                 AverageRating = averageRating,
@@ -214,7 +215,7 @@ namespace ProductServiceApi.Controllers
         /// Get a product by name.
         /// </summary>
         /// <param name="title">The name of the product.</param>
-        [HttpGet("title/{title}")]
+        [HttpGet("name/{title}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
@@ -235,7 +236,7 @@ namespace ProductServiceApi.Controllers
                 ImageUrls = product.ImageUrls,
                 Availability = (Dtos.Availability)product.Availability,
                 Count = product.Count,
-                Sale = product.Sale,
+                Discount = product.Discount,
                 Price = product.Price,
                 CategoryId = product.CategoryId
             };
@@ -251,8 +252,6 @@ namespace ProductServiceApi.Controllers
         [HttpGet("page/{pageNumber}/size/{pageSize}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [AllowAnonymous]
-
-
         public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize, int categoryId)
         {
             try
@@ -268,7 +267,7 @@ namespace ProductServiceApi.Controllers
                     ImageUrls = p.ImageUrls,
                     Availability = (Dtos.Availability)p.Availability,
                     Count = p.Count,
-                    Sale = p.Sale,
+                    Discount = p.Discount,
                     Price = p.Price,
                     CategoryId = p.CategoryId
                 });
@@ -281,6 +280,45 @@ namespace ProductServiceApi.Controllers
                 return StatusCode(500, "An error occurred while retrieving products.");
             }
         }
+
+
+        /// <summary>
+        /// Get products with pagination, without category filter.
+        /// </summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        [HttpGet("page/{pageNumber}/size/{pageSize}/no-category")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetProductsByPageWithoutCategoryAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var (products, totalCount) = await _service.GetProductsByPageAsync(pageNumber, pageSize); 
+
+                var productDtos = products.Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    ProductComposition = p.ProductComposition,
+                    GeneralInformation = p.GeneralInformation,
+                    ImageUrls = p.ImageUrls,
+                    Availability = (Dtos.Availability)p.Availability,
+                    Count = p.Count,
+                    Discount = p.Discount,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId
+                });
+
+                return Ok(new { Products = productDtos, TotalCount = totalCount });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving products.");
+                return StatusCode(500, "An error occurred while retrieving products.");
+            }
+        }
+
 
         /// <summary>
         /// Add a new product.
@@ -308,7 +346,7 @@ namespace ProductServiceApi.Controllers
                     ImageUrls = productDto.ImageUrls,
                     Availability = (Models.Availability)productDto.Availability,
                     Count = productDto.Count,
-                    Sale = productDto.Sale,
+                    Discount = productDto.Discount,
                     Price = productDto.Price,
                     CategoryId = productDto.CategoryId
                 };
@@ -324,7 +362,7 @@ namespace ProductServiceApi.Controllers
                     ImageUrls = product.ImageUrls,
                     Availability = (Dtos.Availability)product.Availability,
                     Count = product.Count,
-                    Sale = product.Sale,
+                    Discount = product.Discount,
                     Price = product.Price,
                     CategoryId = product.CategoryId
                 };
@@ -372,7 +410,7 @@ namespace ProductServiceApi.Controllers
                 existingProduct.ImageUrls = productDto.ImageUrls;
                 existingProduct.Availability = (Models.Availability)productDto.Availability;
                 existingProduct.Count = productDto.Count;
-                existingProduct.Sale = productDto.Sale;
+                existingProduct.Discount = productDto.Discount;
                 existingProduct.Price = productDto.Price;
                 existingProduct.CategoryId = productDto.CategoryId;
 
@@ -422,5 +460,28 @@ namespace ProductServiceApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred while removing the product.");
             }
         }
+        /// <summary>
+        /// Get the total count of products.
+        /// </summary>
+        /// <returns>The total number of products.</returns>
+        [HttpGet("count")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        [AllowAnonymous]
+        public async Task<ActionResult<int>> GetProductsCountAsync()
+        {
+            try
+            {
+                var products = await _service.GetAllProductsAsync();  // Fetch all products
+                var productCount = products.Count();  // Count the number of products
+
+                return Ok(productCount);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching product count: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching the product count.");
+            }
+        }
+
     }
 }

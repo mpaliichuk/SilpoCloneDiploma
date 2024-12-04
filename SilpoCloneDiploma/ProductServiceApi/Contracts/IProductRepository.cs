@@ -13,6 +13,7 @@ namespace ProductServiceApi.Contracts
         Task RemoveProductAsync(int id); 
         Task UpdateProductAsync(Product product); 
         Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize, int categoryId); 
+        Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize); 
         Task<Product> GetProductByNameAsync(string name); 
     }
 }

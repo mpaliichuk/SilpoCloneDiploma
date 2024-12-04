@@ -20,7 +20,7 @@ namespace ProductServiceApi.Models
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task AddProductAsync(Product product) 
+        public async Task AddProductAsync(Product product)
         {
             if (product == null)
             {
@@ -53,7 +53,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync() 
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
             try
             {
@@ -66,7 +66,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Product> GetProductByIdAsync(int id) 
+        public async Task<Product> GetProductByIdAsync(int id)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId) 
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task RemoveProductAsync(int id) 
+        public async Task RemoveProductAsync(int id)
         {
             var product = await GetProductByIdAsync(id);
             if (product != null)
@@ -116,11 +116,18 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task<Product> GetProductByNameAsync(string title) 
+        public async Task<Product> GetProductByNameAsync(string title)
         {
             try
             {
-                return await _context.Products.FirstOrDefaultAsync(p => p.Title == title);
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Title == title);
+
+                if (product == null)
+                {
+                    _logger.LogWarning($"No product found with the title: {title}"); 
+                }
+
+                return product;
             }
             catch (Exception ex)
             {
@@ -129,7 +136,8 @@ namespace ProductServiceApi.Models
             }
         }
 
-        public async Task UpdateProductAsync(Product product) 
+
+        public async Task UpdateProductAsync(Product product)
         {
             if (product == null)
             {
@@ -208,8 +216,25 @@ namespace ProductServiceApi.Models
             }
         }
 
+        public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var products = await _context.Products
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var totalCount = await _context.Products.CountAsync();
+
+                return (products, totalCount);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching products.");
+                throw; 
+            }
+        }
     }
-
-
 }
 

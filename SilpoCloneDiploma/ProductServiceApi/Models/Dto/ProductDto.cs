@@ -33,7 +33,7 @@ namespace ProductServiceApi.Dtos
 
             public double Count { get; set; }
 
-            public double? Sale { get; set; }
+            public double? Discount { get; set; }
 
             public double AverageRating { get; set; }
             public int RatingCount { get; set; }
