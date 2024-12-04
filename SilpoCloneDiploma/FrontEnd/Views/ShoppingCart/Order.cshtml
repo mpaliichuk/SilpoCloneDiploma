@@ -98,6 +98,200 @@
         border-radius: 5px;
         border: 1px solid #CBCBCB;
     }
+
+    /* Parent container should be flex */
+    .parent-container {
+        display: flex;
+        justify-content: flex-end;
+        /* Push child to the right */
+    }
+
+    /* Add width to CertificateDetails if needed */
+    .CertificateDetails {
+        width: 50%;
+        /* Adjust width as per your requirement */
+        height: 536px;
+        padding: 28px;
+        border-radius: 36px;
+        border: 3px #FF5722 solid;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 32px;
+        display: flex;
+        padding-top: 30%;
+    }
+
+
+    .Detail {
+        align-self: stretch;
+        justify-content: space-between;
+        align-items: center;
+        display: inline-flex;
+    }
+
+    .DetailLabel {
+        width: 240px;
+        color: #1E1E1E;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 400;
+        word-wrap: break-word;
+    }
+
+    .DetailValue {
+        text-align: right;
+        color: #1E1E1E;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 600;
+        word-wrap: break-word;
+    }
+
+    .DetailValue.total {
+        font-size: 20px;
+    }
+
+    .AdditionalInfo {
+        align-self: stretch;
+        height: 313px;
+        padding-top: 40px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 28px;
+        display: flex;
+    }
+
+    .InfoContent {
+        align-self: stretch;
+        height: 199px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+        display: flex;
+    }
+
+    .InfoTitle {
+        align-self: stretch;
+        height: 22px;
+        color: #1E1E1E;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 600;
+        word-wrap: break-word;
+    }
+
+    .InfoComment {
+        align-self: stretch;
+        padding: 20px;
+        border-radius: 4px;
+        border: 1px #CBCBCB solid;
+        color: #757575;
+        font-size: 14px;
+        font-family: Noto Sans;
+        font-weight: 400;
+        word-wrap: break-word;
+    }
+
+    .PromoNext {
+        align-self: stretch;
+        padding: 12px;
+        background: #FF5722;
+        border-radius: 36px;
+        border: 2px #FFFEFE solid;
+        justify-content: space-between;
+        align-items: center;
+        display: inline-flex;
+    }
+
+    .NextText {
+        width: 310px;
+        height: 22px;
+        text-align: center;
+        color: #FFFEFE;
+        font-size: 16px;
+        font-family: Noto Sans;
+        font-weight: 600;
+        word-wrap: break-word;
+    }
+
+    .popup {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 40px 60px;
+        gap: 40px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 551px;
+        height: 660.64px;
+        background: #FFFEFE;
+        border-radius: 40px;
+        z-index: 1000;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .cancel {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    .popup-content {
+        text-align: center;
+    }
+
+    .ThankYou {
+        font-family: 'Noto Sans';
+        font-size: 40px;
+        font-weight: 600;
+        color: #1E1E1E;
+        margin-bottom: 20px;
+    }
+
+    .promo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 471px;
+        height: 46px;
+        background: #FF5722;
+        border-radius: 36px;
+        cursor: pointer;
+    }
+
+    .ConfirmOrder {
+        font-family: 'Noto Sans';
+        font-size: 16px;
+        font-weight: 600;
+        color: #FFFEFE;
+    }
+
+    .order-success {
+        font-family: 'Noto Sans';
+        font-size: 16px;
+        font-weight: 600;
+        color: #1E1E1E;
+        margin-bottom: 8px;
+    }
+
+    .order-info {
+        font-family: 'Noto Sans';
+        font-size: 14px;
+        font-weight: 400;
+        color: #757575;
+    }
 </style>
 
 
@@ -155,43 +349,46 @@
                 </div>
             </div>
         </div>
-    <div class="Frame427318660"
-        style="align-self: stretch; height: 155px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
-        <div class="Frame427318647"
-            style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-            <div style="color: #FFFEFE; font-size: 18px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                Дата і час
+        <div class="Frame427318660"
+            style="align-self: stretch; height: 155px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
+            <div class="Frame427318647"
+                style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+                <div
+                    style="color: #FFFEFE; font-size: 18px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                    Дата і час
+                </div>
+            </div>
+            <div class="Frame427318659"
+                style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
+                <div class="Frame427318649"
+                    style="display: inline-flex; justify-content: flex-start; align-items: center; gap: 16px;">
+                    <div style="color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 400;">
+                        Виберіть час коли вам зручно було б отримати замовлення:
+                    </div>
+                </div>
+                <div class="Frame427318658"
+                    style="align-self: stretch; display: inline-flex; gap: 20px; justify-content: flex-start; align-items: center;">
+                    <div class="time-option selected" onclick="selectTime(this)">
+                        <img src="~/icons/iconoir_delivery-truck.png">
+                        <div>з 9:00 до 10:30</div>
+                    </div>
+                    <div class="time-option" onclick="selectTime(this)">
+                        <img src="~/icons/iconoir_delivery-truck.png">
+                        <div>з 10:30 до 12:00</div>
+                    </div>
+                    <div class="time-option" onclick="selectTime(this)">
+                        <img src="~/icons/iconoir_delivery-truck.png">
+                        <div>з 12:00 до 13:30</div>
+                    </div>
+                    <div class="time-option" onclick="selectCustomTime(this)">
+                        <div>Інший час</div>
+                        <img src="~/icons/DateCheckmark.png">
+                    </div>
+                    <input type="text" id="customTimeInput" class="custom-time-input" placeholder="з HH:MM до HH:MM"
+                        onblur="finalizeCustomTime()">
+                </div>
             </div>
         </div>
-        <div class="Frame427318659"
-            style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-            <div class="Frame427318649" style="display: inline-flex; justify-content: flex-start; align-items: center; gap: 16px;">
-                <div style="color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 400;">
-                    Виберіть час коли вам зручно було б отримати замовлення:
-                </div>
-            </div>
-            <div class="Frame427318658"
-                style="align-self: stretch; display: inline-flex; gap: 20px; justify-content: flex-start; align-items: center;">
-                <div class="time-option selected" onclick="selectTime(this)">
-                    <img src="~/icons/iconoir_delivery-truck.png">
-                    <div>з 9:00 до 10:30</div>
-                </div>
-                <div class="time-option" onclick="selectTime(this)">
-                    <img src="~/icons/iconoir_delivery-truck.png">
-                    <div>з 10:30 до 12:00</div>
-                </div>
-                <div class="time-option" onclick="selectTime(this)">
-                    <img src="~/icons/iconoir_delivery-truck.png">
-                    <div>з 12:00 до 13:30</div>
-                </div>
-                <div class="time-option" onclick="selectCustomTime(this)">
-                    <div>Інший час</div>
-                    <img src="~/icons/DateCheckmark.png">
-                </div>
-                <input type="text" id="customTimeInput" class="custom-time-input" placeholder="з HH:MM до HH:MM" onblur="finalizeCustomTime()">
-            </div>
-        </div>
-    </div>
         <div class="Frame427318647"
             style="align-self: stretch; padding-top: 10px;  padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
             <div
@@ -271,65 +468,35 @@
                             Карткою кур’єру
                         </div>
                     </div>
+
+                </div>
+                <div class="PromoNext" onclick="showPopup()">
+                    <div class="NextText">Оформити замовлення</div>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+</div>
+<div class="popup" id="orderPopup">
+    <div class="cancel" onclick="closePopup()">
+        <img src="~/icons/ConfirmOrderCancelIcon.png" alt="Location Icon">
+    </div>
+    <div class="popup-content">
+        <img src="~/icons/ConfirmOrderIcon.png" alt="Location Icon">
+        <div class="ThankYou">Дякуємо!</div>
+        <div class="Frame427318845">
+            <div class="order-success">Ваше замовлення успішно оформлено</div>
+            @* <div class="order-info">Інформація про замовлення уже доступна в акаунті користувача</div> *@
+        </div>
+        <a class="promo" style="text-decoration: none;" asp-area="" asp-controller="Home" asp-action="Goodmeal">
+            <div class="ConfirmOrder" onclick="closePopup()">Повернутись до покупок</div>
+        </a>
+    </div>
+</div>
 <script>
-    function updateCharacterCount() {
-        const input = document.getElementById('courierComment');
-        const countDisplay = document.getElementById('characterCount');
-        const currentLength = input.value.length;
-        countDisplay.textContent = `${currentLength}/200`;
-    }
-    function editText() {
-        const textElement = document.getElementById('addressText');
-
-        if (textElement.tagName === 'SPAN') {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = textElement.innerText;
-            input.style.width = "300px"; 
-            input.onblur = function () {
-                textElement.innerText = input.value;
-                input.replaceWith(textElement);
-            };
-            textElement.replaceWith(input);
-            input.focus();
-        }
-    }
-    function selectOption(selectedElement) {
-        const allRadioButtons = document.querySelectorAll('.RadioButton');
-        allRadioButtons.forEach((radioButton) => {
-            radioButton.classList.remove('selected');
-        });
-
-        const selectedRadioButton = selectedElement.querySelector('.RadioButton');
-        selectedRadioButton.classList.add('selected');
-    }
-    function selectTime(element) {
-        document.querySelectorAll('.time-option').forEach(option => option.classList.remove('selected'));
-        element.classList.add('selected');
-        document.getElementById('customTimeInput').style.display = 'none';
-    }
-
-    function selectCustomTime(element) {
-        document.querySelectorAll('.time-option').forEach(option => option.classList.remove('selected'));
-        element.classList.add('selected');
-        const customTimeInput = document.getElementById('customTimeInput');
-        customTimeInput.style.display = 'block';
-        customTimeInput.focus();
-        }
-
-    function finalizeCustomTime() {
-        const customTimeInput = document.getElementById('customTimeInput');
-        const customTimeText = customTimeInput.value;
-            if (customTimeText) {
-                const customTimeOption = document.querySelector('.time-option.selected');
-                customTimeOption.querySelector('div').innerText = customTimeText;
-            }
-            customTimeInput.style.display = 'none';
-        }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 </script>

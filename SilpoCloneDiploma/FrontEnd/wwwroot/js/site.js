@@ -713,3 +713,66 @@ function displayLoginError(message) {
         loginErrorElement.textContent = message;
     }
 }
+
+//OrderPage scripts
+function updateCharacterCount() {
+    const input = document.getElementById('courierComment');
+    const countDisplay = document.getElementById('characterCount');
+    const currentLength = input.value.length;
+    countDisplay.textContent = `${currentLength}/200`;
+}
+function editText() {
+    const textElement = document.getElementById('addressText');
+
+    if (textElement.tagName === 'SPAN') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = textElement.innerText;
+        input.style.width = "300px";
+        input.onblur = function () {
+            textElement.innerText = input.value;
+            input.replaceWith(textElement);
+        };
+        textElement.replaceWith(input);
+        input.focus();
+    }
+}
+function selectOption(selectedElement) {
+    const allRadioButtons = document.querySelectorAll('.RadioButton');
+    allRadioButtons.forEach((radioButton) => {
+        radioButton.classList.remove('selected');
+    });
+
+    const selectedRadioButton = selectedElement.querySelector('.RadioButton');
+    selectedRadioButton.classList.add('selected');
+}
+function selectTime(element) {
+    document.querySelectorAll('.time-option').forEach(option => option.classList.remove('selected'));
+    element.classList.add('selected');
+    document.getElementById('customTimeInput').style.display = 'none';
+}
+
+function selectCustomTime(element) {
+    document.querySelectorAll('.time-option').forEach(option => option.classList.remove('selected'));
+    element.classList.add('selected');
+    const customTimeInput = document.getElementById('customTimeInput');
+    customTimeInput.style.display = 'block';
+    customTimeInput.focus();
+}
+
+function finalizeCustomTime() {
+    const customTimeInput = document.getElementById('customTimeInput');
+    const customTimeText = customTimeInput.value;
+    if (customTimeText) {
+        const customTimeOption = document.querySelector('.time-option.selected');
+        customTimeOption.querySelector('div').innerText = customTimeText;
+    }
+    customTimeInput.style.display = 'none';
+}
+function showPopup() {
+    document.getElementById('orderPopup').style.display = 'flex';
+}
+
+function closePopup() {
+    document.getElementById('orderPopup').style.display = 'none';
+}
