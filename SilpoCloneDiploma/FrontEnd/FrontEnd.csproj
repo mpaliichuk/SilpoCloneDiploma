@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\icons\CategoryIcons\" />
-    <Folder Include="wwwroot\uploadImg\" />
   </ItemGroup>
 
 </Project>

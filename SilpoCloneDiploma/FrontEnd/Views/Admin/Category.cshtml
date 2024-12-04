@@ -12,26 +12,46 @@
 
 <div class="categoryContainer">
     <div class="leftPanel">
-        <h3>Список категорій</h3>
+        <h3 style="color:#4caf50">Список категорій</h3>
 
         <div class="search-container">
-            <input type="text" id="search-input" class="form-control" placeholder="Пошук за назвою категорії" oninput="searchCategories()">
+            <input type="text"
+                id="search-input"
+                class="form-control"
+                   style="border-color:#4caf50"
+                placeholder="Пошук за назвою категорії"
+                oninput="searchCategories()">
         </div>
 
-        <ul id="category-list" class="categoryList">
-            @foreach (var category in Model)
-            {
-                <li>
-                    <span>@category.Id - @category.Name</span>
+       <table id="category-table" class="categoryTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Name</td>
+                <td>@(category.ParentCategoryId ?? 0)</td>
+                <td>
                     <button class="editBtn" onclick="editCategory(@category.Id, '@category.Name', @category.ParentCategoryId)">Редагувати</button>
                     <button class="deleteBtn" onclick="deleteCategory(@category.Id)">Видалити</button>
-                </li>
-            }
-        </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
     </div>
 
     <div class="rightPanel">
-        <h3 id="form-title">Додати нову категорію</h3>
+        <h3 id="form-title" style="color:#4caf50">Додати нову категорію</h3>
         <form id="category-form" asp-action="Category" asp-controller="Admin" method="post">
             <input type="hidden" id="category-id" name="Id" />
             <div class="form-group">
@@ -42,8 +62,10 @@
                 <label for="parent-category-id">ID батьківської категорії (необов'язково)</label>
                 <input type="number" id="parent-category-id" name="ParentCategoryId" class="form-control" />
             </div>
-            <button type="submit" class="btn btn-success" id="save-btn">Зберегти</button>
-            <button type="button" class="btn btn-secondary" onclick="resetForm()">Очистити</button>
+            <div>
+            <button type="submit" class="btn btn-success " id="save-btn">Зберегти</button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()" id="clear-btn">Очистити</button>
+            </div>
         </form>
     </div>
 </div>
@@ -53,24 +75,35 @@
     let allCategories = @Html.Raw(Json.Serialize(Model));
     let filteredCategories = [...allCategories];
 
-    function updateCategoryList(categories) {
-        const categoryList = document.getElementById("category-list");
-        categoryList.innerHTML = "";
+   function updateCategoryList(categories) {
+    const tbody = document.querySelector("#category-table tbody");
+    tbody.innerHTML = "";
 
-        if (categories.length === 0) {
-            categoryList.innerHTML = "<li>Немає категорій, що відповідають пошуковому запиту.</li>";
-        } else {
-            categories.forEach(category => {
-                const li = document.createElement("li");
-                li.innerHTML = `
-                                    <span>ID:${category.id} - ${category.name}</span>
-                            <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId})">Редагувати</button>
-                            <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
-                        `;
-                categoryList.appendChild(li);
-            });
-        }
+    if (categories.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 4;
+        cell.textContent = "Немає категорій, що відповідають пошуковому запиту.";
+        cell.style.textAlign = "center";
+        row.appendChild(cell);
+        tbody.appendChild(row);
+    } else {
+        categories.forEach(category => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${category.id}</td>
+                <td>${category.name}</td>
+                <td>${category.parentCategoryId || "Немає"}</td>
+                <td>
+                    <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId})">Редагувати</button>
+                    <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
     }
+}
+
 
     function searchCategories() {
         const searchTerm = document.getElementById("search-input").value.toLowerCase();
@@ -92,11 +125,37 @@
         document.getElementById("save-btn").textContent = "Зберегти зміни";
     }
 
-    function deleteCategory(id) {
-        if (confirm("Ви дійсно хочете видалити цю категорію?")) {
-            console.log(`Категорія з ID ${id} видалена`);
+    async function deleteCategory(id) {
+        const isConfirmed = confirm("Ви дійсно хочете видалити цю категорію? (УВАГА !!! будуть видалені і продукти які є в цій категорії)");
+        if (!isConfirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:5152/gateway/Category/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.status === 204) { 
+                alert("Категорія успішно видалена");
+                location.reload(); 
+            } else if (response.status === 404) {
+                alert("Категорія не знайдена");
+            } else if (response.status === 500) {
+                alert("Виникла внутрішня помилка сервера");
+            } else {
+                const error = await response.json();
+                alert(`Помилка: ${error.message}`);
+            }
+        } catch (error) {
+            alert(`Сталася помилка: ${error.message}`);
         }
     }
+
+
+
+
+
 
     function resetForm() {
         document.getElementById("category-id").value = "";
@@ -113,10 +172,9 @@
     document.addEventListener("DOMContentLoaded", function () {
         var successMessage = document.getElementById("success-message");
         if (successMessage) {
-            // Покажемо повідомлення
+            
             successMessage.style.display = "block";
 
-            // Через 3 секунди ховаємо його
             setTimeout(function () {
                 successMessage.style.display = "none";
             }, 3000);
@@ -124,72 +182,175 @@
     });
 </script>
 
-<!-- CSS -->
 <style>
-    .categoryContainer {
-        display: flex;
-        gap: 20px;
-        padding: 20px;
-    }
+.categoryContainer {
+    display: flex;
+    
+    padding: 20px;
+}
 
-    .leftPanel {
-        flex: 3;
-        border-right: 1px solid #ddd;
-        padding-right: 20px;
-    }
+.leftPanel {
+    flex: 3;
+    border-right: 1px solid #ddd;
+    padding-right: 20px;
+}
 
-    .rightPanel {
-        flex: 1;
-        padding-left: 20px;
-    }
+.rightPanel {
+    flex: 1;
+    padding-left: 20px;
+}
 
-    .categoryList {
-        list-style-type: none;
-        padding: 0;
-    }
+.categoryList {
+    list-style-type: none;
+    padding: 0;
+}
 
-        .categoryList li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
+.categoryList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
 
-    .editBtn, .deleteBtn {
-        margin-left: 10px;
-    }
+.form-group {
+    margin-bottom: 15px;
+}
 
-    .form-group {
-        margin-bottom: 15px;
-    }
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #4caf50; 
+    font-weight: bold; 
+    font-size: 16px; 
+    border-radius: 5px; 
+    max-width: 500px;
+}
 
-    .form-control {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-    }
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 5px #4caf50; 
+}
 
-    .btn {
-    }
+button {
+    font-weight: bold;
+    border: 2px solid transparent;
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; 
+}
 
-    .search-container {
-        margin-bottom: 15px;
-    }
+.editBtn, .deleteBtn {
+    margin-left: 10px;
+}
 
-    #success-message {
-        display: none; /* Приховуємо повідомлення спочатку */
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999;
-        padding: 15px;
-        background-color: #28a745; /* Зелений колір */
-        color: white;
-        border-radius: 20px;
-        font-size: 16px;
-        opacity: 0.7;
-    }
+button#save-btn {
+    color: #4caf50;
+    background-color:white;
+    border: 2px solid #4caf50; 
+
+}
+
+button#save-btn:hover {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+.editBtn {
+   color: #4caf50;
+    background-color:white;
+    border: 2px solid #4caf50;  
+}
+
+.editBtn:hover {
+    background-color: #007bff;
+    color: #ffffff;
+    border: 2px solid #007bff;
+}
+
+.deleteBtn {
+   color: #4caf50;
+    background-color:white;
+    border: 2px solid #4caf50; 
+}
+
+.deleteBtn:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: 2px solid #dc3545;
+}
+
+button#clear-btn {
+     color: #4caf50;
+    background-color:white;
+    border: 2px solid #4caf50; 
+}
+
+button#clear-btn:hover {
+    background-color: #6c757d; 
+    color: white; 
+    border-color: #6c757d; 
+}
+
+
+.search-container {
+    margin-bottom: 15px;
+}
+
+.categoryTable {
+    width: 100%;
+    border-collapse: collapse; 
+}
+
+.categoryTable th, 
+.categoryTable td {
+    padding: 10px 20px; 
+    text-align: left; 
+    border-bottom: 1px solid #4caf50; 
+}
+
+.categoryTable th {
+    background-color: #4caf50; 
+    color:white;
+    font-weight: bold; 
+    font-size: 16px;
+}
+
+.categoryTable tbody tr:hover {
+    background-color: #f9f9f9; 
+}
+
+.categoryTable td:last-child {
+    text-align: center; 
+}
+
+.categoryTable th, 
+.categoryTable td {
+    white-space: nowrap; 
+}
+
+#success-message {
+    display: none; 
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 15px;
+    background-color: #28a745; 
+    color: white;
+    border-radius: 20px;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+.rightPanel form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
 
 </style>

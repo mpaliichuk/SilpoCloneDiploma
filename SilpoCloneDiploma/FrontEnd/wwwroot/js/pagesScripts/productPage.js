@@ -3,7 +3,7 @@ var categoryId = 0;
 
 GetProduct(productId, categoryId);
 async function GetProduct(productId, productCategoryId) {
-    const response = await fetch("http://localhost:5152/gateway/Products/" + productId, {
+    const response = await fetch("http://localhost:5152/gateway/Product/" + productId, {
          method: "GET",
          headers: {
              "Accept": "application/json",

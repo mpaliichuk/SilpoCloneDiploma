@@ -9,6 +9,7 @@ namespace FrontEnd.Models.Dto
         OutOfStock,
         InStock,
     }
+
     public class ProductDto
     {
         [Required]
@@ -33,13 +34,16 @@ namespace FrontEnd.Models.Dto
 
         public double Count { get; set; }
 
-        public double? Sale { get; set; }
+        public double? Discount { get; set; }  
 
         [Required]
         [Range(0, double.MaxValue)]
         public double Price { get; set; }
 
-        public int CategoryId { get; set; }
-        public IEnumerable<SelectListItem> CategorySelectList { get; set; }
+        public int? CategoryId { get; set; }
+
+        public int? CategoryIdStr { get; set; }
+
+        public IEnumerable<SelectListItem>? CategorySelectList { get; set; } = new List<SelectListItem>(); // ініціалізація за замовчуванням
     }
 }

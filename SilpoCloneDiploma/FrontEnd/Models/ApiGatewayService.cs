@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using FrontEnd.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace FrontEnd.Services
 {
@@ -12,14 +14,15 @@ namespace FrontEnd.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ProductCategoryRatingService> _logger;
-        private const string BaseUrl = "http://localhost:5296";
+        private readonly string _baseUrl;
 
-        // Constructor that initializes HttpClient and Logger
-        public ProductCategoryRatingService(HttpClient httpClient, ILogger<ProductCategoryRatingService> logger)
+        // Constructor that initializes HttpClient, Logger, and Base URL
+        public ProductCategoryRatingService(HttpClient httpClient, ILogger<ProductCategoryRatingService> logger, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(BaseUrl);
             _logger = logger;
+            _baseUrl = configuration["ApiBaseUrl"] ?? "http://localhost:5152"; // Set default base URL if not configured
+            _httpClient.BaseAddress = new Uri(_baseUrl);
         }
 
         // Helper method to send HTTP requests with specified method, URL, and optional data
@@ -31,6 +34,7 @@ namespace FrontEnd.Services
             };
 
             var response = await _httpClient.SendAsync(request);
+
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
@@ -46,13 +50,35 @@ namespace FrontEnd.Services
         {
             try
             {
-                var url = $"/gateway/product?pageNumber={pageNumber}&pageSize={pageSize}"; // URL with pagination parameters
-                return await _httpClient.GetFromJsonAsync<List<ProductDto>>(url);
+                var url = $"/gateway/product?pageNumber={pageNumber}&pageSize={pageSize}";
+                return await SendRequestAsync<List<ProductDto>>(HttpMethod.Get, url); // Using SendRequestAsync for consistency
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred while fetching products: {ex.Message}");
                 return new List<ProductDto>(); // Return an empty list instead of null
+            }
+        }
+
+        public async Task<List<ProductDto>> GetProductsWithoutCategoryAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var url = $"/gateway/GetProductsByPageWithoutCategoryAsync/{pageNumber}/{pageSize}";
+                var response = await _httpClient.GetFromJsonAsync<ProductResponse>(url);
+
+                if (response == null || response.Products == null)
+                {
+                    _logger.LogWarning("No products found for the specified page and size.");
+                    return new List<ProductDto>(); // Return empty list if no products
+                }
+
+                return response.Products.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching products: {ex.Message}");
+                return new List<ProductDto>();
             }
         }
 
@@ -86,13 +112,13 @@ namespace FrontEnd.Services
         // Create a new product
         public async Task<ProductDto> CreateProductAsync(ProductDto product)
         {
-            return await SendRequestAsync<ProductDto>(HttpMethod.Post, "/gateway/product", product); // Specify the type explicitly
+            return await SendRequestAsync<ProductDto>(HttpMethod.Post, "/gateway/product", product); // Using helper method for consistency
         }
 
         // Update an existing product
         public async Task<ProductDto> UpdateProductAsync(int id, ProductDto product)
         {
-            return await SendRequestAsync<ProductDto>(HttpMethod.Put, $"/gateway/product/{id}", product); // Specify the type explicitly
+            return await SendRequestAsync<ProductDto>(HttpMethod.Put, $"/gateway/product/{id}", product);
         }
 
         // Delete a product by ID
@@ -122,7 +148,7 @@ namespace FrontEnd.Services
             try
             {
                 _logger.LogInformation("Fetching categories...");
-                var response = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("/gateway/category");
+                var response = await _httpClient.GetFromJsonAsync<List<CategoryDto>>("/gateway/Category");
 
                 if (response == null)
                 {
@@ -138,59 +164,58 @@ namespace FrontEnd.Services
             }
         }
 
-
         // Get a category by ID
         public async Task<CategoryDto> GetCategoryByIdAsync(int id)
         {
-            return await SendRequestAsync<CategoryDto>(HttpMethod.Get, $"/gateway/category/{id}"); // Specify the type explicitly
+            return await SendRequestAsync<CategoryDto>(HttpMethod.Get, $"/gateway/category/{id}");
         }
 
         // Create a new category
         public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category)
         {
-            return await SendRequestAsync<CategoryDto>(HttpMethod.Post, "/gateway/category", category); // Specify the type explicitly
+            return await SendRequestAsync<CategoryDto>(HttpMethod.Post, "/gateway/category", category);
         }
 
         // Update an existing category
         public async Task<CategoryDto> UpdateCategoryAsync(int id, CategoryDto category)
         {
-            return await SendRequestAsync<CategoryDto>(HttpMethod.Put, $"/gateway/category/{id}", category); // Specify the type explicitly
+            return await SendRequestAsync<CategoryDto>(HttpMethod.Put, $"/gateway/category/{id}", category);
         }
 
         // Delete a category by ID
         public async Task<bool> DeleteCategoryAsync(int id)
         {
-            return await SendRequestAsync<CategoryDto>(HttpMethod.Delete, $"/gateway/category/{id}") != null; // Specify the type explicitly
+            return await SendRequestAsync<CategoryDto>(HttpMethod.Delete, $"/gateway/category/{id}") != null;
         }
 
         // Get a list of ratings
         public async Task<List<RatingDto>> GetRatingsAsync()
         {
-            return await SendRequestAsync<List<RatingDto>>(HttpMethod.Get, "/gateway/rating"); // Specify the type explicitly
+            return await SendRequestAsync<List<RatingDto>>(HttpMethod.Get, "/gateway/rating");
         }
 
         // Get a rating by ID
         public async Task<RatingDto> GetRatingByIdAsync(int id)
         {
-            return await SendRequestAsync<RatingDto>(HttpMethod.Get, $"/gateway/rating/{id}"); // Specify the type explicitly
+            return await SendRequestAsync<RatingDto>(HttpMethod.Get, $"/gateway/rating/{id}");
         }
 
         // Create a new rating
         public async Task<RatingDto> CreateRatingAsync(RatingDto rating)
         {
-            return await SendRequestAsync<RatingDto>(HttpMethod.Post, "/gateway/rating", rating); // Specify the type explicitly
+            return await SendRequestAsync<RatingDto>(HttpMethod.Post, "/gateway/rating", rating);
         }
 
         // Update an existing rating
         public async Task<RatingDto> UpdateRatingAsync(int id, RatingDto rating)
         {
-            return await SendRequestAsync<RatingDto>(HttpMethod.Put, $"/gateway/rating/{id}", rating); // Specify the type explicitly
+            return await SendRequestAsync<RatingDto>(HttpMethod.Put, $"/gateway/rating/{id}", rating);
         }
 
         // Delete a rating by ID
         public async Task<bool> DeleteRatingAsync(int id)
         {
-            return await SendRequestAsync<RatingDto>(HttpMethod.Delete, $"/gateway/rating/{id}") != null; // Specify the type explicitly
+            return await SendRequestAsync<RatingDto>(HttpMethod.Delete, $"/gateway/rating/{id}") != null;
         }
 
         // Get products in a specific category
@@ -206,6 +231,55 @@ namespace FrontEnd.Services
             {
                 _logger.LogError($"An error occurred while fetching products in category {category}: {ex.Message}");
                 return new List<ProductDto>(); // Return an empty list instead of null
+            }
+        }
+
+        // Get the product count from the Ocelot route
+        public async Task<int> GetProductsCountAsync()
+        {
+            try
+            {
+                var url = "/gateway/product/count"; // Ocelot route to get the product count
+                var response = await _httpClient.GetFromJsonAsync<int>(url); // Expecting an integer count as response
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching the product count: {ex.Message}");
+                return 0; // Return 0 if there is an error
+            }
+        }
+
+        // Find product by name
+        public async Task<ProductDto> GetProductByName(string title)
+        {
+            try
+            {
+                var url = $"/gateway/SearchProducts?title={Uri.EscapeDataString(title)}";
+
+                var response = await _httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning($"Failed to fetch product. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                    return null;
+                }
+
+                var product = await response.Content.ReadFromJsonAsync<ProductDto>();
+
+                if (product == null)
+                {
+                    _logger.LogWarning($"No product found with title: {title}");
+                    return null;
+                }
+
+                return product;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching product by name: {ex.Message}");
+                return null;
             }
         }
     }

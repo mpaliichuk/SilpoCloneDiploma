@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text;
 using FrontEnd.Controllers;
 using FrontEnd.Services;
+using FrontEnd.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class AdminController : Controller
@@ -38,9 +39,30 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Logic for confirming the attribute
+            
         }
         return View(model);
+    }
+
+    //get product by name
+
+    [HttpGet]
+    public async Task<IActionResult> SearchProducts(string searchTitle)
+    {
+        if (string.IsNullOrEmpty(searchTitle))
+        {
+            return View(); 
+        }
+
+        var product = await _productCategoryRatingService.GetProductByName(searchTitle);
+
+        if (product == null)
+        {
+            ViewBag.Message = "No product found with that name.";
+            return View(product);
+        }
+
+        return View(product); 
     }
 
     /// <summary>
@@ -68,16 +90,14 @@ public class AdminController : Controller
     /// </summary>
     [HttpGet]
     public async Task<IActionResult> Category()
-    {//microService Admin Get
+    {
         var categories = await _productCategoryRatingService.GetCategoriesAsync();
 
-        // Перевірка на null або порожність категорій
         if (categories == null || !categories.Any())
         {
             ViewData["Message"] = "Категорії не знайдено.";
         }
 
-        // Передача категорій у модель
         return View(categories);
     }
 
@@ -86,7 +106,7 @@ public class AdminController : Controller
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> Category(CategoryDto categoryDto)
-    {//microService Category post
+    {
         if (!ModelState.IsValid)
         {
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
@@ -112,27 +132,22 @@ public class AdminController : Controller
 
 
     /// <summary>
-    /// Handle category delete
+    ///  category delete
     /// </summary>
-    [HttpPost]
+    [HttpDelete("DeleteCategory/{id}")]
     public async Task<IActionResult> DeleteCategory(int id)
-    {//microService Category Delete
+    {
         var success = await _productCategoryRatingService.DeleteCategoryAsync(id);
         if (success)
         {
-            TempData["SuccessMessage"] = "Категорія успішно видалена";
+            return Ok(new { message = "Категорія успішно видалена" });
         }
-        else
-        {
-            TempData["ErrorMessage"] = "Помилка при видаленні категорії";
-        }
-
-        return RedirectToAction("Index");
+        return BadRequest(new { message = "Помилка при видаленні категорії" });
     }
-
     /// <summary>
-    /// Display form to add a new product with a category selection dropdown
+    /// Get
     /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> AddProduct()
     {
@@ -148,52 +163,62 @@ public class AdminController : Controller
             CategorySelectList = categorySelectList
         };
 
-        ViewData["CategorySelectList"] = categorySelectList;
         return View(model);
     }
 
+
     /// <summary>
-    /// Add a new product and upload images
+    /// Display form to add a new product with a category selection dropdown
     /// </summary>
+
     [HttpPost]
     public async Task<IActionResult> AddProduct(ProductDto productDto, ICollection<IFormFile> imageFiles)
     {
+        if (!productDto.CategoryIdStr.HasValue)
+        {
+            ModelState.AddModelError("CategoryId", "Категорія повинна бути вибрана.");
+        }
+
+        if (imageFiles == null || imageFiles.Count == 0)
+        {
+            ModelState.AddModelError("imageFiles", "Потрібно завантажити хоча б одне зображення.");
+        }
+
         if (ModelState.IsValid)
         {
             var imageUrls = new List<string>();
-            if (imageFiles != null && imageFiles.Count > 0)
+            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadImg");
+
+            if (!Directory.Exists(uploadPath))
             {
-                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadImg");
-                if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            foreach (var file in imageFiles)
+            {
+                var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif" };
+                if (!allowedTypes.Contains(file.ContentType))
                 {
-                    Directory.CreateDirectory(uploadPath);
+                    ModelState.AddModelError("imageFiles", "Дозволяються лише зображення у форматах JPEG, PNG, GIF.");
+                    return View(productDto);
                 }
 
-                foreach (var file in imageFiles)
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                try
                 {
-                    var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif" };
-                    if (!allowedTypes.Contains(file.ContentType))
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        ModelState.AddModelError("imageFiles", "Only image files are allowed.");
-                        return View(productDto);
+                        await file.CopyToAsync(stream);
                     }
 
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    var filePath = Path.Combine(uploadPath, fileName);
-
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-                        imageUrls.Add($"/uploads/{fileName}");
-                    }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", "An error occurred while uploading files: " + ex.Message);
-                        return View(productDto);
-                    }
+                    imageUrls.Add($"/uploadImg/{fileName}");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Помилка при завантаженні файлів: " + ex.Message);
+                    return View(productDto);
                 }
             }
 
@@ -205,45 +230,29 @@ public class AdminController : Controller
                 ImageUrls = imageUrls,
                 Availability = productDto.Availability,
                 Count = productDto.Count,
-                Sale = productDto.Sale,
+                Discount = productDto.Discount,
                 Price = productDto.Price,
-                CategoryId = productDto.CategoryId
+                CategoryId = (int)productDto.CategoryIdStr
             };
 
-            var ocelotApiUrl = "http://localhost:5000/api/products";
+            var createdProduct = await _productCategoryRatingService.CreateProductAsync(product);
 
-            using (var client = new HttpClient())
+            if (createdProduct != null)
             {
-                var content = new MultipartFormDataContent();
-                content.Add(new StringContent(product.Title), "Title");
-                content.Add(new StringContent(product.ProductComposition), "ProductComposition");
-                content.Add(new StringContent(product.GeneralInformation), "GeneralInformation");
-                content.Add(new StringContent(product.Availability.ToString()), "Availability");
-                content.Add(new StringContent(product.Count.ToString()), "Count");
-                content.Add(new StringContent(product.Sale?.ToString() ?? "0"), "Sale");
-                content.Add(new StringContent(product.Price.ToString()), "Price");
-                content.Add(new StringContent(product.CategoryId.ToString()), "CategoryId");
-
-                foreach (var imageUrl in imageUrls)
-                {
-                    var imageContent = new ByteArrayContent(System.IO.File.ReadAllBytes(imageUrl));
-                    content.Add(imageContent, "imageFiles", Path.GetFileName(imageUrl));
-                }
-
-                var response = await client.PostAsync(ocelotApiUrl, content);
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("ProductList");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Error while sending data to the service.");
-                    return View(productDto);
-                }
+                TempData["SuccessMessage"] = "Продукт успішно додано!";
+                return RedirectToAction("AddProduct");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Сталася помилка при додаванні продукту.";
+                return RedirectToAction("ProductList");
             }
         }
+
         return View(productDto);
     }
+
+
 
     // Display general information page
     public IActionResult General()
@@ -263,9 +272,116 @@ public class AdminController : Controller
         return View();
     }
 
+    /// <summary>
+    /// List Shops
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ListShops()
+    {
+        var model = new AttributeModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult ListShops(AttributeModel model)
+    {
+       
+        return View(model);
+    }
+
+    /// <summary>
+    /// Add Shops
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult AddShop()
+    {
+        var model = new AttributeModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult AddShop(AttributeModel model)
+    {
+
+        return View(model);
+    }
+
+    /// <summary>
+    /// Administrators
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult Administrators()
+    {
+        var model = new AttributeModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult Administrators(AttributeModel model)
+    {
+
+        return View(model);
+    }
+
+    /// <summary>
+    /// Buyers
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult Buyers()
+    {
+        var model = new AttributeModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult Buyers(AttributeModel model)
+    {
+
+        return View(model);
+    }
+
+    /// <summary>
+    /// ListOfProducts
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<IActionResult> ListOfProducts(int pageNumber = 1, int pageSize = 10)
+    {
+        var products = await _productCategoryRatingService.GetProductsWithoutCategoryAsync(pageNumber, pageSize);
+        var totalProducts = await _productCategoryRatingService.GetProductsCountAsync();
+        var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
+
+        var model = new ProductListViewModel
+        {
+            Products = products,
+            CurrentPage = pageNumber,
+            TotalPages = totalPages
+        };
+
+        return View(model);
+    }
+
+
+    [HttpPost]
+    public IActionResult ListOfProducts(AttributeModel model)
+    {
+        return View(model);
+    }
+
+
+
     // Display exit page
     public IActionResult Exit()
     {
         return View();
     }
+
+
+   
+
+
 }

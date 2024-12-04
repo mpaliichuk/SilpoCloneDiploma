@@ -1,9 +1,11 @@
 using FrontEnd.Services;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 
 // Add HttpClient configuration for ProductCategoryRatingService
 if (builder.Environment.IsDevelopment())

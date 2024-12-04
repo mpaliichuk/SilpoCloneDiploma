@@ -1,6 +1,5 @@
 {
   "Routes": [
-    //////////////////Product/////////////////////
     {
       "DownstreamPathTemplate": "/api/Product",
       "DownstreamScheme": "http",
@@ -10,8 +9,20 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Products",
+      "UpstreamPathTemplate": "/gateway/Product",
       "UpstreamHttpMethod": [ "POST", "GET" ]
+    }, //good
+    {
+      "DownstreamPathTemplate": "/api/product/GetProductByNameAsync/{title}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/SearchProducts/{title}",
+      "UpstreamHttpMethod": [ "GET" ] //bad
     },
     {
       "DownstreamPathTemplate": "/api/Product/random-discounted",
@@ -23,7 +34,7 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/DiscountedProducts",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ] //good
     },
     {
       "DownstreamPathTemplate": "/api/Product/random-same-category/{productId}/{categoryId}",
@@ -35,7 +46,7 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/ProductsBySameCategory/{productId}/{categoryId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ] //good
     },
     {
       "DownstreamPathTemplate": "/api/Product/random-recommendation",
@@ -47,7 +58,7 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/RecommendedProducts",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ] //good
     },
     {
       "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}",
@@ -59,23 +70,31 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ] //so so
     },
     {
-      "Routes": [
+      "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}/no-category",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
         {
-          "DownstreamPathTemplate": "/api/product/by-category/{categoryId}",
-          "DownstreamScheme": "http",
-          "DownstreamHostAndPorts": [
-            {
-              "Host": "localhost",
-              "Port": 5296
-            }
-          ],
-          "UpstreamPathTemplate": "/api/gateway/product/by-category/{categoryId}",
-          "UpstreamHttpMethod": [ "GET" ]
+          "Host": "localhost",
+          "Port": 5296
         }
-      ]
+      ],
+      "UpstreamPathTemplate": "/gateway/GetProductsByPageWithoutCategoryAsync/{pageNumber}/{pageSize}",
+      "UpstreamHttpMethod": [ "GET" ] //good
+    },
+    {
+      "DownstreamPathTemplate": "/api/product/by-category/{categoryId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/product/by-category/{categoryId}",
+      "UpstreamHttpMethod": [ "GET" ] //bad
     },
     {
       "DownstreamPathTemplate": "/api/Product/{id}",
@@ -87,11 +106,10 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/Products/{id}",
-      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
+      "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ] //good
     },
-    ////////////////Category///////////////////
     {
-      "DownstreamPathTemplate": "/api/category",
+      "DownstreamPathTemplate": "/api/product/count",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -99,11 +117,11 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/category",
-      "UpstreamHttpMethod": [ "POST", "GET" ]
+      "UpstreamPathTemplate": "/gateway/product/count",
+      "UpstreamHttpMethod": [ "GET" ] //good
     },
     {
-      "DownstreamPathTemplate": "/api/category",
+      "DownstreamPathTemplate": "/api/Category",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -111,8 +129,21 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/AllCategories",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamPathTemplate": "/gateway/Category",
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT" ] //good
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Category/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Category/{id}",
+      "UpstreamHttpMethod": [ "PUT", "DELETE" ]
     },
     {
       "DownstreamPathTemplate": "/api/categories/{id}",
@@ -126,7 +157,6 @@
       "UpstreamPathTemplate": "/gateway/CategoryByParentId/{parentId}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
-    ////////////////Rating////////////////////////
     {
       "DownstreamPathTemplate": "/api/rating",
       "DownstreamScheme": "http",
@@ -151,7 +181,6 @@
       "UpstreamPathTemplate": "/gateway/Rating/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ]
     },
-    /////////////////Cart////////////////////////////
     {
       "DownstreamPathTemplate": "/api/cart/upsert",
       "DownstreamScheme": "http",
