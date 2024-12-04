@@ -311,7 +311,7 @@ async function GetRecommendedProducts() {
             productName: productsByCategory[i].title,
             productFullName: productsByCategory[i].productComposition,
             price: productsByCategory[i].price,
-            sale: productsByCategory[i].sale,
+            sale: productsByCategory[i].discount,
             productId: productsByCategory[i].id,
             isFirst: isFirstBool
         });

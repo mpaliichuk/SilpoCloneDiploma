@@ -19,7 +19,7 @@ async function GetProduct(productId, productCategoryId) {
             description: responseProduct.generalInformation,
             imageUrls: responseProduct.imageUrls,
             price: responseProduct.price,
-            discountPercentage: responseProduct.sale,
+            discountPercentage: responseProduct.discount,
             rating: responseProduct.averageRating,
             ratingCount: responseProduct.ratingCount,
             category_id: responseProduct.categoryId,
@@ -127,7 +127,7 @@ async function GetProductsBySameCategory(productCategoryId) {
             productName: productsByCategory[i].title,
             productFullName: productsByCategory[i].productComposition,
             price: productsByCategory[i].price,
-            sale: productsByCategory[i].sale,
+            discount: productsByCategory[i].discount,
             productId: productsByCategory[i].id,
             isFirst: isFirstBool
         });

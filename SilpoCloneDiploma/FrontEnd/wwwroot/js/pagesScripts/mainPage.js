@@ -46,7 +46,7 @@ async function GetProducts() {
             productName: productsByDiscount[i].title,
             productFullName: productsByDiscount[i].productComposition,
             price: productsByDiscount[i].price,
-            sale: productsByDiscount[i].sale,
+            sale: productsByDiscount[i].discount,
             productId: productsByDiscount[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);

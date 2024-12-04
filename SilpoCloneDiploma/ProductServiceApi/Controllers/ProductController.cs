@@ -190,7 +190,7 @@ namespace ProductServiceApi.Controllers
             var ratings = await _serviceRating.GetAllRatingsAsync();
 
             var productRatings = ratings.Where(r => r.IdProduct == product.Id).ToList();
-            double averageRating = productRatings.Any() ? productRatings.Average(r => r.Value) : 0;
+            double averageRating = productRatings.Any() ? Math.Round(productRatings.Average(r => r.Value), 2) : 0;
             int ratingCount = productRatings.Count;
 
             var productDto = new ProductDto

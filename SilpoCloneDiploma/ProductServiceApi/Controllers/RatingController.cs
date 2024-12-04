@@ -89,7 +89,6 @@ namespace ProductServiceApi.Controllers
         /// </summary>
         /// <param name="ratingDto">The rating to add.</param>
         [HttpPost]
-        //[Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RatingDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<RatingDto>> AddRating([FromBody] RatingDto ratingDto)

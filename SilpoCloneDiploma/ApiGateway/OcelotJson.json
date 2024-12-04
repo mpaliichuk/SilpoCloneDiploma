@@ -61,7 +61,7 @@
       "UpstreamHttpMethod": [ "GET" ] //good
     },
     {
-      "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}",
+      "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}/category/{categoryId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -69,7 +69,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}",
+      "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}/{categoryId}",
       "UpstreamHttpMethod": [ "GET" ] //so so
     },
     {
@@ -105,7 +105,7 @@
           "Port": 5296
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Products/{id}",
+      "UpstreamPathTemplate": "/gateway/Product/{id}",
       "UpstreamHttpMethod": [ "DELETE", "PUT", "GET" ] //good
     },
     {
@@ -132,7 +132,18 @@
       "UpstreamPathTemplate": "/gateway/Category",
       "UpstreamHttpMethod": [ "POST", "GET", "PUT" ] //good
     },
-
+    {
+      "DownstreamPathTemplate": "/api/Category",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/AllCategories",
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT" ] //good
+    },
     {
       "DownstreamPathTemplate": "/api/Category/{id}",
       "DownstreamScheme": "http",
@@ -143,10 +154,10 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/Category/{id}",
-      "UpstreamHttpMethod": [ "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamPathTemplate": "/api/Category/getByParent/{parentId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

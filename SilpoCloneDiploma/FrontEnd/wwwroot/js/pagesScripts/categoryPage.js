@@ -10,9 +10,9 @@ var categoryId = document.getElementById("categoryId").value;
 GetCategoryInfo(categoryId);
 GetProducts(categoryId, true);
 
-async function GetCategoryInfo(categoryId) {
+async function GetCategoryInfo(id) {
     try {
-        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/Category/" + id, {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -58,8 +58,9 @@ async function CategoryByParentId(parentId) {
         });
         if (response.ok) {
             const getCategories = await response.json();
-            console.log(getCategories);         
-            generateSubCategoryMarkup(getCategories);
+            console.log(getCategories);
+            if (getCategories.length > 0)
+                generateSubCategoryMarkup(getCategories);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -119,13 +120,15 @@ async function GetProducts(categoryId, firstIn = null) {
     if (newPage) {
         document.getElementById('subProductsDiv').innerText = '';
     }
-    for (var i = 0; i < pageSize; i++) {
+    const productsCount = productsOnPage.products.length;
+    const iterations = Math.min(pageSize, productsCount);
+    for (var i = 0; i < iterations; i++) {
         const productCard = createProductCard({
             productIconSrc: productsOnPage.products[i].imageUrls[0],
             productName: productsOnPage.products[i].title,
             productFullName: productsOnPage.products[i].productComposition,
             price: productsOnPage.products[i].price,
-            sale: productsOnPage.products[i].sale,
+            sale: productsOnPage.products[i].discount,
             productId: productsOnPage.products[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
