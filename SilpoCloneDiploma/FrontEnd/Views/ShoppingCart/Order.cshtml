@@ -16,7 +16,7 @@
 
     .content {
         margin-left: 0;
-        margin-top: 0;
+        margin-top: -4%;
     }
 
     .orderLabel {
@@ -37,9 +37,66 @@
         order: 0;
         flex-grow: 0;
         z-index: 0;
-        margin-top: 5%;
+        margin-top: 3%;
         margin-left: 12%;
 
+    }
+
+    .RadioButton {
+        width: 24px;
+        height: 24px;
+        padding: 5px;
+        border-radius: 16px;
+        border: 2px #CBCBCB solid;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 1px 10px rgba(218, 80, 1, 0.20);
+        cursor: pointer;
+    }
+
+    .RadioButton.selected {
+        border: 2px #FF5722 solid;
+    }
+
+    .RadioButton .Ellipse4 {
+        width: 14px;
+        height: 14px;
+        background: #FF5722;
+        border-radius: 9999px;
+        display: none;
+    }
+
+    .RadioButton.selected .Ellipse4 {
+        display: block;
+    }
+
+    .time-option {
+        padding: 8px 16px;
+        border-radius: 36px;
+        border: 1px solid #CBCBCB;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+    }
+
+    .time-option.selected {
+        border: 1px solid #FF5722;
+        background-color: rgba(255, 87, 34, 0.1);
+    }
+
+    .time-option img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .custom-time-input {
+        display: none;
+        width: 100px;
+        padding: 4px;
+        border-radius: 5px;
+        border: 1px solid #CBCBCB;
     }
 </style>
 
@@ -47,7 +104,7 @@
 <div class="content">
     <div class="orderLabel">Оформлення замовлення</div>
     <div class="Frame427318672"
-        style="width: 1100px; margin-top: 10%; margin-left: 5%; height: 724px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex">
+        style="width: 1100px; margin-top: 10%; margin-left: 5%; height: 724px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex;">
 
         <div class="Frame427318651"
             style="align-self: stretch; height: 270px; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 20px; display: flex">
@@ -62,15 +119,17 @@
                 <div class="Frame427318649"
                     style="justify-content: flex-start; align-items: center; gap: 16px; display: flex">
                     <div>
-                        <img src="~/icons/ion_location-outline.png"></img>
+                        <img src="~/icons/ion_location-outline.png" alt="Location Icon">
                     </div>
-                    <div class="83a"
+                    <div class="editable-text"
                         style="color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 400; word-wrap: break-word">
-                        Львів, Замарстинівська вулиця, 83A</div>
+                        <span id="addressText">Львів, Замарстинівська вулиця, 83A</span>
+                    </div>
                 </div>
                 <div class="TablerPencil"
-                    style="width: 40px; height: 40px; padding: 8px; background: #FF5722; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: flex">
-                    <img src="~/icons/tabler_pencil.png"></img>
+                    style="width: 40px; height: 40px; padding: 8px; background: #FF5722; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: flex; cursor: pointer;"
+                    onclick="editText()">
+                    <img src="~/icons/tabler_pencil.png" alt="Edit Icon">
                 </div>
             </div>
             <div class="Frame427318648"
@@ -96,156 +155,125 @@
                 </div>
             </div>
         </div>
-        <div class="Frame427318660"
-            style="align-self: stretch; height: 155px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
-            <div class="Frame427318647"
-                style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-                <div
-                    style="color: #FFFEFE; font-size: 18px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                    Дата і час</div>
-            </div>
-            <div class="Frame427318659"
-                style="align-self: stretch; height: 78px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                <div class="Frame427318649"
-                    style="justify-content: flex-start; align-items: center; gap: 16px; display: inline-flex">
-                    <div
-                        style="color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 400; word-wrap: break-word">
-                        Виберіть час коли вам зручно було б отримати замовлення:</div>
-                </div>
-                <div class="Frame427318658"
-                    style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 20px; display: inline-flex">
-                    <div class="Frame427318654"
-                        style="padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; border-radius: 36px; border: 1px #FF5722 solid; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                        <div class="IconoirDeliveryTruck"
-                            style="width: 28px; height: 28px; padding-top: 7px; padding-bottom: 5.83px; padding-left: 1.17px; padding-right: 1.17px; justify-content: center; align-items: center; display: flex">
-                            <div class="Group">
-                                <img src="~/icons/iconoir_delivery-truck_selected.png"></img>
-                            </div>
-                        </div>
-                        <div class="9001030"
-                            style="color: #FF5722; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                            з 9:00 до 10:30
-                        </div>
-                    </div>
-                    <div class="Frame427318655"
-                        style="padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; border-radius: 36px; border: 1px #CBCBCB solid; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                        <div class="IconoirDeliveryTruck"
-                            style="width: 28px; height: 28px; padding-top: 7px; padding-bottom: 5.83px; padding-left: 1.17px; padding-right: 1.17px; justify-content: center; align-items: center; display: flex">
-                            <div class="Group">
-                                <img src="~/icons/iconoir_delivery-truck.png"></img>
-                            </div>
-                        </div>
-                        <div class="10301200"
-                            style="color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                            з 10:30 до 12:00</div>
-                    </div>
-                    <div class="Frame427318657"
-                        style="padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; border-radius: 36px; border: 1px #CBCBCB solid; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                        <div class="IconoirDeliveryTruck"
-                            style="width: 28px; height: 28px; padding-top: 7px; padding-bottom: 5.83px; padding-left: 1.17px; padding-right: 1.17px; justify-content: center; align-items: center; display: flex">
-                            <div class="Group">
-                                <img src="~/icons/iconoir_delivery-truck.png"></img>
-                            </div>
-                        </div>
-                        <div class="12001330"
-                            style="color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                            з 12:00 до 13:30</div>
-                    </div>
-                    <div class="Frame427318656"
-                        style="padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; border-radius: 36px; border: 1px #CBCBCB solid; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
-                        <div
-                            style="color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                            Інший час</div>
-                        <div class="Frame427318657"
-                            style="width: 28px; height: 28px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                            <img src="~/icons/DateCheckmark.png"></img>
-                        </div>
-                    </div>
-                </div>
+    <div class="Frame427318660"
+        style="align-self: stretch; height: 155px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
+        <div class="Frame427318647"
+            style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+            <div style="color: #FFFEFE; font-size: 18px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                Дата і час
             </div>
         </div>
-        <div class="Frame427318671"
-            style="align-self: stretch; height: 219px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
-            <div class="Frame427318647"
-                style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-                <div
-                    style="color: #FFFEFE; font-size: 18px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                    Оплата</div>
+        <div class="Frame427318659"
+            style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
+            <div class="Frame427318649" style="display: inline-flex; justify-content: flex-start; align-items: center; gap: 16px;">
+                <div style="color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 400;">
+                    Виберіть час коли вам зручно було б отримати замовлення:
+                </div>
             </div>
-            <div class="Frame427318670"
-                style="justify-content: flex-start; align-items: flex-start; gap: 132px; display: inline-flex">
-                <div class="Frame427318669"
-                    style="width: 315px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-                    <div class="Frame427318649"
-                        style="width: 203px; padding-left: 28px; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-                        <div
-                            style="width: 92px; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
-                            Онлайн</div>
+            <div class="Frame427318658"
+                style="align-self: stretch; display: inline-flex; gap: 20px; justify-content: flex-start; align-items: center;">
+                <div class="time-option selected" onclick="selectTime(this)">
+                    <img src="~/icons/iconoir_delivery-truck.png">
+                    <div>з 9:00 до 10:30</div>
+                </div>
+                <div class="time-option" onclick="selectTime(this)">
+                    <img src="~/icons/iconoir_delivery-truck.png">
+                    <div>з 10:30 до 12:00</div>
+                </div>
+                <div class="time-option" onclick="selectTime(this)">
+                    <img src="~/icons/iconoir_delivery-truck.png">
+                    <div>з 12:00 до 13:30</div>
+                </div>
+                <div class="time-option" onclick="selectCustomTime(this)">
+                    <div>Інший час</div>
+                    <img src="~/icons/DateCheckmark.png">
+                </div>
+                <input type="text" id="customTimeInput" class="custom-time-input" placeholder="з HH:MM до HH:MM" onblur="finalizeCustomTime()">
+            </div>
+        </div>
+    </div>
+        <div class="Frame427318647"
+            style="align-self: stretch; padding-top: 10px;  padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+            <div
+                style="color: #FFFEFE; font-size: 18px; padding-bottom: 5px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                Оплата</div>
+        </div>
+        <div class="Frame427318670"
+            style="justify-content: flex-start; align-items: flex-start; gap: 132px; padding-left: 10px; display: inline-flex; margin-bottom: 35px">
+            <div class="Frame427318669"
+                style="width: 315px; flex-direction: column; padding-bottom:15px; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+                <div
+                    style="width: 203px; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
+                    Онлайн
+                </div>
+                <div class="Frame427318665"
+                    style="align-self: stretch; height: 104px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+                    <div class="Frame427318662"
+                        style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex"
+                        onclick="selectOption(this)">
+                        <div class="RadioButton">
+                            <div class="Ellipse4"></div>
+                        </div>
+                        <div class="Frame427318661"
+                            style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                            <div class="ApplePay"
+                                style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                                Apple Pay
+                            </div>
+                        </div>
                     </div>
                     <div class="Frame427318665"
-                        style="align-self: stretch; height: 104px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                        <div class="Frame427318662"
-                            style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
-                            <div class="RadioButton"
-                                style="width: 24px; height: 24px; padding: 4px; border-radius: 24px; border: 2px #FF5722 solid; justify-content: center; align-items: center; gap: 8.12px; display: flex">
-                                <div class="Ellipse4"
-                                    style="width: 14px; height: 14px; background: #FF5722; border-radius: 9999px"></div>
-                            </div>
-                            <div class="Frame427318661"
-                                style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
-                                <div class="ApplePay"
-                                    style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                                    Apple Pay</div>
-                            </div>
+                        style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex"
+                        onclick="selectOption(this)">
+                        <div class="RadioButton">
+                            <div class="Ellipse4"></div>
                         </div>
-                        <div class="Frame427318665"
-                            style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
-                            <div class="RadioButton"
-                                style="width: 24px; height: 24px; padding: 5px; box-shadow: 0px 1px 10px rgba(218, 80, 1, 0.20); border-radius: 16px; border: 2px #CBCBCB solid">
-                            </div>
-                            <div class="Frame427318661"
-                                style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
-                                <div class="GogglePay"
-                                    style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                                    Goggle Pay </div>
-                            </div>
-                        </div>
-                        <div class="Frame427318666"
-                            style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
-                            <div class="RadioButton"
-                                style="width: 24px; height: 24px; padding: 5px; box-shadow: 0px 1px 10px rgba(218, 80, 1, 0.20); border-radius: 16px; border: 2px #CBCBCB solid">
-                            </div>
-                            <div class="Frame427318661"
-                                style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
-                                <div
-                                    style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                                    Оплата карткою</div>
+                        <div class="Frame427318661"
+                            style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                            <div class="GooglePay"
+                                style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                                Google Pay
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="Frame427318668"
-                    style="width: 315px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
                     <div class="Frame427318666"
-                        style="width: 203px; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-                        <div
-                            style="width: 203px; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
-                            При отриманні</div>
-                    </div>
-                    <div class="Frame427318667"
-                        style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
-                        <div class="RadioButton"
-                            style="width: 24px; height: 24px; padding: 5px; box-shadow: 0px 1px 10px rgba(218, 80, 1, 0.20); border-radius: 16px; border: 2px #CBCBCB solid">
+                        style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex"
+                        onclick="selectOption(this)">
+                        <div class="RadioButton">
+                            <div class="Ellipse4"></div>
                         </div>
                         <div class="Frame427318661"
                             style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
                             <div
                                 style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
-                                Карткою кур’єру</div>
+                                Оплата карткою
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="Frame427318668"
+                style="width: 315px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+                <div
+                    style="width: 203px; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
+                    При отриманні
+                </div>
+                <div class="Frame427318667"
+                    style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex"
+                    onclick="selectOption(this)">
+                    <div class="RadioButton">
+                        <div class="Ellipse4"></div>
+                    </div>
+                    <div class="Frame427318661"
+                        style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                        <div
+                            style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                            Карткою кур’єру
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -256,4 +284,52 @@
         const currentLength = input.value.length;
         countDisplay.textContent = `${currentLength}/200`;
     }
+    function editText() {
+        const textElement = document.getElementById('addressText');
+
+        if (textElement.tagName === 'SPAN') {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = textElement.innerText;
+            input.style.width = "300px"; 
+            input.onblur = function () {
+                textElement.innerText = input.value;
+                input.replaceWith(textElement);
+            };
+            textElement.replaceWith(input);
+            input.focus();
+        }
+    }
+    function selectOption(selectedElement) {
+        const allRadioButtons = document.querySelectorAll('.RadioButton');
+        allRadioButtons.forEach((radioButton) => {
+            radioButton.classList.remove('selected');
+        });
+
+        const selectedRadioButton = selectedElement.querySelector('.RadioButton');
+        selectedRadioButton.classList.add('selected');
+    }
+    function selectTime(element) {
+        document.querySelectorAll('.time-option').forEach(option => option.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('customTimeInput').style.display = 'none';
+    }
+
+    function selectCustomTime(element) {
+        document.querySelectorAll('.time-option').forEach(option => option.classList.remove('selected'));
+        element.classList.add('selected');
+        const customTimeInput = document.getElementById('customTimeInput');
+        customTimeInput.style.display = 'block';
+        customTimeInput.focus();
+        }
+
+    function finalizeCustomTime() {
+        const customTimeInput = document.getElementById('customTimeInput');
+        const customTimeText = customTimeInput.value;
+            if (customTimeText) {
+                const customTimeOption = document.querySelector('.time-option.selected');
+                customTimeOption.querySelector('div').innerText = customTimeText;
+            }
+            customTimeInput.style.display = 'none';
+        }
 </script>
