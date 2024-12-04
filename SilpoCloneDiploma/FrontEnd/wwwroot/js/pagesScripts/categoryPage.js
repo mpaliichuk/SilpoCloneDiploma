@@ -1,10 +1,14 @@
 ﻿var currentPage = 1;
-var pageSize = 18;
+var getsOnPage = 0;
+var totalPageCount = 0;
+/*var pageSize = 18;*/
+var pageSize = 6;
 var newPage = true;
 var pageChangeSymbol = "plus";
+var categoryId = document.getElementById("categoryId").value;
 
-GetCategoryInfo(document.getElementById("categoryId").value);
-GetProducts();
+GetCategoryInfo(categoryId);
+GetProducts(categoryId, true);
 
 async function GetCategoryInfo(categoryId) {
     try {
@@ -89,11 +93,10 @@ async function AddProductInCart(productId, productCount, userId) {
         throw error;
     }
 }
-async function GetProducts() {
+async function GetProducts(categoryId, firstIn = null) {
     var productsOnPage = [];
-
     try {
-        const response = await fetch("http://localhost:5152/gateway/GetPage/" + 1 + "/" + 18, {
+        const response = await fetch("http://localhost:5152/gateway/GetPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -102,6 +105,8 @@ async function GetProducts() {
         if (response.ok) {
             productsOnPage = await response.json();
             console.log(productsOnPage);
+            if (firstIn)
+                setPageSize(productsOnPage.totalCount);
             //productsOnPage.forEach(product => {
             //    const productCard = createProductCard(product);
             //    document.getElementById('subProductsDiv').appendChild(productCard);
@@ -111,9 +116,10 @@ async function GetProducts() {
         console.error('Error:', error);
         throw error;
     }
-    if (newPage)
+    if (newPage) {
         document.getElementById('subProductsDiv').innerText = '';
-    for (var i = 0; i < 18; i++) {
+    }
+    for (var i = 0; i < pageSize; i++) {
         const productCard = createProductCard({
             productIconSrc: productsOnPage.products[i].imageUrls[0],
             productName: productsOnPage.products[i].title,
@@ -269,58 +275,150 @@ function generateSubCategoryMarkup(subCategories) {
 }
 
 const moreItemsBtn = document.getElementById('moreItems');
-var pageButtons = document.querySelectorAll('.pageButton');
 const buttonPrev = document.getElementById('buttonPrev');
 const buttonNext = document.getElementById('buttonNext');
 
 moreItemsBtn.addEventListener("click", function () {
     newPage = false;
-    GetProducts();
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
+    GetProducts(categoryId);
 });
 
 buttonNext.addEventListener("click", function () {
     newPage = true;
-    GetProducts();
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
     window.scrollTo({
-        top: 0,
+        top: 200,
         left: 0,
         behavior: 'smooth'
     });
+    GetProducts(categoryId);
 });
 
 buttonPrev.addEventListener("click", function () {
     newPage = true;
-    GetProducts();
     pageChangeSymbol = "minus";
     changePageText(pageChangeSymbol);
     window.scrollTo({
-        top: 0,
+        top: 200,
         left: 0,
         behavior: 'smooth'
     });
+    GetProducts(categoryId);
 });
 
 function changePageText(pageChangeSymbol) {
-    var tmpPage = currentPage;
-    var minusStep = 0;
-    pageButtons.forEach(btn => {
-        if (pageChangeSymbol == "plus")
-            btn.innerText = ++tmpPage;
-        else {
-            tmpPage--;
-            btn.innerText = tmpPage - minusStep;
-            minusStep++;
-            tmpPage += 3;
-        }
-    });
-    if (pageChangeSymbol == "plus")
+    const pageButtons = document.querySelectorAll('.pageButton');
+
+    if (pageChangeSymbol === "plus") {
         currentPage++;
-    else
+    } else {
         currentPage--;
+    }
+
+    if (currentPage > totalPageCount) {
+        currentPage--;
+    }
+    else if (currentPage < 1) {
+        currentPage++;
+    }
+    else {
+        pageButtons.forEach((btn, index) => {
+            if (btn.innerText == currentPage.toString()) {
+                btn.classList.add("selectedPage");
+                selectedPage = parseInt(btn.innerText);
+            } else {
+                btn.classList.remove("selectedPage");
+            }
+
+            if (totalPageCount > 6) {
+                if (currentPage === totalPageCount - 2 && pageChangeSymbol === "plus") {
+                    pageButtons[1].innerText = "...";
+                    pageButtons[2].innerText = totalPageCount - 4;
+                    pageButtons[3].innerText = totalPageCount - 3;
+                    pageButtons[4].innerText = totalPageCount - 2;
+                    pageButtons[5].innerText = totalPageCount - 1;
+                    pageButtons[6].innerText = totalPageCount;
+                }
+                else if (currentPage >= totalPageCount - 3 && pageChangeSymbol === "minus") {
+                    pageButtons[1].innerText = "...";
+                    pageButtons[2].innerText = totalPageCount - 4;
+                    pageButtons[3].innerText = totalPageCount - 3;
+                    pageButtons[4].innerText = totalPageCount - 2;
+                    pageButtons[5].innerText = totalPageCount - 1;
+                    pageButtons[6].innerText = totalPageCount;
+                }
+                else if (currentPage <= 4) {
+                    pageButtons[1].innerText = '2';
+                    pageButtons[2].innerText = '3';
+                    pageButtons[3].innerText = '4';
+                    pageButtons[4].innerText = '5';
+                    pageButtons[5].innerText = '...';
+                }
+                else if (currentPage === totalPageCount - 2 && pageChangeSymbol === "minus") {
+                    pageButtons[5].innerText = '...';
+                    pageButtons[1].innerText = '2';
+                }
+                else if (currentPage > 5 && currentPage < totalPageCount - 1) {
+                    pageButtons[1].innerText = '...';
+                    pageButtons[2].innerText = currentPage - 1;
+                    pageButtons[3].innerText = currentPage;
+                    pageButtons[4].innerText = currentPage + 1;
+                    pageButtons[5].innerText = '...';
+                }
+
+            } else {
+                pageButtons[index].innerText = index + 1;
+            }
+        });
+    }   
+}
+
+function setPageSize(count) {
+    const lastPageButton = document.querySelector(".lastPageButton");
+    const paginationDiv = document.getElementById("paginationDiv");
+    const pagesDiv = document.querySelector(".pages");
+    var pageCount = count / pageSize;
+
+    pageCount = Math.ceil(pageCount);
+    totalPageCount = pageCount;
+
+    if (pageCount > 1) {
+        paginationDiv.style.visibility = "visible";
+        paginationDiv.style.height = "auto";
+    } else {
+        paginationDiv.style.visibility = "hidden";
+        paginationDiv.style.height = "0px";
+    }
+
+    for (let i = 1; i <= pageCount; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.className = 'pageButton';
+        if (i === 1) {
+            pageButton.className += ' selectedPage';
+        }
+        if (pageCount <= 7) {
+            pageButton.innerText = i;
+            pagesDiv.appendChild(pageButton);
+        } else {
+            if (i <= 5) {
+                pageButton.innerText = i;
+                pagesDiv.appendChild(pageButton);
+            } else if (i === 6) {
+                pageButton.innerText = "...";
+                pageButton.className += ' selectorButtonRight';
+                pagesDiv.appendChild(pageButton);
+            } else if (i === pageCount) {
+                const lastButton = document.createElement('button');
+                lastButton.className = 'pageButton lastPageButton';
+                lastButton.innerText = pageCount;
+                pagesDiv.appendChild(lastButton);
+                break;
+            }
+        }
+    }
 }
 
 /*////////////////////////////      Cards       //////////////////////////////////////////////*/
@@ -471,3 +569,111 @@ function toggleDropdown(idFilter) {
     //        info.classList.toggle('active');
     //}
 }
+
+
+//Slider
+const slider = document.querySelector(".range-slider");
+const progress = slider.querySelector(".progress");
+const minPriceInput = slider.querySelector(".min-price");
+const maxPriceInput = slider.querySelector(".max-price");
+const minInput = slider.querySelector(".min-input");
+const maxInput = slider.querySelector(".max-input");
+
+const updateProgress = () => {
+    const minValue = parseInt(minInput.value);
+    const maxValue = parseInt(maxInput.value);
+
+    const range = maxInput.max - minInput.min;
+    const valueRange = maxValue - minValue;
+    const width = (valueRange / range) * 100;
+    const minOffset = ((minValue - minInput.min) / range) * 100;
+
+    progress.style.width = width + "%";
+    progress.style.left = minOffset + "%";
+
+    minPriceInput.value = minValue;
+    maxPriceInput.value = maxValue;
+};
+
+const updateRange = (event) => {
+    const input = event.target;
+
+    let min = parseInt(minPriceInput.value);
+    let max = parseInt(maxPriceInput.value);
+
+    if (input === minPriceInput && min > max) {
+        max = min;
+        maxPriceInput.value = max;
+    } else if (input === maxPriceInput && max < min) {
+        min = max;
+        minPriceInput.value = min;
+    }
+
+    minInput.value = min;
+    maxInput.value = max;
+
+    updateProgress();
+};
+
+minPriceInput.addEventListener("input", updateRange);
+maxPriceInput.addEventListener("input", updateRange);
+
+minInput.addEventListener("input", () => {
+    if (parseInt(minInput.value) >= parseInt(maxInput.value)) {
+        maxInput.value = minInput.value;
+    }
+    updateProgress();
+});
+
+maxInput.addEventListener("input", () => {
+    if (parseInt(maxInput.value) <= parseInt(minInput.value)) {
+        minInput.value = maxInput.value;
+    }
+    updateProgress();
+});
+
+let isDragging = false;
+let startOffsetX;
+
+progress.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+
+    isDragging = true;
+
+    startOffsetX = e.clientX - progress.getBoundingClientRect().left;
+
+    slider.classList.toggle("dragging", isDragging);
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        const sliderRect = slider.getBoundingClientRect();
+        const progressWidth = parseFloat(progress.style.width || 0);
+
+        let newLeft =
+            ((e.clientX - sliderRect.left - startOffsetX) / sliderRect.width) * 100;
+
+        newLeft = Math.min(Math.max(newLeft, 0), 100 - progressWidth);
+
+        progress.style.left = newLeft + "%";
+
+        const range = maxInput.max - minInput.min;
+        const newMin = Math.round((newLeft / 100) * range) + parseInt(minInput.min);
+        const newMax = newMin + parseInt(maxInput.value) - parseInt(minInput.value);
+
+        minInput.value = newMin;
+        maxInput.value = newMax;
+
+        updateProgress();
+    }
+    slider.classList.toggle("dragging", isDragging);
+});
+
+document.addEventListener("mouseup", () => {
+    if (isDragging) {
+        isDragging = false;
+    }
+    slider.classList.toggle("dragging", isDragging);
+});
+
+updateProgress();

@@ -187,9 +187,12 @@ namespace ProductServiceApi.Models
                     throw new ArgumentException("Invalid categoryId", nameof(categoryId));
                 }
 
+                var allCategoryIds = await GetAllChildCategoryIdsAsync(categoryId);
+
+                allCategoryIds.Add(categoryId);
                 var query = _context.Products
                     .Include(p => p.Category)
-                    .Where(p => p.CategoryId == categoryId || p.Category.ParentCategoryId == categoryId);
+                    .Where(p => allCategoryIds.Contains(p.CategoryId));
 
                 var totalCount = await query.CountAsync();
 
@@ -214,6 +217,25 @@ namespace ProductServiceApi.Models
                 _logger.LogError(ex, $"Error occurred while retrieving products page {pageNumber} with size {pageSize} for category {categoryId}");
                 throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize} for category {categoryId}", ex);
             }
+        }
+
+        private async Task<List<int>> GetAllChildCategoryIdsAsync(int parentCategoryId)
+        {
+            var childCategoryIds = new List<int>();
+
+            var directChildren = await _context.Categories
+                .Where(c => c.ParentCategoryId == parentCategoryId)
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            childCategoryIds.AddRange(directChildren);
+
+            foreach (var childId in directChildren)
+            {
+                childCategoryIds.AddRange(await GetAllChildCategoryIdsAsync(childId));
+            }
+
+            return childCategoryIds;
         }
 
         public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize)

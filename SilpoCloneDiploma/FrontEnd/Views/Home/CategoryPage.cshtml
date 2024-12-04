@@ -62,11 +62,11 @@
         <div id="pagesControlDiv">
             <button class="pageControlButtons" id="buttonPrev"><</button>
             <div class="pages">
-                <button class="pageButton">1</button>
+                @* <button class="pageButton">1</button>
                 <button class="pageButton">2</button>
                 <button class="pageButton">3</button>
-                <button class="selectorButton">...</button>
-                <button class="lastPageButton">14</button>
+                <button class="selectorButtonRight">...</button>
+                <button class="lastPageButton">14</button>*@
             </div>
             <button class="pageControlButtons" id="buttonNext">></button>
         </div>
@@ -196,11 +196,27 @@
                 <img class="ArrowHorisontalImg no-drag" src="/icons/ArrowHorisontalBlack.png" />
             </div>
             <div id="priceFilter" class="info-section-content">
-                <label class="checkboxContainer">
-                    <span class="filterName">Тут буде ціна</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    <span class="filterCount">10</span>
+                @* <label class="checkboxContainer">
+                    
+                </label> *@
+                <label class="range-slider">
+                    <label class="range">
+                        <input type="range" class="min-price" value="2500" min="10" max="10000" />
+                        <input type="range" class="max-price" value="5025" min="10" max="10000" />
+                        <label class="slider">
+                            <label class="progress"></label>
+                        </label>
+                    </label>
+                    <label class="priceInputs">
+                        <label>
+                            <span>Від</span>
+                            <input type="number" class="min-input" value="2500" min="10" max="10000" />
+                        </label>
+                        <label>
+                            <span>До</span>
+                            <input type="number" class="max-input" value="5025" min="10" max="10000" />
+                        </label>               
+                    </label>
                 </label>
             </div>
         </div>

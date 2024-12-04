@@ -249,7 +249,7 @@ namespace ProductServiceApi.Controllers
         /// </summary>
         /// <param name="pageNumber">The page number.</param>
         /// <param name="pageSize">The page size.</param>
-        [HttpGet("page/{pageNumber}/size/{pageSize}")]
+        [HttpGet("page/{pageNumber}/size/{pageSize}/category/{categoryId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [AllowAnonymous]
         public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetProductsByPageAsync(int pageNumber, int pageSize, int categoryId)

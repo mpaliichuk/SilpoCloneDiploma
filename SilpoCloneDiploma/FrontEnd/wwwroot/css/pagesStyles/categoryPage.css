@@ -45,17 +45,23 @@
     align-items: center;
     padding: 14px 40px;
     gap: 8px;
-    width: 210px;
+    width: 250px;
     height: 55px;
-    border: 0px;
-    background: #4CAF50;
+    border: 3px solid #CBCBCB;
+    background: #FFFEFE;
     border-radius: 30px;
     /*Text*/
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
     text-align: center;
+    color: #1E1E1E;
+}
+
+.moreItemsDiv:hover {
+    background: #4CAF50;
     color: #FFFEFE;
+    border: 3px solid #4CAF50;
 }
 
 #pagesControlDiv {
@@ -64,15 +70,21 @@
     align-items: center;
     justify-content: space-between;
     padding: 0px;
-    gap: 20px;
+    gap: 30px;
     width: auto;
     height: auto;
 }
 
-.pageControlButtons{
-    border:0px;
+.pageControlButtons {
+    border: 0px;
     background: none;
-    font-size:30px;
+    font-size: 30px;
+    color: #909090;
+    transform: scaleY(1.4);
+}
+
+.pageControlButtons:hover {
+    color: #1E1E1E;
 }
 
 .pages{
@@ -80,21 +92,25 @@
     justify-content:center;
     align-items:center;
     gap:5%;
+    padding-bottom:1.5px;
 }
 
-.pageButton, .lastPageButton, .selectorButton {
+.pageButton, .lastPageButton, .selectorButtonLeft, .selectorButtonRight, .selectedPage {
     border: 0px;
     background: none;
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
+    font-size: 20px;
     text-align: center;
-    color: #1E1E1E;
+    color: #909090;
 }
 
-.selectorButton {
+.selectorButtonLeft, .selectorButtonRight {
     cursor: default;
+}
+
+.selectedPage {
+    color: #1E1E1E;
 }
 
 .breadcrumb {
@@ -602,6 +618,95 @@ body.no-scroll {
     overflow: hidden;
 }
 
+/*////////////////////////////////////////////////////////////////////*/
+.range-slider {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-block: 20px;
+    /*Text*/
+    font-family: 'Noto Sans';
+    font-style: normal;
+}
+
+.range-slider.dragging {
+    cursor: ew-resize;
+}
+
+.priceInputs{
+    width: 100%;
+    display:flex;
+    justify-content:space-between;
+}
+
+.priceInputs > label {
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    display: flex;
+    justify-content: space-between;
+    color: #757575;
+    font-size: 14px;
+}
+
+.priceInputs > label > input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    min-width: 64px;
+    width: 100%;
+    border: 1px solid #CBCBCB;
+}
+
+.range {
+    width: 100%;
+    display: grid;
+    position: relative;
+    z-index: 5;
+}
+
+.range input {
+    grid-row: 2;
+    grid-column: 1;
+    pointer-events: none;
+    appearance: none;
+    background: transparent;
+}
+
+.range input::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    background: #FF5722;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.slider {
+    position: absolute;
+    height: 5px;
+    width: 100%;
+    background: #CBCBCB;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.progress {
+    position: absolute;
+    height: 100%;
+    background: #FF5722;
+    cursor: ew-resize;
+}
+
 
 /*///////////////////////////////////              CARDS               ////////////////////////////////////*/
 #mainProductsDiv {
@@ -648,8 +753,9 @@ body.no-scroll {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     padding: 0px;
+    padding-left:1.3%;
     gap: 35px 30px;
     width: 100%;
     height: auto;
