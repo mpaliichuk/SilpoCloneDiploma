@@ -120,7 +120,7 @@ namespace ProductServiceApi.Models
         {
             try
             {
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.Title == title);
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Title.ToLower().Contains(title.ToLower()));
 
                 if (product == null)
                 {
@@ -177,6 +177,80 @@ namespace ProductServiceApi.Models
         //        throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize}", ex);
         //    }
         //}
+
+        public async Task<(IEnumerable<Product>, int)> GetSortedProductsByPageAsync(int pageNumber, int pageSize, int categoryId, string sortName)
+        {
+            try
+            {
+                if (categoryId <= 0)
+                {
+                    throw new ArgumentException("Invalid categoryId", nameof(categoryId));
+                }
+
+                var allCategoryIds = await GetAllChildCategoryIdsAsync(categoryId);
+                allCategoryIds.Add(categoryId);
+
+                var query = _context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Ratings)
+                    .Where(p => allCategoryIds.Contains(p.CategoryId));
+
+                switch (sortName.ToLower())
+                {
+                    case "popular":
+                        query = query.OrderByDescending(p => p.Count);
+                        break;
+                    case "promotions":
+                        query = query.OrderByDescending(p => p.Discount > 0); 
+                        break;
+                    case "rating":
+                        query = query.OrderByDescending(p => p.Ratings.Any() ? p.Ratings.Average(r => r.Value) : 0);
+                        break;
+                    case "alphabetically":
+                        query = query.OrderBy(p => p.Title);
+                        break;
+                    case "reversealphabetically":
+                        query = query.OrderByDescending(p => p.Title);
+                        break;
+                    case "cheap":
+                        query = query.OrderBy(p => p.Discount.HasValue && p.Discount > 0
+                            ? Math.Round(p.Price * (1 - p.Discount.Value / 100), 2)
+                            : p.Price);
+                        break;
+                    case "expensive":
+                        query = query.OrderByDescending(p => p.Discount.HasValue && p.Discount > 0
+                            ? Math.Round(p.Price * (1 - p.Discount.Value / 100), 2)
+                            : p.Price);
+                        break;
+                    default:
+                        break;
+                }
+
+                var totalCount = await query.CountAsync();
+
+                var skipCount = (pageNumber - 1) * pageSize;
+                if (skipCount >= totalCount)
+                {
+                    return (new List<Product>(), totalCount);
+                }
+
+                var products = await query
+                    .Skip(skipCount)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                _logger.LogInformation("Retrieved {Count} products on page {PageNumber} with page size {PageSize} for category {CategoryId} and sort {SortName}",
+                    products.Count, pageNumber, pageSize, categoryId, sortName);
+
+                return (products, totalCount);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while retrieving products page {pageNumber} with size {pageSize} for category {categoryId} and sort {sortName}");
+                throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize} for category {categoryId} and sort {sortName}", ex);
+            }
+        }
+
 
         public async Task<(IEnumerable<Product>, int)> GetProductsByPageAsync(int pageNumber, int pageSize, int categoryId)
         {

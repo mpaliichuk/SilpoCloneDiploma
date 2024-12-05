@@ -1,11 +1,31 @@
 ﻿var currentPage = 1;
+var selectedPage = 1;
 var getsOnPage = 0;
 var totalPageCount = 0;
-/*var pageSize = 18;*/
+var outOfRange = false;
+var sortName = "none";
 var pageSize = 6;
 var newPage = true;
 var pageChangeSymbol = "plus";
+
 var categoryId = document.getElementById("categoryId").value;
+var sortModeElement = document.getElementById("sortMode");
+if (sortModeElement) {
+    var sortMode = sortModeElement.value;
+    sortName = sortMode;
+    var sortModesMapping = {
+        popular: "Спочатку популярні",
+        promotions: "Спочатку акційні",
+        rating: "За рейтингом",
+        alphabetically: "Від А до Я",
+        reverseAlphabetically: "Від Я до А",
+        cheap: "Спочатку дешевші",
+        expensive: "Спочатку дорожчі"
+    };
+
+    var sortText = sortModesMapping[sortName] || "Сортувати";
+    document.getElementById("sortText").innerHTML = sortText;
+}
 
 GetCategoryInfo(categoryId);
 GetProducts(categoryId, true);
@@ -97,7 +117,7 @@ async function AddProductInCart(productId, productCount, userId) {
 async function GetProducts(categoryId, firstIn = null) {
     var productsOnPage = [];
     try {
-        const response = await fetch("http://localhost:5152/gateway/GetPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/GetSortedPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId + "/" + sortName, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -277,6 +297,16 @@ function generateSubCategoryMarkup(subCategories) {
     document.querySelector(".controlItemsDis").appendChild(container);
 }
 
+///Sort////
+var sortsBtns = document.querySelectorAll(".sortName");
+sortsBtns.forEach(item => {
+    item.addEventListener("click", function (event) {
+        sortName = event.target.id;
+        window.location = "/Goodmeal/Category/" + categoryId + "/" + sortName;
+    });
+});
+
+///Pages///
 const moreItemsBtn = document.getElementById('moreItems');
 const buttonPrev = document.getElementById('buttonPrev');
 const buttonNext = document.getElementById('buttonNext');
@@ -285,49 +315,81 @@ moreItemsBtn.addEventListener("click", function () {
     newPage = false;
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
-    GetProducts(categoryId);
+    if (!outOfRange)
+        GetProducts(categoryId);
 });
 
 buttonNext.addEventListener("click", function () {
     newPage = true;
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
-    window.scrollTo({
-        top: 200,
-        left: 0,
-        behavior: 'smooth'
-    });
-    GetProducts(categoryId);
+    if (!outOfRange) {
+        window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
+        GetProducts(categoryId);
+    }
 });
 
 buttonPrev.addEventListener("click", function () {
     newPage = true;
     pageChangeSymbol = "minus";
     changePageText(pageChangeSymbol);
-    window.scrollTo({
-        top: 200,
-        left: 0,
-        behavior: 'smooth'
-    });
-    GetProducts(categoryId);
+    if (!outOfRange) {
+        window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
+        GetProducts(categoryId);
+    }
 });
+
+function selectPageFunctionalyty() {
+    const pageButtons = document.querySelectorAll('.pageButton');
+    pageButtons.forEach(item => {
+        item.addEventListener("click", function (event) {
+            newPage = true;
+            pageChangeSymbol = "select";
+            selectedPage = parseInt(event.target.innerHTML);
+            if (selectedPage != currentPage) {
+                changePageText(pageChangeSymbol);
+                if (!outOfRange) {
+                    window.scrollTo({
+                        top: 200,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                    GetProducts(categoryId);
+                }
+            }
+        });
+    });
+}
 
 function changePageText(pageChangeSymbol) {
     const pageButtons = document.querySelectorAll('.pageButton');
 
     if (pageChangeSymbol === "plus") {
         currentPage++;
-    } else {
+    } else if (pageChangeSymbol !== "select") {
         currentPage--;
+    } else {
+        currentPage = selectedPage;
     }
 
     if (currentPage > totalPageCount) {
         currentPage--;
+        outOfRange = true;
     }
     else if (currentPage < 1) {
         currentPage++;
+        outOfRange = true;
     }
     else {
+        outOfRange = false;
         pageButtons.forEach((btn, index) => {
             if (btn.innerText == currentPage.toString()) {
                 btn.classList.add("selectedPage");
@@ -337,7 +399,7 @@ function changePageText(pageChangeSymbol) {
             }
 
             if (totalPageCount > 6) {
-                if (currentPage === totalPageCount - 2 && pageChangeSymbol === "plus") {
+                if (currentPage === totalPageCount - 2 && (pageChangeSymbol === "plus" || pageChangeSymbol === "select")) {
                     pageButtons[1].innerText = "...";
                     pageButtons[2].innerText = totalPageCount - 4;
                     pageButtons[3].innerText = totalPageCount - 3;
@@ -345,7 +407,7 @@ function changePageText(pageChangeSymbol) {
                     pageButtons[5].innerText = totalPageCount - 1;
                     pageButtons[6].innerText = totalPageCount;
                 }
-                else if (currentPage >= totalPageCount - 3 && pageChangeSymbol === "minus") {
+                else if (currentPage >= totalPageCount - 3 && (pageChangeSymbol === "minus" || pageChangeSymbol === "select")) {
                     pageButtons[1].innerText = "...";
                     pageButtons[2].innerText = totalPageCount - 4;
                     pageButtons[3].innerText = totalPageCount - 3;
@@ -360,11 +422,11 @@ function changePageText(pageChangeSymbol) {
                     pageButtons[4].innerText = '5';
                     pageButtons[5].innerText = '...';
                 }
-                else if (currentPage === totalPageCount - 2 && pageChangeSymbol === "minus") {
+                else if (currentPage === totalPageCount - 2 && (pageChangeSymbol === "minus" || pageChangeSymbol === "select")) {
                     pageButtons[5].innerText = '...';
                     pageButtons[1].innerText = '2';
                 }
-                else if (currentPage > 5 && currentPage < totalPageCount - 1) {
+                else if (currentPage > 4 && currentPage < totalPageCount - 1) {
                     pageButtons[1].innerText = '...';
                     pageButtons[2].innerText = currentPage - 1;
                     pageButtons[3].innerText = currentPage;
@@ -376,11 +438,10 @@ function changePageText(pageChangeSymbol) {
                 pageButtons[index].innerText = index + 1;
             }
         });
-    }   
+    }
 }
 
 function setPageSize(count) {
-    const lastPageButton = document.querySelector(".lastPageButton");
     const paginationDiv = document.getElementById("paginationDiv");
     const pagesDiv = document.querySelector(".pages");
     var pageCount = count / pageSize;
@@ -422,6 +483,7 @@ function setPageSize(count) {
             }
         }
     }
+    selectPageFunctionalyty();
 }
 
 /*////////////////////////////      Cards       //////////////////////////////////////////////*/

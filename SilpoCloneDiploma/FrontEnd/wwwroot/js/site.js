@@ -69,6 +69,26 @@ async function GetCategories() {
     }
 }
 
+async function FindProduct(title) {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/SearchProducts/" + title, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            responseItem = await response.json();
+            console.log(responseItem);
+            var productId = responseItem.id;
+            window.location = "/Goodmeal/ProductPage/" + productId;;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
 
 dropdownToggle.addEventListener('click', function (event) {
     event.preventDefault();
@@ -215,6 +235,28 @@ function createCategoryItem(href, id) {
     categoryList.appendChild(categoryItem);
 }
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+///Find////
+var search = document.getElementById("searchText");
+var searchIcon = document.getElementById("searchIcon");
+
+search.addEventListener('keyup', event => {
+    if (event.code === 'Enter') {
+        find(search.value);
+    }
+});
+
+searchIcon.addEventListener("click", function (event) {
+    find(search.value);
+});
+
+function find(title) {
+    if (title.length > 3) {
+        FindProduct(title);
+    }  
+}
+
+///
 
 socialIcons.forEach((item) => {
     item.addEventListener('mouseenter', function () {

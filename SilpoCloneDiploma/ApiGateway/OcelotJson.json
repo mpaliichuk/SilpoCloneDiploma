@@ -13,7 +13,7 @@
       "UpstreamHttpMethod": [ "POST", "GET" ]
     }, //good
     {
-      "DownstreamPathTemplate": "/api/product/GetProductByNameAsync/{title}",
+      "DownstreamPathTemplate": "/api/Product/name/{title}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -70,7 +70,19 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/GetPage/{pageNumber}/{pageSize}/{categoryId}",
-      "UpstreamHttpMethod": [ "GET" ] //so so
+      "UpstreamHttpMethod": [ "GET" ] //so so Пагінація без сорту
+    },
+    {
+      "DownstreamPathTemplate": "/api/Product/sortedPage/{pageNumber}/size/{pageSize}/category/{categoryId}/sortBy/{sortName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetSortedPage/{pageNumber}/{pageSize}/{categoryId}/{sortName}",
+      "UpstreamHttpMethod": [ "GET" ]
     },
     {
       "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}/no-category",

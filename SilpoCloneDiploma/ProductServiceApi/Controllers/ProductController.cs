@@ -230,6 +230,7 @@ namespace ProductServiceApi.Controllers
 
             var productDto = new ProductDto
             {
+                Id = product.Id,
                 Title = product.Title,
                 ProductComposition = product.ProductComposition,
                 GeneralInformation = product.GeneralInformation,
@@ -257,6 +258,43 @@ namespace ProductServiceApi.Controllers
             try
             {
                 var (products, totalCount) = await _service.GetProductsByPageAsync(pageNumber, pageSize, categoryId);
+
+                var productDtos = products.Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    ProductComposition = p.ProductComposition,
+                    GeneralInformation = p.GeneralInformation,
+                    ImageUrls = p.ImageUrls,
+                    Availability = (Dtos.Availability)p.Availability,
+                    Count = p.Count,
+                    Discount = p.Discount,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId
+                });
+
+                return Ok(new { Products = productDtos, TotalCount = totalCount });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving products.");
+                return StatusCode(500, "An error occurred while retrieving products.");
+            }
+        }
+
+        /// <summary>
+        /// Get products with pagination.
+        /// </summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        [HttpGet("sortedPage/{pageNumber}/size/{pageSize}/category/{categoryId}/sortBy/{sortName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetSortedProductsByPageAsync(int pageNumber, int pageSize, int categoryId, string sortName)
+        {
+            try
+            {
+                var (products, totalCount) = await _service.GetSortedProductsByPageAsync(pageNumber, pageSize, categoryId, sortName);
 
                 var productDtos = products.Select(p => new ProductDto
                 {

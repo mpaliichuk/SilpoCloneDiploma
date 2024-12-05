@@ -140,7 +140,7 @@ async function GetProductsBySameCategory(productCategoryId) {
 
 async function GetCategoryInfo(categoryId) {
     try {
-        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/Category/" + categoryId, {
             method: "GET",
             headers: {
                 "Accept": "application/json",
