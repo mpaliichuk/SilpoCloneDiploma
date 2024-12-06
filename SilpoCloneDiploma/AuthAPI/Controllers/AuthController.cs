@@ -1,5 +1,6 @@
 ﻿using AuthAPI.Models.Dto;
 using AuthAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthAPI.Controllers
@@ -38,6 +39,7 @@ namespace AuthAPI.Controllers
         }
 
         [HttpPost("assign-role")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> AssignRole([FromBody] AssignRoleDto requestDto)
         {
             var response = await _authService.AssignRole(requestDto);

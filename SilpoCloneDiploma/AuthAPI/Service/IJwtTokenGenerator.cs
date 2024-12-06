@@ -1,10 +1,11 @@
 ﻿
 using AuthAPI.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthAPI.Service
 {
     public interface IJwtTokenGenerator
     {
-        string GenerateToken(User user);
+        public Task<string> GenerateTokenAsync(User user);
     }
 }

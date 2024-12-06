@@ -44,5 +44,18 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-
+ApplyMigrations();
 app.Run();
+
+void ApplyMigrations()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
+        if (db.Database.GetPendingMigrations().Any())
+        {
+            db.Database.Migrate();
+
+        }
+    }
+}

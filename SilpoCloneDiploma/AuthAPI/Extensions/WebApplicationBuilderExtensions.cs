@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace ShopingCartServiceApi.Extentions
+namespace AuthAPI.Extentions
 {
     public static class WebApplicationBuilderExtensions
     {
