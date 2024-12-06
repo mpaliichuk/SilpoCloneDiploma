@@ -7,6 +7,7 @@ var sortName = "none";
 var pageSize = 6;
 var newPage = true;
 var pageChangeSymbol = "plus";
+var selectedFiltersCount = 0;
 
 var categoryId = document.getElementById("categoryId").value;
 var sortModeElement = document.getElementById("sortMode");
@@ -633,6 +634,99 @@ function toggleDropdown(idFilter) {
     //    default:
     //        info.classList.toggle('active');
     //}
+}
+
+///Filter Params
+
+var checkboxContainers = document.querySelectorAll(".checkboxContainer");
+var clearAllFilters = document.getElementById("clearAllFilters");
+const selectedFiltersDiv = document.querySelector(".selectedFiltersDiv");
+const selectedFiltersList = document.getElementById("selectedFiltersList");
+const selectedFilters = document.getElementById("selectedItems");
+
+function checkFiltersVisibility() {
+    if (selectedFiltersList.children.length === 0) {
+        selectedFiltersDiv.style.visibility = 'hidden';
+        selectedFiltersDiv.style.padding = '0px';
+        selectedFiltersDiv.style.height = '0px';
+        selectedFiltersDiv.style.borderTop = '0px';
+    } else {
+        selectedFiltersDiv.style.visibility = 'visible';
+        selectedFiltersDiv.style.padding = '15px 0px 0px 6px';
+        selectedFiltersDiv.style.height = 'auto';
+        selectedFiltersDiv.style.borderTop = '1px solid #BDBDBD';
+    }
+}
+
+clearAllFilters.addEventListener("click", function () {
+
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+    selectedFiltersList.innerHTML = '';  
+
+    const checkboxes = document.querySelectorAll(".checkboxContainer input[type='checkbox']");
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    selectedFiltersCount = 0;
+    selectedFilters.innerText = selectedFiltersCount;
+    checkFiltersVisibility();
+});
+
+checkboxContainers.forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+        const filterName = checkbox.querySelector(".filterName");
+        const checkboxInput = checkbox.querySelector("input[type='checkbox']");
+
+        if (checkboxInput.checked) {
+            addSelectedFilter(filterName.innerText, checkboxInput);
+            selectedFiltersCount++;
+        } else {
+            removeSelectedFilter(filterName.innerText);
+            selectedFiltersCount--;
+        }
+        selectedFilters.innerText = selectedFiltersCount;
+        checkFiltersVisibility();
+    });
+});
+
+function addSelectedFilter(text, checkboxInput) {
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+
+    if (!Array.from(selectedFiltersList.children).some(item => item.querySelector(".selectedFilterText").innerText === text)) {
+        const newFilter = document.createElement("div");
+        newFilter.className = "selectedFilter";
+
+        const filterText = document.createElement("span");
+        filterText.className = "selectedFilterText";
+        filterText.innerText = text;
+
+        const filterDelete = document.createElement("span");
+        filterDelete.className = "selectedFilterDelete";
+        filterDelete.innerText = "x";
+
+        filterDelete.addEventListener("click", () => {
+            newFilter.remove();
+            checkboxInput.checked = false;
+            selectedFiltersCount--;
+            selectedFilters.innerText = selectedFiltersCount;
+            checkFiltersVisibility();
+        });
+
+        newFilter.appendChild(filterText);
+        newFilter.appendChild(filterDelete);
+        selectedFiltersList.appendChild(newFilter);
+        checkFiltersVisibility();
+    }
+}
+
+function removeSelectedFilter(text) {
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+    const filterToRemove = Array.from(selectedFiltersList.children).find(item => item.querySelector(".selectedFilterText").innerText === text);
+
+    if (filterToRemove) {
+        filterToRemove.remove();
+    }
+    checkFiltersVisibility();
 }
 
 

@@ -351,12 +351,11 @@
     flex-direction: column;
     gap: 15px;
     padding: 0px;
-    padding-left: 6px;
     width: 100%;
-    height: auto;
+    height: 0px;
     align-self: stretch;
-    border-top: 1px solid #BDBDBD;
-    padding-top: 15px;
+    border-top: 0px;
+    visibility: hidden;
 }
 
 .selectedFiltersTitleDiv {
