@@ -388,18 +388,37 @@ nav {
     height: 24px;
 }
 
-#basketDiv {
+.adminDivClass {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 10px 20px;
     gap: 8px;
-    width: 152px;
+    width: auto;
+    min-width: 152px;
+    height: 40px;
+    background: #FFFEFE;
+    border-radius: 30px;
+    border: 3px solid #4CAF50;
+    cursor: pointer;
+    color: #585858;
+}
+
+.basketDivClass {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 8px;
+    width: auto;
+    min-width: 152px;
     height: 40px;
     background: #FF5722;
     border-radius: 30px;
-    cursor:pointer;
+    cursor: pointer;
+    color: #FFFFFF;
 }
 
 #basketIcon {
@@ -408,14 +427,11 @@ nav {
 }
 
 #basketText {
-    width: 52px;
-    height: 22px;
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 22px;
-    color: #FFFFFF;
 }
 
 /*//////////////////////////////////FOOTER////////////////////////////////*/

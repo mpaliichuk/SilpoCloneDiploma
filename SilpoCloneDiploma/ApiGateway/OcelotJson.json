@@ -215,6 +215,18 @@
       ],
       "UpstreamPathTemplate": "/gateway/AddToCart",
       "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/cart/get-cart/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5129
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetUserCart/{userId}",
+      "UpstreamHttpMethod": [ "GET" ]
     }
   ]
 }

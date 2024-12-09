@@ -391,11 +391,17 @@ function cardFunctionality() {
             if (countElement) {
                 let currentCount = parseInt(countElement.innerHTML, 10);
                 if (currentCount > 0) {
-                    // AddProductInCart(cardDiv.id, currentCount, /*userId*/ 0);
-                    alert(`${cardDiv.id}, ${currentCount}, ${0}`);
-                    countElement.innerHTML = '0';
-                } else {
-                    alert("Спершу виберіть кількість товару (`U_U`)!");
+                    var userId = localStorage.getItem("userId");
+                    if (userId != 0) {
+                        AddProductInCart(cardDiv.id, count.innerHTML, userId);
+                        count.innerHTML = '0';
+                    }
+                    else {
+                        alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+                    }
+                }
+                else {
+                    alert("Спершу виберіть кількість товар (`U_U`)!");
                 }
             }
         });
