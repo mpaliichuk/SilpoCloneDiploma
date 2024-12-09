@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using ProductServiceApi.Models.Dto;
 
 namespace ProductServiceApi.Controllers
 {
@@ -325,6 +326,9 @@ namespace ProductServiceApi.Controllers
                     GeneralInformation = p.GeneralInformation,
                     ImageUrls = p.ImageUrls,
                     Availability = (Dtos.Availability)p.Availability,
+                    Weight = p.Weight,
+                    TradeMark = p.TradeMark,
+                    CountryOfManufacture = p.CountryOfManufacture,
                     Count = p.Count,
                     Discount = p.Discount,
                     Price = p.Price,
@@ -340,6 +344,82 @@ namespace ProductServiceApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get products with filtered/sorted pagination.
+        /// </summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        [HttpPost("sortedFilteredPage/{pageNumber}/size/{pageSize}/category/{categoryId}/sortBy/{sortName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetFilteredAndSortedProductsAsync(ProductFilterDto filter, int pageNumber, int pageSize, int categoryId, string sortName)
+        {
+            try
+            {
+                IEnumerable<Product> products;
+                int totalCount;
+
+                if (filter != null)
+                {
+                    (products, totalCount) = await _service.GetFilteredAndSortedProductsAsync(pageNumber, pageSize, categoryId, sortName, filter);
+                }
+                else
+                {
+                    (products, totalCount) = await _service.GetSortedProductsByPageAsync(pageNumber, pageSize, categoryId, sortName);
+                }
+
+                var productDtos = products.Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    ProductComposition = p.ProductComposition,
+                    GeneralInformation = p.GeneralInformation,
+                    ImageUrls = p.ImageUrls,
+                    Availability = (Dtos.Availability)p.Availability,
+                    Weight = p.Weight,
+                    TradeMark = p.TradeMark,
+                    CountryOfManufacture = p.CountryOfManufacture,
+                    Count = p.Count,
+                    Discount = p.Discount,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId
+                });
+
+                return Ok(new { Products = productDtos, TotalCount = totalCount });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving products.");
+                return StatusCode(500, "An error occurred while retrieving products.");
+            }
+        }
+
+        [HttpGet("GetFilters/{categoryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CountryAndTradeMarkDto>))]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<CountryAndTradeMarkDto>>> GetFiltersAsync(int categoryId)
+        {
+            try
+            {
+                var products = await _service.GetAllProductsByCategoryAsync(categoryId);
+
+                var groupedData = products
+                    .GroupBy(p => new { p.CountryOfManufacture, p.TradeMark })
+                    .Select(g => new CountryAndTradeMarkDto
+                    {
+                        Country = g.Key.CountryOfManufacture,
+                        TradeMark = g.Key.TradeMark,
+                        Count = g.Count()
+                    });
+
+                return Ok(groupedData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving filters for categoryId: {CategoryId}", categoryId);
+                return StatusCode(500, "An error occurred while retrieving filters.");
+            }
+        }
 
         /// <summary>
         /// Get products with pagination, without category filter.

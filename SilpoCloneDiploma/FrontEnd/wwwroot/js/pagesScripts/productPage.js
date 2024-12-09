@@ -12,7 +12,11 @@ async function GetProduct(productId, productCategoryId) {
     });
     if (response.ok) {
         const responseProduct = await response.json();
-        console.log(responseProduct);
+        if (responseProduct.weight < 1)
+            responseProduct.weight = `${responseProduct.weight * 1000} грам(мл)`;
+        else
+            responseProduct.weight = `${responseProduct.weight} кілограм`;
+
         let product = {
             id: productId,
             title: responseProduct.title,
@@ -24,9 +28,9 @@ async function GetProduct(productId, productCategoryId) {
             ratingCount: responseProduct.ratingCount,
             category_id: responseProduct.categoryId,
             attributes: [
-                { key: "Колір", value: "Помаранчевий" },
-                { key: "Країна", value: "Мексика" },
-                { key: "Вага", value: "100 грамм" }
+                { key: "Торгова марка", value: responseProduct.tradeMark },
+                { key: "Країна", value: responseProduct.countryOfManufacture },
+                { key: "Вага", value: responseProduct.weight }
             ]
         };
         productCategoryId = responseProduct.categoryId;
@@ -129,6 +133,7 @@ async function GetProductsBySameCategory(productCategoryId) {
             price: productsByCategory[i].price,
             discount: productsByCategory[i].discount,
             productId: productsByCategory[i].id,
+            count: productsByCategory[i].count,
             isFirst: isFirstBool
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
@@ -254,10 +259,13 @@ function generatePriceNoDiscount(oldPrice, discountPercentage) {
 
 }
 function createProductCard({ productIconSrc, productName, productFullName,
-    price, sale, productId, isFirst, discountIconSrc = '/icons/Discount.png' }) {
+    price, sale, productId, count, isFirst, discountIconSrc = '/icons/Discount.png' }) {
     const cardDiv = document.createElement('div');
     cardDiv.id = `${productId}`;
     cardDiv.className = 'cardDiv';
+    //if (count < 1) {
+    //    cardDiv.classList.add('soldOut');
+    //}
     //cardDiv.setAttribute("product-id", productId);
 
     const productIconDiv = document.createElement('div');
@@ -603,8 +611,11 @@ const ratingBtn = document.querySelector('.setRatingBtn');
 var selectedRating = 0;
 
 ratingBtn.addEventListener('click', function () {
-    if (selectedRating != 0)
-        SetRating(selectedRating, "тут має бути id користувача а не текст", productId);
+    var userId = localStorage.getItem("userId")
+    if (selectedRating != 0 && localStorage.getItem("userId") != 0)
+        SetRating(selectedRating, `${userId}`, productId);
+    else
+        alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
     closeRatingPopUpEvent();
 });
 
@@ -687,7 +698,7 @@ async function SetRating(rating, comment, productId) {
             })
         });
         if (response.ok) {
-
+            window.location.reload();
         }
     } catch (error) {
         console.error('Error:', error);

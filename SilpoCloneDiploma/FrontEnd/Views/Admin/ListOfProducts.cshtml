@@ -39,7 +39,7 @@
                         <th class="custom-size">Weight</th>
                         <th class="custom-size">Trade Mark</th>
                         <th class="custom-size">Country Of Manufacture</th>
-                        <th class="custom-size">Price</th>
+                        <th class="custom-size">Price </th>
                         <th class="custom-size">Category</th>
                         <th class="custom-size">Actions</th>
                     </tr>
@@ -70,7 +70,7 @@
                             <td>@product.Weight</td>
                             <td>@product.TradeMark</td>
                             <td>@product.CountryOfManufacture</td>
-                            <td>@product.Price.ToString("C")</td>
+                            <td style="white-space: nowrap;">@product.Price.ToString("C")</td>
                             <td>
                                 @if (product.CategoryId.HasValue)
                                 {
@@ -222,7 +222,7 @@
         align-items: center;
         justify-content: center;
         font-size: 10px;
-        margin-bottom: 5px; /* Додає відстань між кнопками */
+        margin-bottom: 5px; 
     }
 
         .edit-btn:hover {
@@ -281,6 +281,12 @@
         }
 
     .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-bottom: 20px;
+        table-layout: fixed;
+        table-layout: auto; 
         width: 100%;
     }
 

@@ -51,7 +51,7 @@ async function GetCategories() {
     var categoriesRespons = [];
 
     try {
-        const response = await fetch("http://localhost:5152/gateway/AllCategories", {
+        const response = await fetch("http://localhost:5152/gateway/Category", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -700,8 +700,8 @@ loginButton.addEventListener("click", async function () {
             overlayPopUp.style.display = 'none';
             localStorage.setItem("userName", result.user.name);
             localStorage.setItem("userId", result.user.id);
-            /*localStorage.setItem("userRole", result.user.role);*/
-            localStorage.setItem("userRole", "Admin");
+            localStorage.setItem("userRole", result.user.role);
+            /*localStorage.setItem("userRole", "Admin");*/
 
             closeLoginPopup();
             overlayPopUp.style.display = 'none';
@@ -711,6 +711,7 @@ loginButton.addEventListener("click", async function () {
             if (profileSpan) {
                 profileSpan.textContent = `${result.user.name}(Вийти)` || "Акаунт";
             }
+            window.location.reload();
         } else {
             loginErrorDiv.textContent = result.message || "Помилка входу. Перевірте емейл та пароль.";
             loginErrorDiv.style.display = "block";
@@ -720,7 +721,6 @@ loginButton.addEventListener("click", async function () {
         loginErrorDiv.textContent = "Помилка мережі при вході.";
         loginErrorDiv.style.display = "block";
     }
-    window.location.reload();
 });
 
 function displayLoginError(message) {

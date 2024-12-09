@@ -8,28 +8,23 @@ var pageSize = 6;
 var newPage = true;
 var pageChangeSymbol = "plus";
 var selectedFiltersCount = 0;
+var selectedFiltersArray= {
+    CountryOfManufacture: [],
+    TradeMarks: [],
+    MinPrice: 0,
+    MaxPrice: 0,
+};
+var systemFiltersArray = {
+    CountryOfManufacture: [],
+    TradeMarks: []
+};
 
 var categoryId = document.getElementById("categoryId").value;
 var sortModeElement = document.getElementById("sortMode");
-if (sortModeElement) {
-    var sortMode = sortModeElement.value;
-    sortName = sortMode;
-    var sortModesMapping = {
-        popular: "Спочатку популярні",
-        promotions: "Спочатку акційні",
-        rating: "За рейтингом",
-        alphabetically: "Від А до Я",
-        reverseAlphabetically: "Від Я до А",
-        cheap: "Спочатку дешевші",
-        expensive: "Спочатку дорожчі"
-    };
-
-    var sortText = sortModesMapping[sortName] || "Сортувати";
-    document.getElementById("sortText").innerHTML = sortText;
-}
 
 GetCategoryInfo(categoryId);
 GetProducts(categoryId, true);
+GetFilters();
 
 async function GetCategoryInfo(id) {
     try {
@@ -116,23 +111,70 @@ async function AddProductInCart(productId, productCount, userId) {
     }
 }
 async function GetProducts(categoryId, firstIn = null) {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const countries = urlParams.get('countries') ? urlParams.get('countries').split(',') : [];
+    const trademarks = urlParams.get('trademarks') ? urlParams.get('trademarks').split(',') : [];
+    const minPrice = urlParams.get('minPrice') ? parseFloat(urlParams.get('minPrice')) : null;
+    const maxPrice = urlParams.get('maxPrice') ? parseFloat(urlParams.get('maxPrice')) : null;
+    const sort = urlParams.get('sort') || (sortModeElement ? sortModeElement.value : '') || sortName;
+
+    const filter = {
+        Countries: countries.length > 0 ? countries : [],
+        Brands: trademarks.length > 0 ? trademarks : [],
+        MinPrice: minPrice !== null ? minPrice : null,
+        MaxPrice: maxPrice !== null ? maxPrice : null
+    };
+
+    let url = `http://localhost:5152/gateway/GetSortedFilteredPage/${currentPage + getsOnPage}/${pageSize}/${categoryId}/${sort}`;
     var productsOnPage = [];
+    console.log(filter);
     try {
-        const response = await fetch("http://localhost:5152/gateway/GetSortedPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId + "/" + sortName, {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
+        if (filter.Countries.length < 1 && filter.Brands.length < 1 && filter.MinPrice == null && filter.maxPrice == null) {
+            const response = await fetch("http://localhost:5152/gateway/GetSortedPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId + "/" + sort, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (response.ok) {
+                productsOnPage = await response.json();
+                console.log(productsOnPage);
+                if (firstIn) setPageSize(productsOnPage.totalCount);
+            }   
+        } else {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(filter)
+            });
+
+            if (response.ok) {
+                productsOnPage = await response.json();
+                console.log(productsOnPage);
+                if (firstIn) setPageSize(productsOnPage.totalCount);
+            } 
+
+            if (sort) {
+                var sortMode = sort;
+                sortName = sortMode;
+                var sortModesMapping = {
+                    popular: "Спочатку популярні",
+                    promotions: "Спочатку акційні",
+                    rating: "За рейтингом",
+                    alphabetically: "Від А до Я",
+                    reverseAlphabetically: "Від Я до А",
+                    cheap: "Спочатку дешевші",
+                    expensive: "Спочатку дорожчі"
+                };
+
+                var sortText = sortModesMapping[sortName] || "Сортувати";
+                document.getElementById("sortText").innerHTML = sortText;
             }
-        });
-        if (response.ok) {
-            productsOnPage = await response.json();
-            console.log(productsOnPage);
-            if (firstIn)
-                setPageSize(productsOnPage.totalCount);
-            //productsOnPage.forEach(product => {
-            //    const productCard = createProductCard(product);
-            //    document.getElementById('subProductsDiv').appendChild(productCard);
-            //});
         }
     } catch (error) {
         console.error('Error:', error);
@@ -155,6 +197,82 @@ async function GetProducts(categoryId, firstIn = null) {
         document.getElementById('subProductsDiv').appendChild(productCard);
     }
     addCardsEvents();
+}
+async function GetFilters() {
+    try {
+        const response = await fetch("http://localhost:5152/gateway/GetFilters/" + categoryId, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            const countries = data.reduce((acc, item) => {
+                const country = acc.find(c => c.name === item.country);
+                if (country) {
+                    country.count += item.count;
+                } else {
+                    acc.push({ name: item.country, count: item.count });
+                }
+                return acc;
+            }, []);
+
+            const tradeMarks = data.reduce((acc, item) => {
+                const tradeMark = acc.find(t => t.name === item.tradeMark);
+                if (tradeMark) {
+                    tradeMark.count += item.count;
+                } else {
+                    acc.push({ name: item.tradeMark, count: item.count });
+                }
+                return acc;
+            }, []);
+            systemFiltersArray.CountryOfManufacture = countries;
+            systemFiltersArray.TradeMarks = tradeMarks;
+            generateFilterMarkup(systemFiltersArray.CountryOfManufacture, "country");
+            generateFilterMarkup(systemFiltersArray.TradeMarks, "tradeMark");
+            FilterParams();
+        } else {
+            console.error(`Failed to fetch filters: ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+function generateFilterMarkup(data, containerId) {
+    const container = document.getElementById(containerId);
+
+    container.innerHTML = "";
+
+    data.forEach(item => {
+        const label = document.createElement("label");
+        label.className = "checkboxContainer";
+
+        const filterName = document.createElement("span");
+        filterName.className = "filterName";
+        filterName.textContent = item.name;
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+
+        const checkmark = document.createElement("span");
+        checkmark.className = "checkmark";
+
+        const filterCount = document.createElement("span");
+        filterCount.className = "filterCount";
+        filterCount.textContent = item.count;
+
+        label.appendChild(filterName);
+        label.appendChild(checkbox);
+        label.appendChild(checkmark);
+        label.appendChild(filterCount);
+
+        container.appendChild(label);
+    });
 }
 function createProductCard({ productIconSrc, productName, productFullName,
     price, sale, productId, discountIconSrc = '/icons/Discount.png' }) {
@@ -299,13 +417,44 @@ function generateSubCategoryMarkup(subCategories) {
 }
 
 ///Sort////
+
 var sortsBtns = document.querySelectorAll(".sortName");
+
+if (sortModeElement) {
+    var sortMode = sortModeElement.value;
+    sortName = sortMode;
+    var sortModesMapping = {
+        popular: "Спочатку популярні",
+        promotions: "Спочатку акційні",
+        rating: "За рейтингом",
+        alphabetically: "Від А до Я",
+        reverseAlphabetically: "Від Я до А",
+        cheap: "Спочатку дешевші",
+        expensive: "Спочатку дорожчі"
+    };
+
+    var sortText = sortModesMapping[sortName] || "Сортувати";
+    document.getElementById("sortText").innerHTML = sortText;
+}
+
 sortsBtns.forEach(item => {
     item.addEventListener("click", function (event) {
-        sortName = event.target.id;
-        window.location = "/Goodmeal/Category/" + categoryId + "/" + sortName;
+        const sortName = event.target.id;
+        const currentUrl = new URL(window.location.href);
+        const currentPath = window.location.pathname;
+        const searchParams = currentUrl.searchParams;
+
+        if (searchParams.has("sort")) {
+            searchParams.set("sort", sortName);
+            const newUrl = `${currentPath}?${searchParams.toString()}`;
+            window.location = newUrl;
+        } else {
+            const newPath = `/Goodmeal/Category/${categoryId}/${sortName}`;
+            window.location = newPath;
+        }
     });
 });
+
 
 ///Pages///
 const moreItemsBtn = document.getElementById('moreItems');
@@ -579,6 +728,32 @@ const filterPopUp = document.getElementById('filterPopUp');
 const filterButton = document.getElementById('filterButton');
 const overlayFilterPopUp = document.getElementById('filterOverlay');
 
+document.querySelector(".submitFiltersButton").addEventListener("click", function () {
+    const filters = selectedFiltersArray;
+    const queryParams = new URLSearchParams();
+
+    if (filters.CountryOfManufacture.length > 0) {
+        queryParams.append("countries", filters.CountryOfManufacture.join(","));
+    }
+    if (filters.TradeMarks.length > 0) {
+        queryParams.append("trademarks", filters.TradeMarks.join(","));
+    }
+
+    const minPriceInput = document.querySelector(".min-input");
+    const maxPriceInput = document.querySelector(".max-input");
+
+    if (minPriceInput && minPriceInput.value) {
+        queryParams.append("minPrice", minPriceInput.value);
+    }
+    if (maxPriceInput && maxPriceInput.value) {
+        queryParams.append("maxPrice", maxPriceInput.value);
+    }
+
+    queryParams.append("sort", sortName || "");
+    const newUrl = `/Goodmeal/Category/${categoryId}?${queryParams.toString()}`;
+    window.location.href = newUrl;
+});
+
 function closeRatingPopUpEvent() {
     overlayFilterPopUp.style.display = 'none';
     overlayFilterPopUp.style.zIndex = 9990;
@@ -604,6 +779,134 @@ overlayFilterPopUp.addEventListener('click', function () {
 document.getElementById('cancelFilter').addEventListener('click', function () {
     closeRatingPopUpEvent();
 });
+
+
+///Filter Params
+function FilterParams() {
+    var checkboxContainers = document.querySelectorAll(".checkboxContainer");
+    var clearAllFilters = document.getElementById("clearAllFilters");
+    const selectedFiltersDiv = document.querySelector(".selectedFiltersDiv");
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+    const selectedFilters = document.getElementById("selectedItems");
+
+    function checkFiltersVisibility() {
+        if (selectedFiltersList.children.length === 0) {
+            selectedFiltersDiv.style.visibility = 'hidden';
+            selectedFiltersDiv.style.padding = '0px';
+            selectedFiltersDiv.style.height = '0px';
+            selectedFiltersDiv.style.borderTop = '0px';
+        } else {
+            selectedFiltersDiv.style.visibility = 'visible';
+            selectedFiltersDiv.style.padding = '15px 0px 0px 6px';
+            selectedFiltersDiv.style.height = 'auto';
+            selectedFiltersDiv.style.borderTop = '1px solid #BDBDBD';
+        }
+    }
+
+    clearAllFilters.addEventListener("click", function () {
+
+        const selectedFiltersList = document.getElementById("selectedFiltersList");
+        selectedFiltersList.innerHTML = '';
+
+        const checkboxes = document.querySelectorAll(".checkboxContainer input[type='checkbox']");
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        selectedFiltersCount = 0;
+        selectedFilters.innerText = selectedFiltersCount;
+        selectedFiltersArray = {
+            CountryOfManufacture: [],
+            TradeMarks: [],
+            MinPrice: 0,
+            MaxPrice: 0,
+        };
+        checkFiltersVisibility();
+    });
+
+    checkboxContainers.forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const filterName = checkbox.querySelector(".filterName");
+            const checkboxInput = checkbox.querySelector("input[type='checkbox']");
+
+            const filterCategoryDiv = checkbox.closest('.filterDiv').querySelector('.infoTitleDiv');
+            const filterCategory = filterCategoryDiv ? filterCategoryDiv.innerText.trim() : "";
+
+            if (checkboxInput.checked) {
+                addSelectedFilter(filterName.innerText, checkboxInput);
+                selectedFiltersCount++;
+            } else {
+                removeSelectedFilter(filterName.innerText, filterCategory);
+                selectedFiltersCount--;
+            }
+
+            selectedFilters.innerText = selectedFiltersCount;
+
+            checkFiltersVisibility();
+        });
+    });
+
+    function addSelectedFilter(text, checkboxInput) {
+        const selectedFiltersList = document.getElementById("selectedFiltersList");
+
+        const filterCategoryDiv = checkboxInput.closest('.filterDiv').querySelector('.infoTitleDiv');
+        const filterCategory = filterCategoryDiv ? filterCategoryDiv.innerText.trim() : "";
+
+        if (!Array.from(selectedFiltersList.children).some(item => item.querySelector(".selectedFilterText").innerText === text)) {
+            const newFilter = document.createElement("div");
+            newFilter.className = "selectedFilter";
+
+            const filterText = document.createElement("span");
+            filterText.className = "selectedFilterText";
+            filterText.innerText = text;
+
+            const filterDelete = document.createElement("span");
+            filterDelete.className = "selectedFilterDelete";
+            filterDelete.innerText = "x";
+
+            if (filterCategory === "Країна") {
+                selectedFiltersArray.CountryOfManufacture.push(text);
+            } else if (filterCategory === "Торгова марка") {
+                selectedFiltersArray.TradeMarks.push(text);
+            }
+
+            filterDelete.addEventListener("click", () => {
+                newFilter.remove();
+                checkboxInput.checked = false;
+
+                if (filterCategory === "Країна") {
+                    selectedFiltersArray.CountryOfManufacture = selectedFiltersArray.CountryOfManufacture.filter(item => item !== text);
+                } else if (filterCategory === "Торгова марка") {
+                    selectedFiltersArray.TradeMarks = selectedFiltersArray.TradeMarks.filter(item => item !== text);
+                }
+
+                checkFiltersVisibility();
+            });
+
+            newFilter.appendChild(filterText);
+            newFilter.appendChild(filterDelete);
+            selectedFiltersList.appendChild(newFilter);
+            console.log(selectedFiltersArray);
+            checkFiltersVisibility();
+        }
+    }
+
+    function removeSelectedFilter(text, filterCategory) {
+        const selectedFiltersList = document.getElementById("selectedFiltersList");
+        const filterToRemove = Array.from(selectedFiltersList.children).find(item => item.querySelector(".selectedFilterText").innerText === text);
+
+        if (filterToRemove) {
+            filterToRemove.remove();
+
+            if (filterCategory === "Країна") {
+                selectedFiltersArray.CountryOfManufacture = selectedFiltersArray.CountryOfManufacture.filter(item => item !== text);
+            } else if (filterCategory === "Торгова марка") {
+                selectedFiltersArray.TradeMarks = selectedFiltersArray.TradeMarks.filter(item => item !== text);
+            }
+        }
+
+        checkFiltersVisibility();
+    }
+}
 
 //Info arrows
 var info = document.querySelectorAll('.info-section-content');
@@ -640,99 +943,6 @@ function toggleDropdown(idFilter) {
     //    default:
     //        info.classList.toggle('active');
     //}
-}
-
-///Filter Params
-
-var checkboxContainers = document.querySelectorAll(".checkboxContainer");
-var clearAllFilters = document.getElementById("clearAllFilters");
-const selectedFiltersDiv = document.querySelector(".selectedFiltersDiv");
-const selectedFiltersList = document.getElementById("selectedFiltersList");
-const selectedFilters = document.getElementById("selectedItems");
-
-function checkFiltersVisibility() {
-    if (selectedFiltersList.children.length === 0) {
-        selectedFiltersDiv.style.visibility = 'hidden';
-        selectedFiltersDiv.style.padding = '0px';
-        selectedFiltersDiv.style.height = '0px';
-        selectedFiltersDiv.style.borderTop = '0px';
-    } else {
-        selectedFiltersDiv.style.visibility = 'visible';
-        selectedFiltersDiv.style.padding = '15px 0px 0px 6px';
-        selectedFiltersDiv.style.height = 'auto';
-        selectedFiltersDiv.style.borderTop = '1px solid #BDBDBD';
-    }
-}
-
-clearAllFilters.addEventListener("click", function () {
-
-    const selectedFiltersList = document.getElementById("selectedFiltersList");
-    selectedFiltersList.innerHTML = '';  
-
-    const checkboxes = document.querySelectorAll(".checkboxContainer input[type='checkbox']");
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    selectedFiltersCount = 0;
-    selectedFilters.innerText = selectedFiltersCount;
-    checkFiltersVisibility();
-});
-
-checkboxContainers.forEach(checkbox => {
-    checkbox.addEventListener("change", function () {
-        const filterName = checkbox.querySelector(".filterName");
-        const checkboxInput = checkbox.querySelector("input[type='checkbox']");
-
-        if (checkboxInput.checked) {
-            addSelectedFilter(filterName.innerText, checkboxInput);
-            selectedFiltersCount++;
-        } else {
-            removeSelectedFilter(filterName.innerText);
-            selectedFiltersCount--;
-        }
-        selectedFilters.innerText = selectedFiltersCount;
-        checkFiltersVisibility();
-    });
-});
-
-function addSelectedFilter(text, checkboxInput) {
-    const selectedFiltersList = document.getElementById("selectedFiltersList");
-
-    if (!Array.from(selectedFiltersList.children).some(item => item.querySelector(".selectedFilterText").innerText === text)) {
-        const newFilter = document.createElement("div");
-        newFilter.className = "selectedFilter";
-
-        const filterText = document.createElement("span");
-        filterText.className = "selectedFilterText";
-        filterText.innerText = text;
-
-        const filterDelete = document.createElement("span");
-        filterDelete.className = "selectedFilterDelete";
-        filterDelete.innerText = "x";
-
-        filterDelete.addEventListener("click", () => {
-            newFilter.remove();
-            checkboxInput.checked = false;
-            selectedFiltersCount--;
-            selectedFilters.innerText = selectedFiltersCount;
-            checkFiltersVisibility();
-        });
-
-        newFilter.appendChild(filterText);
-        newFilter.appendChild(filterDelete);
-        selectedFiltersList.appendChild(newFilter);
-        checkFiltersVisibility();
-    }
-}
-
-function removeSelectedFilter(text) {
-    const selectedFiltersList = document.getElementById("selectedFiltersList");
-    const filterToRemove = Array.from(selectedFiltersList.children).find(item => item.querySelector(".selectedFilterText").innerText === text);
-
-    if (filterToRemove) {
-        filterToRemove.remove();
-    }
-    checkFiltersVisibility();
 }
 
 
