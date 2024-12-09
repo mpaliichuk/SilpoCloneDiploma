@@ -202,7 +202,7 @@ namespace ProductServiceApi.Controllers
             var ratings = await _serviceRating.GetAllRatingsAsync();
 
             var productRatings = ratings.Where(r => r.IdProduct == product.Id).ToList();
-            double averageRating = productRatings.Any() ? productRatings.Average(r => r.Value) : 0;
+            double averageRating = productRatings.Any() ? Math.Round(productRatings.Average(r => r.Value), 2) : 0;
             int ratingCount = productRatings.Count;
 
             var productDto = new ProductDto
@@ -245,8 +245,7 @@ namespace ProductServiceApi.Controllers
 
             var productDto = new ProductDto
             {
-               
-
+                Id = product.Id,
                 Title = product.Title,
                 ProductComposition = product.ProductComposition,
                 GeneralInformation = product.GeneralInformation,
@@ -289,6 +288,43 @@ namespace ProductServiceApi.Controllers
                     Weight = p.Weight,
                     TradeMark = p.TradeMark,
                     CountryOfManufacture = p.CountryOfManufacture,
+                    Count = p.Count,
+                    Discount = p.Discount,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId
+                });
+
+                return Ok(new { Products = productDtos, TotalCount = totalCount });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving products.");
+                return StatusCode(500, "An error occurred while retrieving products.");
+            }
+        }
+
+        /// <summary>
+        /// Get products with pagination.
+        /// </summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        [HttpGet("sortedPage/{pageNumber}/size/{pageSize}/category/{categoryId}/sortBy/{sortName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<(IEnumerable<ProductDto>, int)>> GetSortedProductsByPageAsync(int pageNumber, int pageSize, int categoryId, string sortName)
+        {
+            try
+            {
+                var (products, totalCount) = await _service.GetSortedProductsByPageAsync(pageNumber, pageSize, categoryId, sortName);
+
+                var productDtos = products.Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    ProductComposition = p.ProductComposition,
+                    GeneralInformation = p.GeneralInformation,
+                    ImageUrls = p.ImageUrls,
+                    Availability = (Dtos.Availability)p.Availability,
                     Count = p.Count,
                     Discount = p.Discount,
                     Price = p.Price,

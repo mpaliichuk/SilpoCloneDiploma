@@ -1,99 +1,174 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderServiceApi.Data;
 using OrderServiceApi.Models;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using OrderServiceApi.Models.Dto;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OrderServiceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
-        private readonly OrderDbContext _context;
+        private readonly OrderDbContext _orderDb;
 
-        public OrderController(OrderDbContext context)
+        public OrdersController(OrderDbContext orderDb)
         {
-            _context = context;
+            _orderDb = orderDb;
         }
 
+        // GET: api/orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
         {
-            return await _context.Orders.Include(o => o.OrderItems).ToListAsync();
+            var orders = await _orderDb.Orders
+                .Include(o => o.OrderItems)
+                .Select(o => new OrderDto
+                {
+                    Id = o.Id,
+                    CustomerId = o.CustomerId,
+                    OrderDate = o.OrderDate,
+                    OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+                    {
+                        Id = oi.Id,
+                        OrderId = oi.OrderId,
+                        ProductId = oi.ProductId,
+                        Quantity = oi.Quantity,
+                        Price = oi.Price
+                    }).ToList(),
+                    TotalPrice = o.OrderItems.Sum(oi => (int)(oi.Quantity * oi.Price))
+                }).ToListAsync();
+
+            return Ok(orders);
         }
 
+        // GET: api/orders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<OrderDto>> GetOrder(int id)
         {
-            var order = await _context.Orders.Include(o => o.OrderItems).FirstOrDefaultAsync(o => o.OrderId == id);
+            var order = await _orderDb.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
             if (order == null)
             {
                 return NotFound();
             }
-            return order;
+
+            var orderDto = new OrderDto
+            {
+                Id = order.Id,
+                CustomerId = order.CustomerId,
+                OrderDate = order.OrderDate,
+                OrderItems = order.OrderItems.Select(oi => new OrderItemDto
+                {
+                    Id = oi.Id,
+                    OrderId = oi.OrderId,
+                    ProductId = oi.ProductId,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price
+                }).ToList(),
+                TotalPrice = order.OrderItems.Sum(oi => (int)(oi.Quantity * oi.Price))
+            };
+
+            return Ok(orderDto);
         }
 
+        // POST: api/orders
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, order);
+            var order = new Order
+            {
+                CustomerId = orderDto.CustomerId,
+                OrderDate = orderDto.OrderDate,
+                OrderItems = orderDto.OrderItems.Select(oi => new OrderItem
+                {
+                    ProductId = oi.ProductId,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price
+                }).ToList()
+            };
+
+            _orderDb.Orders.Add(order);
+            await _orderDb.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
 
+        // PUT: api/orders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, Order order)
+        public async Task<IActionResult> UpdateOrder(int id, OrderDto orderDto)
         {
-            if (id != order.OrderId)
+            if (id != orderDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(order).State = EntityState.Modified;
+            var order = await _orderDb.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
+            order.CustomerId = orderDto.CustomerId;
+            order.OrderDate = orderDto.OrderDate;
 
+            // Update or add OrderItems
+            foreach (var itemDto in orderDto.OrderItems)
+            {
+                var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == itemDto.Id);
+                if (orderItem != null)
+                {
+                    orderItem.ProductId = itemDto.ProductId;
+                    orderItem.Quantity = itemDto.Quantity;
+                    orderItem.Price = itemDto.Price;
+                }
+                else
+                {
+                    order.OrderItems.Add(new OrderItem
+                    {
+                        ProductId = itemDto.ProductId,
+                        Quantity = itemDto.Quantity,
+                        Price = itemDto.Price
+                    });
+                }
+            }
+
+            // Remove OrderItems not in the DTO
+            var itemsToRemove = order.OrderItems
+                .Where(oi => !orderDto.OrderItems.Any(dto => dto.Id == oi.Id))
+                .ToList();
+            _orderDb.OrderItems.RemoveRange(itemsToRemove);
+
+            await _orderDb.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool OrderExists(int id)
+        // DELETE: api/orders/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(int id)
         {
-            return _context.Orders.Any(e => e.OrderId == id);
+            var order = await _orderDb.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            _orderDb.OrderItems.RemoveRange(order.OrderItems);
+            _orderDb.Orders.Remove(order);
+            await _orderDb.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

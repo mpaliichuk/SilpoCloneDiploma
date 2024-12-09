@@ -1,18 +1,39 @@
 ﻿var currentPage = 1;
+var selectedPage = 1;
 var getsOnPage = 0;
 var totalPageCount = 0;
-/*var pageSize = 18;*/
+var outOfRange = false;
+var sortName = "none";
 var pageSize = 6;
 var newPage = true;
 var pageChangeSymbol = "plus";
+var selectedFiltersCount = 0;
+
 var categoryId = document.getElementById("categoryId").value;
+var sortModeElement = document.getElementById("sortMode");
+if (sortModeElement) {
+    var sortMode = sortModeElement.value;
+    sortName = sortMode;
+    var sortModesMapping = {
+        popular: "Спочатку популярні",
+        promotions: "Спочатку акційні",
+        rating: "За рейтингом",
+        alphabetically: "Від А до Я",
+        reverseAlphabetically: "Від Я до А",
+        cheap: "Спочатку дешевші",
+        expensive: "Спочатку дорожчі"
+    };
+
+    var sortText = sortModesMapping[sortName] || "Сортувати";
+    document.getElementById("sortText").innerHTML = sortText;
+}
 
 GetCategoryInfo(categoryId);
 GetProducts(categoryId, true);
 
-async function GetCategoryInfo(categoryId) {
+async function GetCategoryInfo(id) {
     try {
-        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/Category/" + id, {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -58,8 +79,9 @@ async function CategoryByParentId(parentId) {
         });
         if (response.ok) {
             const getCategories = await response.json();
-            console.log(getCategories);         
-            generateSubCategoryMarkup(getCategories);
+            console.log(getCategories);
+            if (getCategories.length > 0)
+                generateSubCategoryMarkup(getCategories);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -96,7 +118,7 @@ async function AddProductInCart(productId, productCount, userId) {
 async function GetProducts(categoryId, firstIn = null) {
     var productsOnPage = [];
     try {
-        const response = await fetch("http://localhost:5152/gateway/GetPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/GetSortedPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId + "/" + sortName, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -119,13 +141,15 @@ async function GetProducts(categoryId, firstIn = null) {
     if (newPage) {
         document.getElementById('subProductsDiv').innerText = '';
     }
-    for (var i = 0; i < pageSize; i++) {
+    const productsCount = productsOnPage.products.length;
+    const iterations = Math.min(pageSize, productsCount);
+    for (var i = 0; i < iterations; i++) {
         const productCard = createProductCard({
             productIconSrc: productsOnPage.products[i].imageUrls[0],
             productName: productsOnPage.products[i].title,
             productFullName: productsOnPage.products[i].productComposition,
             price: productsOnPage.products[i].price,
-            sale: productsOnPage.products[i].sale,
+            sale: productsOnPage.products[i].discount,
             productId: productsOnPage.products[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
@@ -274,6 +298,16 @@ function generateSubCategoryMarkup(subCategories) {
     document.querySelector(".controlItemsDis").appendChild(container);
 }
 
+///Sort////
+var sortsBtns = document.querySelectorAll(".sortName");
+sortsBtns.forEach(item => {
+    item.addEventListener("click", function (event) {
+        sortName = event.target.id;
+        window.location = "/Goodmeal/Category/" + categoryId + "/" + sortName;
+    });
+});
+
+///Pages///
 const moreItemsBtn = document.getElementById('moreItems');
 const buttonPrev = document.getElementById('buttonPrev');
 const buttonNext = document.getElementById('buttonNext');
@@ -282,49 +316,81 @@ moreItemsBtn.addEventListener("click", function () {
     newPage = false;
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
-    GetProducts(categoryId);
+    if (!outOfRange)
+        GetProducts(categoryId);
 });
 
 buttonNext.addEventListener("click", function () {
     newPage = true;
     pageChangeSymbol = "plus";
     changePageText(pageChangeSymbol);
-    window.scrollTo({
-        top: 200,
-        left: 0,
-        behavior: 'smooth'
-    });
-    GetProducts(categoryId);
+    if (!outOfRange) {
+        window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
+        GetProducts(categoryId);
+    }
 });
 
 buttonPrev.addEventListener("click", function () {
     newPage = true;
     pageChangeSymbol = "minus";
     changePageText(pageChangeSymbol);
-    window.scrollTo({
-        top: 200,
-        left: 0,
-        behavior: 'smooth'
-    });
-    GetProducts(categoryId);
+    if (!outOfRange) {
+        window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
+        GetProducts(categoryId);
+    }
 });
+
+function selectPageFunctionalyty() {
+    const pageButtons = document.querySelectorAll('.pageButton');
+    pageButtons.forEach(item => {
+        item.addEventListener("click", function (event) {
+            newPage = true;
+            pageChangeSymbol = "select";
+            selectedPage = parseInt(event.target.innerHTML);
+            if (selectedPage != currentPage) {
+                changePageText(pageChangeSymbol);
+                if (!outOfRange) {
+                    window.scrollTo({
+                        top: 200,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                    GetProducts(categoryId);
+                }
+            }
+        });
+    });
+}
 
 function changePageText(pageChangeSymbol) {
     const pageButtons = document.querySelectorAll('.pageButton');
 
     if (pageChangeSymbol === "plus") {
         currentPage++;
-    } else {
+    } else if (pageChangeSymbol !== "select") {
         currentPage--;
+    } else {
+        currentPage = selectedPage;
     }
 
     if (currentPage > totalPageCount) {
         currentPage--;
+        outOfRange = true;
     }
     else if (currentPage < 1) {
         currentPage++;
+        outOfRange = true;
     }
     else {
+        outOfRange = false;
         pageButtons.forEach((btn, index) => {
             if (btn.innerText == currentPage.toString()) {
                 btn.classList.add("selectedPage");
@@ -334,7 +400,7 @@ function changePageText(pageChangeSymbol) {
             }
 
             if (totalPageCount > 6) {
-                if (currentPage === totalPageCount - 2 && pageChangeSymbol === "plus") {
+                if (currentPage === totalPageCount - 2 && (pageChangeSymbol === "plus" || pageChangeSymbol === "select")) {
                     pageButtons[1].innerText = "...";
                     pageButtons[2].innerText = totalPageCount - 4;
                     pageButtons[3].innerText = totalPageCount - 3;
@@ -342,7 +408,7 @@ function changePageText(pageChangeSymbol) {
                     pageButtons[5].innerText = totalPageCount - 1;
                     pageButtons[6].innerText = totalPageCount;
                 }
-                else if (currentPage >= totalPageCount - 3 && pageChangeSymbol === "minus") {
+                else if (currentPage >= totalPageCount - 3 && (pageChangeSymbol === "minus" || pageChangeSymbol === "select")) {
                     pageButtons[1].innerText = "...";
                     pageButtons[2].innerText = totalPageCount - 4;
                     pageButtons[3].innerText = totalPageCount - 3;
@@ -357,11 +423,11 @@ function changePageText(pageChangeSymbol) {
                     pageButtons[4].innerText = '5';
                     pageButtons[5].innerText = '...';
                 }
-                else if (currentPage === totalPageCount - 2 && pageChangeSymbol === "minus") {
+                else if (currentPage === totalPageCount - 2 && (pageChangeSymbol === "minus" || pageChangeSymbol === "select")) {
                     pageButtons[5].innerText = '...';
                     pageButtons[1].innerText = '2';
                 }
-                else if (currentPage > 5 && currentPage < totalPageCount - 1) {
+                else if (currentPage > 4 && currentPage < totalPageCount - 1) {
                     pageButtons[1].innerText = '...';
                     pageButtons[2].innerText = currentPage - 1;
                     pageButtons[3].innerText = currentPage;
@@ -373,11 +439,10 @@ function changePageText(pageChangeSymbol) {
                 pageButtons[index].innerText = index + 1;
             }
         });
-    }   
+    }
 }
 
 function setPageSize(count) {
-    const lastPageButton = document.querySelector(".lastPageButton");
     const paginationDiv = document.getElementById("paginationDiv");
     const pagesDiv = document.querySelector(".pages");
     var pageCount = count / pageSize;
@@ -419,6 +484,7 @@ function setPageSize(count) {
             }
         }
     }
+    selectPageFunctionalyty();
 }
 
 /*////////////////////////////      Cards       //////////////////////////////////////////////*/
@@ -435,8 +501,14 @@ function addCardsEvents() {
             if (count) {
                 let currentCount = parseInt(count.innerHTML);
                 if (currentCount > 0) {
-                    AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 1);
-                    count.innerHTML = '0';
+                    var userId = localStorage.getItem("userId");
+                    if (userId != 0) {
+                        AddProductInCart(cardDiv.id, count.innerHTML, userId);
+                        count.innerHTML = '0';
+                    }
+                    else {
+                        alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+                    }
                 }
                 else {
                     alert("Спершу виберіть кількість товар (`U_U`)!");
@@ -568,6 +640,99 @@ function toggleDropdown(idFilter) {
     //    default:
     //        info.classList.toggle('active');
     //}
+}
+
+///Filter Params
+
+var checkboxContainers = document.querySelectorAll(".checkboxContainer");
+var clearAllFilters = document.getElementById("clearAllFilters");
+const selectedFiltersDiv = document.querySelector(".selectedFiltersDiv");
+const selectedFiltersList = document.getElementById("selectedFiltersList");
+const selectedFilters = document.getElementById("selectedItems");
+
+function checkFiltersVisibility() {
+    if (selectedFiltersList.children.length === 0) {
+        selectedFiltersDiv.style.visibility = 'hidden';
+        selectedFiltersDiv.style.padding = '0px';
+        selectedFiltersDiv.style.height = '0px';
+        selectedFiltersDiv.style.borderTop = '0px';
+    } else {
+        selectedFiltersDiv.style.visibility = 'visible';
+        selectedFiltersDiv.style.padding = '15px 0px 0px 6px';
+        selectedFiltersDiv.style.height = 'auto';
+        selectedFiltersDiv.style.borderTop = '1px solid #BDBDBD';
+    }
+}
+
+clearAllFilters.addEventListener("click", function () {
+
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+    selectedFiltersList.innerHTML = '';  
+
+    const checkboxes = document.querySelectorAll(".checkboxContainer input[type='checkbox']");
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    selectedFiltersCount = 0;
+    selectedFilters.innerText = selectedFiltersCount;
+    checkFiltersVisibility();
+});
+
+checkboxContainers.forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+        const filterName = checkbox.querySelector(".filterName");
+        const checkboxInput = checkbox.querySelector("input[type='checkbox']");
+
+        if (checkboxInput.checked) {
+            addSelectedFilter(filterName.innerText, checkboxInput);
+            selectedFiltersCount++;
+        } else {
+            removeSelectedFilter(filterName.innerText);
+            selectedFiltersCount--;
+        }
+        selectedFilters.innerText = selectedFiltersCount;
+        checkFiltersVisibility();
+    });
+});
+
+function addSelectedFilter(text, checkboxInput) {
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+
+    if (!Array.from(selectedFiltersList.children).some(item => item.querySelector(".selectedFilterText").innerText === text)) {
+        const newFilter = document.createElement("div");
+        newFilter.className = "selectedFilter";
+
+        const filterText = document.createElement("span");
+        filterText.className = "selectedFilterText";
+        filterText.innerText = text;
+
+        const filterDelete = document.createElement("span");
+        filterDelete.className = "selectedFilterDelete";
+        filterDelete.innerText = "x";
+
+        filterDelete.addEventListener("click", () => {
+            newFilter.remove();
+            checkboxInput.checked = false;
+            selectedFiltersCount--;
+            selectedFilters.innerText = selectedFiltersCount;
+            checkFiltersVisibility();
+        });
+
+        newFilter.appendChild(filterText);
+        newFilter.appendChild(filterDelete);
+        selectedFiltersList.appendChild(newFilter);
+        checkFiltersVisibility();
+    }
+}
+
+function removeSelectedFilter(text) {
+    const selectedFiltersList = document.getElementById("selectedFiltersList");
+    const filterToRemove = Array.from(selectedFiltersList.children).find(item => item.querySelector(".selectedFilterText").innerText === text);
+
+    if (filterToRemove) {
+        filterToRemove.remove();
+    }
+    checkFiltersVisibility();
 }
 
 

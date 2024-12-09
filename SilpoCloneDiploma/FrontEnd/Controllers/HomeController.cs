@@ -33,6 +33,16 @@ namespace FrontEnd.Controllers
             return View("CategoryPage");
         }
 
+        [Route("Goodmeal/Category/{id}/{sortName}")]
+        public IActionResult SortedCategoryPage(string id, string sortName)
+        {
+            var categoryId = id;
+            ViewBag.CategoryId = categoryId;
+            var sortMode = sortName;
+            ViewBag.SortMode = sortMode;
+            return View("CategoryPage");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -22,7 +22,7 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/Product/{id}",
-      "UpstreamHttpMethod": [ "POST", "GET","PUT" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT" ]
     },
     {
       "DownstreamPathTemplate": "/api/product/GetProductByNameAsync/{title}",
@@ -34,7 +34,7 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/SearchProducts/{title}",
-      "UpstreamHttpMethod": [ "GET" ] 
+      "UpstreamHttpMethod": [ "GET" ]
     },
     {
       "DownstreamPathTemplate": "/api/Product/random-discounted",
@@ -144,7 +144,6 @@
       "UpstreamPathTemplate": "/gateway/Category",
       "UpstreamHttpMethod": [ "POST", "GET", "PUT" ] //good
     },
-
     {
       "DownstreamPathTemplate": "/api/Category/{id}",
       "DownstreamScheme": "http",
@@ -204,6 +203,18 @@
       ],
       "UpstreamPathTemplate": "/gateway/AddToCart",
       "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/cart/get-cart/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5129
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetUserCart/{userId}",
+      "UpstreamHttpMethod": [ "GET" ]
     }
   ]
 }

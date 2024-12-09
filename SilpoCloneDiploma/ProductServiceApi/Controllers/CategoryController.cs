@@ -89,7 +89,12 @@ namespace ProductServiceApi.Controllers
         /// Gets a category by ID.
         /// </summary>
         /// <param name="id">The ID of the category.</param>
-        [HttpGet("getParent/{parentId}")]
+        /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /// Я ТУТ БЕРУ КАТЕГОРІЇ В ЯКИХ СПІЛЬНИЙ БАТЬКО
+        /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        [HttpGet("getByParent/{parentId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<SubCategoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<SubCategoryDto>>> GetParentCategoryByIdAsync(int parentId)
@@ -99,23 +104,24 @@ namespace ProductServiceApi.Controllers
 
             var subCategories = categories.Where(c => c.ParentCategoryId == parentId);
 
+            var categoryDtos = new List<SubCategoryDto>();
+
             if (!subCategories.Any())
             {
-                return NotFound();
+                return Ok(categoryDtos);
             }
 
-            var categoryDtos = subCategories.Select(c => new SubCategoryDto
+            categoryDtos = subCategories.Select(c => new SubCategoryDto
             {
                 Id = c.Id,
                 Name = c.Name,
                 IconPath = c.IconPath,
                 ParentCategoryId = c.ParentCategoryId,
                 Count = products.Count(p => p.CategoryId == c.Id),
-            });
+            }).ToList();
 
             return Ok(categoryDtos);
         }
-
         /// <summary>
         /// Get a category by name.
         /// </summary>

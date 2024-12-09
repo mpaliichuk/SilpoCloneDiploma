@@ -19,7 +19,7 @@ async function GetProduct(productId, productCategoryId) {
             description: responseProduct.generalInformation,
             imageUrls: responseProduct.imageUrls,
             price: responseProduct.price,
-            discountPercentage: responseProduct.sale,
+            discountPercentage: responseProduct.discount,
             rating: responseProduct.averageRating,
             ratingCount: responseProduct.ratingCount,
             category_id: responseProduct.categoryId,
@@ -127,7 +127,7 @@ async function GetProductsBySameCategory(productCategoryId) {
             productName: productsByCategory[i].title,
             productFullName: productsByCategory[i].productComposition,
             price: productsByCategory[i].price,
-            sale: productsByCategory[i].sale,
+            discount: productsByCategory[i].discount,
             productId: productsByCategory[i].id,
             isFirst: isFirstBool
         });
@@ -140,7 +140,7 @@ async function GetProductsBySameCategory(productCategoryId) {
 
 async function GetCategoryInfo(categoryId) {
     try {
-        const response = await fetch("http://localhost:5152/gateway/CategoryById/" + categoryId, {
+        const response = await fetch("http://localhost:5152/gateway/Category/" + categoryId, {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -391,11 +391,17 @@ function cardFunctionality() {
             if (countElement) {
                 let currentCount = parseInt(countElement.innerHTML, 10);
                 if (currentCount > 0) {
-                    // AddProductInCart(cardDiv.id, currentCount, /*userId*/ 0);
-                    alert(`${cardDiv.id}, ${currentCount}, ${0}`);
-                    countElement.innerHTML = '0';
-                } else {
-                    alert("Спершу виберіть кількість товару (`U_U`)!");
+                    var userId = localStorage.getItem("userId");
+                    if (userId != 0) {
+                        AddProductInCart(cardDiv.id, count.innerHTML, userId);
+                        count.innerHTML = '0';
+                    }
+                    else {
+                        alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+                    }
+                }
+                else {
+                    alert("Спершу виберіть кількість товар (`U_U`)!");
                 }
             }
         });

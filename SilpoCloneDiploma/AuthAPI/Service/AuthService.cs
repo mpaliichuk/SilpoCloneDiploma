@@ -83,7 +83,7 @@ namespace AuthAPI.Service
                     },
                     IsSuccess = true,
                     Message = "Login successful",
-                    Token = _jwtTokenGenerator.GenerateToken(user)
+                    Token = await _jwtTokenGenerator.GenerateTokenAsync(user)
                 };
             }
 

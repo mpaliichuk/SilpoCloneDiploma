@@ -46,7 +46,7 @@ async function GetProducts() {
             productName: productsByDiscount[i].title,
             productFullName: productsByDiscount[i].productComposition,
             price: productsByDiscount[i].price,
-            sale: productsByDiscount[i].sale,
+            sale: productsByDiscount[i].discount,
             productId: productsByDiscount[i].id
         });
         document.getElementById('subProductsDiv').appendChild(productCard);
@@ -233,8 +233,14 @@ function cardFunctionality() {
             if (count) {
                 let currentCount = parseInt(count.innerHTML);
                 if (currentCount > 0) {
-                    AddProductInCart(cardDiv.id, count.innerHTML, /*userId*/ 1);
-                    count.innerHTML = '0';
+                    var userId = localStorage.getItem("userId");
+                    if (userId != 0) {
+                        AddProductInCart(cardDiv.id, count.innerHTML, userId);
+                        count.innerHTML = '0';
+                    }
+                    else {
+                        alert("Спершу потрібно увійти ~(`Y_Y`)~!");
+                    }
                 }
                 else {
                     alert("Спершу виберіть кількість товар (`U_U`)!");
@@ -360,13 +366,17 @@ certificateBuy.forEach(item => {
             //if (message) {
             //    alert(message);
             //}
-
-            addCertificatesToCart(certificates);
-            await certificateButtons.forEach(certificateButton => {
-                certificateButton.classList.remove('selectedCertificate');
-            });
-            certificates = [];
-            localStorage.setItem('certificates', JSON.stringify(certificates));
+            if (userId != 0) {
+                addCertificatesToCart(certificates);
+                await certificateButtons.forEach(certificateButton => {
+                    certificateButton.classList.remove('selectedCertificate');
+                });
+                certificates = [];
+                localStorage.setItem('certificates', JSON.stringify(certificates));
+            }
+            else {
+                alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+            }
         }
         else {
             alert("Спершу виберіть сертифікати для покупки (*μ_μ)!");

@@ -1,11 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Category Page";
     var categoryId = ViewBag.CategoryId;
+    var sortMode = ViewBag.SortMode;
 }
 <link rel="stylesheet" href="~/css/pagesStyles/categoryPage.css" asp-append-version="true" />
 <div class="mainCategoryDiv">
     <div class="topOrange"></div>
     <input type="hidden" id="categoryId" value="@categoryId">
+    @if (!string.IsNullOrEmpty(sortMode))
+    {
+        <input type="hidden" id="sortMode" value="@sortMode">
+    }
     <div class="mainItemsDiv">
         <div class="breadcrumb">
             <a class="breadcrumbLink" href="/">Головна</a>
@@ -36,18 +41,20 @@
             <div class="itemsDiv">
                 <div class="filterItemsDiv">
                     <div class="filtered">
-                        <img id="filterButton" type="button" style="width:20px;" src="~/icons/ListHoverGreen.png" />
+                        <img id="filterButton" class="no-select no-drag" type="button" style="width:20px;" src="~/icons/Filter.png" />
+                        <span class="sortFilterText">Фільтри</span>
                     </div>
                     <div class="sorted">
-                        <img type="button" class="dropdown-toggle no-caret" data-bs-toggle="dropdown" style="width:20px;" src="~/icons/ListHoverGreen.png" />
+                        <span class="sortFilterText" id="sortText">Сортувати</span>
+                        <img type="button" class="dropdown-toggle no-caret no-select no-drag" data-bs-toggle="dropdown" style="width:20px;" src="~/icons/Sort.png" />
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Спочатку популярні</a></li>
-                            <li><a class="dropdown-item" href="#">Спочатку акційні</a></li>
-                            <li><a class="dropdown-item" href="#">За рейтингом</a></li>
-                            <li><a class="dropdown-item" href="#">Від А до Я</a></li>
-                            <li><a class="dropdown-item" href="#">Від Я до А</a></li>
-                            <li><a class="dropdown-item" href="#">Спочатку дешевші</a></li>
-                            <li><a class="dropdown-item" href="#">Спочатку дорожчі</a></li>
+                            <li><a class="dropdown-item sortName" id="popular">Спочатку популярні</a></li>
+                            <li><a class="dropdown-item sortName" id="promotions">Спочатку акційні</a></li>
+                            <li><a class="dropdown-item sortName" id="rating">За рейтингом</a></li>
+                            <li><a class="dropdown-item sortName" id="alphabetically">Від А до Я</a></li>
+                            <li><a class="dropdown-item sortName" id="reverseAlphabetically">Від Я до А</a></li>
+                            <li><a class="dropdown-item sortName" id="cheap">Спочатку дешевші</a></li>
+                            <li><a class="dropdown-item sortName" id="expensive">Спочатку дорожчі</a></li>
                         </ul>
                     </div>
                 </div>
@@ -88,7 +95,7 @@
             <span id="clearAllFilters">Очистити все</span>
         </div>
         <div id="selectedFiltersList">
-            <div class="selectedFilter">
+            @* <div class="selectedFilter">
                 <span class="selectedFilterText">Нові Акції</span>
                 <span class="selectedFilterDelete">x</span>
             </div>
@@ -103,7 +110,7 @@
             <div class="selectedFilter">
                 <span class="selectedFilterText">Гвіней</span>
                 <span class="selectedFilterDelete">x</span>
-            </div>
+            </div> *@
         </div>
     </div>
     <div class="accordion">
@@ -242,7 +249,7 @@
         </div>
     </div>
     <div class="buttonFilterDiv">
-        <button class="submitFiltersButton">Показати результати: <span id="selectedItems">10</span></button>
+        <button class="submitFiltersButton">Показати результати: <span id="selectedItems">0</span></button>
     </div>
 </div>
 
