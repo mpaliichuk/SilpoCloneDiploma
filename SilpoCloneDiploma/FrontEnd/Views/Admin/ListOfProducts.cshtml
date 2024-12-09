@@ -6,74 +6,90 @@
 @model FrontEnd.Models.ProductListViewModel
 @using FrontEnd.Models.Dto
 
-
-
 <h1>@ViewData["Title"]</h1>
 
 <div class="flex-container">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <span class="text-danger">@ViewBag.Message</span>
+    }
     <div class="table-container">
         <div class="search-container">
-    <form asp-action="SearchProducts" asp-controller="Admin" method="get" class="d-flex justify-content-center mb-4">
-        <input type="text" id="searchTitle" name="searchTitle" class="form-control" placeholder="Пошук за назвою продукту" />
-        <button type="submit" class="btn btn-primary ml-2">Пошук</button>
-    </form>
-</div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Photo</th>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Product Composition</th>
-                    <th>General Information</th>
-                    <th>Availability</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var product in Model.Products)
-                {
+            <form asp-action="ListOfProducts" asp-controller="Admin" method="get" class="d-flex justify-content-center mb-4">
+                <input type="text" id="searchTitle" name="searchTitle" class="form-control" placeholder="Пошук за назвою продукту" />
+                <button type="submit" class="btn btn-primary ml-2">Пошук</button>
+            </form>
+        </div>
+
+        @if (Model.Products == null || !Model.Products.Any())
+        {
+            <p>Немає доступних продуктів.</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>
-                            <img src="@(product.ImageUrls?.FirstOrDefault() ?? "/Admin_Image/default-product.png")"
-                                 alt="Product Image"
-                                 class="product-photo">
-                        </td>
-                        <td>@product.Id</td>
-                        <td>@product.Title</td>
-                        <td>@product.ProductComposition</td>
-                        <td>@product.GeneralInformation</td>
-                        <td>
-                            @if (product.Availability == Availability.InStock)
-                            {
-                                <span class="badge bg-success">In Stock</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">Out of Stock</span>
-                            }
-                        </td>
-                        <td>@product.Price.ToString("C")</td>
-                        <td>
-                            @if (product.CategoryId.HasValue)
-                            {
-                                <span>@product.CategoryId</span>
-                            }
-                            else
-                            {
-                                <span>Not Categorized</span>
-                            }
-                        </td>
-                        <td>
-                            <button class="btn edit-btn" onclick="openEditModal(@product.Id)">Редагувати</button>
-                            <button class="btn delete-btn" onclick="deleteProduct(@product.Id)">Видалити</button>
-                        </td>
+                        <th class="custom-size">Photo</th>
+                        <th class="custom-size">ID</th>
+                        <th class="custom-size">Title</th>
+                        <th class="custom-size">Product Composition</th>
+                        <th class="custom-size">General Information</th>
+                        <th class="custom-size">Availability</th>
+                        <th class="custom-size">Weight</th>
+                        <th class="custom-size">Trade Mark</th>
+                        <th class="custom-size">Country Of Manufacture</th>
+                        <th class="custom-size">Price</th>
+                        <th class="custom-size">Category</th>
+                        <th class="custom-size">Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@(product.ImageUrls?.FirstOrDefault() ?? "/Admin_Image/default-product.png")"
+                                     alt="Product Image"
+                                     class="product-photo">
+                            </td>
+                            <td>@product.Id</td>
+                            <td>@product.Title</td>
+                            <td>@product.ProductComposition</td>
+                            <td>@product.GeneralInformation</td>
+                            <td>
+                                @if (product.Availability == Availability.InStock)
+                                {
+                                    <span class="badge bg-success">В наявності</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Немає в наявності</span>
+                                }
+                            </td>
+                            <td>@product.Weight</td>
+                            <td>@product.TradeMark</td>
+                            <td>@product.CountryOfManufacture</td>
+                            <td>@product.Price.ToString("C")</td>
+                            <td>
+                                @if (product.CategoryId.HasValue)
+                                {
+                                    <span>@product.CategoryId</span>
+                                }
+                                else
+                                {
+                                    <span>Не категоризовано</span>
+                                }
+                            </td>
+                            <td>
+                                <button class="btn edit-btn" onclick="editProduct(@product.Id)">Редагувати</button>
+                                <button class="btn delete-btn" onclick="deleteProduct(@product.Id)">Видалити</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 
     <div class="pagination-container">
@@ -89,250 +105,42 @@
 </div>
 
 
-<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProductModalLabel">Редагування продукту</h5>
-            </div>
-            <div class="modal-body">
-                <form id="editProductForm" method="post" enctype="multipart/form-data">
-                    <div class="tablesWrapper">
-                        <div class="leftTable">
-                            <div class="imgAddWindow">
-                                <input type="file" id="editPhotos" name="imageFiles" class="form-control-file" multiple style="display: none;" />
-                                <div id="edit-photo-previews" class="photoPreviews">
-                                    <img id="edit-default-image" src="~/Admin_Image/def.png" alt="Зображення за замовчуванням" />
-                                </div>
-                                <span id="edit-file-names" class="fileNames"></span>
-                            </div>
-                            <div class="orConteiner">
-                                <div class="orStyle">АБО</div>
-                            </div>
-                            <div class="buttonTable" id="buttonTable">
-                                <button type="button" id="upload-file-button" class="custom-button" onclick="document.getElementById('editPhotos').click();">Оберіть файл...</button>
-                            </div>
-                        </div>
-
-                        <div class="rightTable">
-                            <div class="form-group">
-                                <label for="editProductTitle">Назва продукту</label>
-                                <input type="text" id="editProductTitle" name="Title" class="form-control" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="editProductComposition">Склад продукту</label>
-                                <textarea id="editProductComposition" name="ProductComposition" class="form-control" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="editGeneralInformation">Загальна інформація</label>
-                                <textarea id="editGeneralInformation" name="GeneralInformation" class="form-control" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="editAvailability">Статус наявності</label>
-                                <select id="editAvailability" name="Availability" class="form-control" required>
-                                    <option value="InStock">В наявності</option>
-                                    <option value="OutOfStock">Немає в наявності</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="editCount">Кількість</label>
-                                <input type="number" id="editCount" name="Count" class="form-control" step="0.01" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="editDiscount">Знижка (%)</label>
-                                <input type="number" id="editDiscount" name="Discount" class="form-control" step="0.01" />
-                            </div>
-                            <div class="form-group">
-                                <label for="editProductPrice">Ціна</label>
-                                <input type="number" id="editProductPrice" name="Price" class="form-control" step="0.01" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="editCategoryId">Категорія(Id)</label>
-                                <input type="text" id="editCategoryId" name="CategoryId" class="form-control" readonly />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Оновити продукт</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <script>
-function openEditModal(productId) {
-    fetch(`http://localhost:5152/gateway/Products/${productId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("Отримані дані:", data);
-
-            document.getElementById("editProductTitle").value = data.title;
-            document.getElementById("editProductComposition").value = data.productComposition;
-            document.getElementById("editGeneralInformation").value = data.generalInformation;
-            document.getElementById("editAvailability").value = data.availability === 1 ? "InStock" : "OutOfStock";
-            document.getElementById("editCount").value = data.count;
-            document.getElementById("editDiscount").value = data.discount;
-            document.getElementById("editProductPrice").value = data.price;
-
-            const categorySelect = document.getElementById("editCategoryId");
-            categorySelect.value = data.categoryId; // Встановлюємо значення категорії
-
-            const previewsContainer = document.getElementById("edit-photo-previews");
-            const defaultImage = document.getElementById("edit-default-image");
-            previewsContainer.innerHTML = ""; 
-
-            if (data.imageUrls && data.imageUrls.length > 0) {
-                defaultImage.style.display = 'none'; 
-
-                data.imageUrls.forEach((imageUrl, index) => {
-                    const imgPreview = document.createElement("img");
-                    imgPreview.style.maxWidth = "100px";
-                    imgPreview.style.marginRight = "10px";
-                    imgPreview.style.marginBottom = "10px";
-                    imgPreview.src = imageUrl; 
-
-                    const deleteButton = document.createElement("button");
-                    deleteButton.innerText = "Видалити";
-                    deleteButton.classList.add("delete-image-button");
-                    deleteButton.onclick = function () {
-                        deleteImage(imageUrl, imgPreview);
-                    };
-
-                    const imgContainer = document.createElement("div");
-                    imgContainer.appendChild(imgPreview);
-                    imgContainer.appendChild(deleteButton);
-                    previewsContainer.appendChild(imgContainer);
-                });
-            } else {
-                defaultImage.style.display = 'block'; 
-            }
-
-            var myModal = new bootstrap.Modal(document.getElementById('editProductModal'));
-            myModal.show(); 
-        })
-        .catch(error => {
-            console.error('Error fetching product data:', error);
-            //alert('Сталася помилка при завантаженні даних продукту.');
-        });
-}
-
-    document.getElementById("upload-button").addEventListener("click", function () {
-        var editPhotosInput = document.getElementById("editPhotos1");
-        if (editPhotosInput) {
-            editPhotosInput.click();
-        } else {
-            console.error("Елемент 'editPhotos1' не знайдений.");
-        }
-    });
-
-       document.getElementById("photos").addEventListener("change", function () {
-        const previewsContainer = document.getElementById("photo-previews");
-        const fileNames = document.getElementById("file-names");
-        const defaultImage = document.getElementById("default-image");
-
-        previewsContainer.innerHTML = ""; 
-        let fileNamesText = '';
-        const files = this.files;
-
-        if (files.length > 0) {
-            defaultImage.style.display = 'none';
-        } else {
-            defaultImage.style.display = 'block';
-        }
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-
-            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!validTypes.includes(file.type)) {
-                alert(`Файл "${file.name}" має недопустимий формат. Дозволено лише JPG, PNG, GIF.`);
-                continue;
-            }
-
-            fileNamesText += file.name + (i < files.length - 1 ? ', ' : '');
-
-            const imgPreview = document.createElement("img");
-            imgPreview.style.maxWidth = "100px";
-            imgPreview.style.marginRight = "10px";
-            imgPreview.style.marginBottom = "10px";
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                imgPreview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-
-            previewsContainer.appendChild(imgPreview);
-        }
-        fileNames.textContent = fileNamesText || "Шлях до файлів";
-    });
-
-
-function deleteImage(imageUrl) {
-    const imgElement = document.querySelector(`img[src='${imageUrl}']`);
-    
-    if (imgElement) {
-        imgElement.parentNode.remove(); 
-        alert('Зображення було успішно видалено.');
-    } else {
-        alert('Зображення не знайдено.');
+    function editProduct(productId) {
+        window.location.href = `/Admin/EditProduct/${productId}`;
     }
-}
-
-
-
-    document.getElementById('editProductForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); 
-
-        const formData = new FormData(this);
-        const response = await fetch('/Admin/Products/UpdateProduct', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            alert('Продукт успішно оновлено');
-            location.reload(); 
-        } else {
-            alert('Сталася помилка при оновленні продукту');
-        }
-    });
-
 
     async function deleteProduct(productId, currentPage) {
-    const isConfirmed = confirm("Ви впевнені, що хочете видалити цей продукт?");
+        const isConfirmed = confirm("Ви впевнені, що хочете видалити цей продукт?");
 
-    if (!isConfirmed) {
-        return; 
-    }
-
-    try {
-       
-        const response = await fetch(`http://localhost:5152/gateway/Products/${productId}`, {
-            method: 'DELETE',
-        });
-
-        
-        if (response.ok) { 
-            alert("Продукт успішно видалено");
-            location.reload(); 
-        } else if (response.status === 404) {
-            alert("Продукт не знайдено");
-        } else if (response.status === 500) {
-            alert("Виникла внутрішня помилка сервера");
-        } else {
-            const error = await response.json();
-            alert(`Помилка: ${error.message}`);
+        if (!isConfirmed) {
+            return;
         }
-    } catch (error) {
-        alert(`Сталася помилка: ${error.message}`);
+
+        try {
+
+            const response = await fetch(`http://localhost:5152/gateway/Products/${productId}`, {
+                method: 'DELETE',
+            });
+
+
+            if (response.ok) {
+                alert("Продукт успішно видалено");
+                location.reload();
+            } else if (response.status === 404) {
+                alert("Продукт не знайдено");
+            } else if (response.status === 500) {
+                alert("Виникла внутрішня помилка сервера");
+            } else {
+                const error = await response.json();
+                alert(`Помилка: ${error.message}`);
+            }
+        } catch (error) {
+            alert(`Сталася помилка: ${error.message}`);
+        }
     }
-}
 
 
 
@@ -344,7 +152,7 @@ function deleteImage(imageUrl) {
         flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
-        width: 100%;
+        width: 110%;
     }
 
     .table-container {
@@ -365,28 +173,29 @@ function deleteImage(imageUrl) {
         table-layout: fixed;
     }
 
-    .table tbody tr:nth-child(odd) {
-        background-color: #FFFFFF;
-    }
+        .table tbody tr:nth-child(odd) {
+            background-color: #FFFFFF;
+        }
 
-    .table tbody tr:nth-child(even) {
-        background-color: #E5F4E6;
-    }
+        .table tbody tr:nth-child(even) {
+            background-color: #E5F4E6;
+        }
 
-    .table th {
-        background-color: #4caf50;
-        color: white;
-        font-weight: bold;
-        padding: 10px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
+        .table th {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
 
-    .table td {
-        padding: 10px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
+        .table td {
+            padding: 10px;
+            font-size: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
 
     .product-photo {
         width: 50px;
@@ -395,37 +204,38 @@ function deleteImage(imageUrl) {
         border-radius: 5px;
     }
 
-  .edit-btn, .delete-btn {
-    background-color: white;
-    color: #4caf50;
-    border: 2px solid #4caf50;
-    padding: 5px 10px;  /* Відступи для кнопки */
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    margin-right: 5px;
-    box-sizing: border-box; 
-    width: 100%;  
-    height: 100%; 
-    text-align: center;  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-    .edit-btn:hover {
-        background-color: #007bff;
-        color: white;
-        border-color: #007bff;
+    .edit-btn, .delete-btn {
+        background-color: white;
+        color: #4caf50;
+        border: 2px solid #4caf50;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        margin-right: 5px;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        margin-bottom: 5px; /* Додає відстань між кнопками */
     }
 
-    .delete-btn:hover {
-        background-color: #f44336;
-        color: white;
-        border-color: #f44336;
-    }
+        .edit-btn:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .delete-btn:hover {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
 
     .pagination .page-link {
         padding: 10px 15px;
@@ -440,108 +250,112 @@ function deleteImage(imageUrl) {
         color: white;
     }
 
-.search-container {
-    width: 100%;
-    padding: 20px 0;
-    text-align: center;
-}
+    .search-container {
+        width: 100%;
+        padding: 20px 0;
+        text-align: center;
+    }
 
-#searchTitle {
-    width: 60%;
-    padding: 10px;
-    border: 2px solid #4caf50;
-    border-radius: 10px;
-    font-size: 1rem;
-    margin-right: 10px;
-}
+    #searchTitle {
+        width: 60%;
+        padding: 10px;
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        font-size: 1rem;
+        margin-right: 10px;
+    }
 
-.search-container button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #4caf50;
-    color: white;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-}
+    .search-container button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #4caf50;
+        color: white;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
 
-.search-container button:hover {
-    background-color: #45a049;
-}
-.table {
-    width: 100%;
-}
+        .search-container button:hover {
+            background-color: #45a049;
+        }
 
-.form-control {
-    border: 2px solid #ff5722;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 16px;
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
+    .table {
+        width: 100%;
+    }
 
-.form-control:focus {
-    border-color: #4caf50;
-    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-    outline: none;
-}
+    .form-control {
+        border: 2px solid #ff5722;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
 
-.btn {
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: bold;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-}
+        .form-control:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+            outline: none;
+        }
 
-.btn.btn-success {
-    background-color: #ff5722;
-    color: white;
-    border: none;
-}
+    .btn {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
 
-.btn.btn-success:hover {
-    background-color: #e64a19;
-}
+        .btn.btn-success {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+        }
 
-.btn.alert {
-    background-color: #fff;
-    color: #ff5722;
-    border: 2px solid #ff5722;
-}
+            .btn.btn-success:hover {
+                background-color: #e64a19;
+            }
 
-.btn.alert:hover {
-    background-color: #ff5722;
-    color: #fff;
-}
+        .btn.alert {
+            background-color: #fff;
+            color: #ff5722;
+            border: 2px solid #ff5722;
+        }
 
-.photoPreviews img {
-    max-width: 100px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    transition: transform 0.3s ease-in-out;
-}
+            .btn.alert:hover {
+                background-color: #ff5722;
+                color: #fff;
+            }
 
-.photoPreviews img:hover {
-    transform: scale(1.1);
-    border-color: #4caf50;
-}
+    .photoPreviews img {
+        max-width: 100px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out;
+    }
 
-.orStyle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #ff5722;
-}
+        .photoPreviews img:hover {
+            transform: scale(1.1);
+            border-color: #4caf50;
+        }
 
-.orStyle::before,
-.orStyle::after {
-    content: "";
-    flex: 1;
-    border-top: 1px solid #ccc;
-    margin: 0 10px;
-}
+    .orStyle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #ff5722;
+    }
 
+        .orStyle::before,
+        .orStyle::after {
+            content: "";
+            flex: 1;
+            border-top: 1px solid #ccc;
+            margin: 0 10px;
+        }
+
+    .custom-size {
+        font-size: 10px;
+    }
 </style>

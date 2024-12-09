@@ -12,6 +12,8 @@ namespace ProductServiceApi.Models
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Name length must be between 1 and 100 characters")]
         public string Name { get; set; }
 
+        public string? IconPath { get; set; }
+
         public int? ParentCategoryId { get; set; }
 
         [JsonIgnore]

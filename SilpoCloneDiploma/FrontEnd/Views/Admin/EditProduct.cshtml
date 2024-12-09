@@ -1,0 +1,413 @@
+﻿@using FrontEnd.Models.Dto
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model ProductDto
+
+<div class="mainAddProductContainer" id="mainAddProductContainer">
+    <div class="nameLabel" id="nameLabel">
+        <h3 class="nameTable" style="color:#ff5722">Інформація про товар</h3>
+    </div>
+    <form asp-action="EditProduct" asp-controller="Admin" method="post" enctype="multipart/form-data">
+        <div class="tablesWrapper">
+            <div class="leftTable" id="leftTable">
+                <div class="imgAddWindow">
+                    <input type="file" id="photos" name="imageFiles" class="form-control-file" multiple style="display: none;" />
+                    <div id="photo-previews" class="photoPreviews">
+                        @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+                        {
+                            foreach (var imageUrl in Model.ImageUrls)
+                            {
+                                <div class="photo-preview">
+                                    <img src="@imageUrl" alt="Product Image" class="uploaded-image" />
+                                    <button type="button" class="btn btn-danger btn-sm remove-photo" data-url="@imageUrl">Видалити</button>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <img id="default-image" src="~/Admin_Image/def.png" alt="Зображення за замовчуванням" />
+                        }
+                    </div>
+                    <span id="file-names" class="fileNames"></span>
+                </div>
+                <div class="orConteiner">
+                    <div class="orStyle">АБО</div>
+                </div>
+                <div class="buttonTable" id="buttonTable">
+                    <button type="button" id="upload-button" class="custom-button">Оберіть файл...</button>
+                </div>
+
+            <div class="rightTable" id="rightTable">
+                <div class="form-group">
+                    <label asp-for="Title">Назва продукту</label>
+                    <input type="text" id="title" name="Title" class="form-control" value="@Model.Title" required />
+                    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductComposition">Склад продукту</label>
+                    <textarea id="productComposition" name="ProductComposition" class="form-control" rows="3">@Model.ProductComposition</textarea>
+                    @Html.ValidationMessageFor(m => m.ProductComposition, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="GeneralInformation">Загальна інформація</label>
+                    <textarea id="generalInformation" name="GeneralInformation" class="form-control" rows="3">@Model.GeneralInformation</textarea>
+                    @Html.ValidationMessageFor(m => m.GeneralInformation, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="Availability">Статус наявності</label>
+                    <select id="availability" name="Availability" class="form-control" required>
+                        <option value="">Оберіть статус</option>
+                        <option value="InStock">В наявності</option>
+                        <option value="OutOfStock">Немає в наявності</option>
+                    </select>
+                    @Html.ValidationMessageFor(m => m.Availability, "", new { @class = "text-danger" })
+                </div>
+                <!-- Other form fields -->
+                <div class="form-group">
+                    <label asp-for="Weight">Вага:</label>
+                    <input type="number" id="Weight" name="Weight" class="form-control" step="0.250" min="0" value="@Model.Weight" required />
+                    @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="TradeMark">Торгова марка :</label>
+                    <input type="text" id="TradeMark" name="TradeMark" class="form-control" value="@Model.TradeMark" required />
+                    @Html.ValidationMessageFor(m => m.TradeMark, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="CountryOfManufacture">Країна виробник :</label>
+                    <input type="text" id="CountryOfManufacture" name="CountryOfManufacture" class="form-control" value="@Model.CountryOfManufacture" required />
+                    @Html.ValidationMessageFor(m => m.CountryOfManufacture, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="Count">Кількість</label>
+                    <input type="number" id="count" name="Count" class="form-control" step="1" min="0" value="@Model.Count" required />
+                    @Html.ValidationMessageFor(m => m.Count, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="Discount">Знижка (%)</label>
+                    <input type="number" id="Discount" name="Discount" class="form-control" step="0.01" min="0" value="@Model.Discount" />
+                    @Html.ValidationMessageFor(m => m.Discount, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price">Ціна</label>
+                    <input type="number" id="price" name="Price" class="form-control" step="0.01" value="@Model.Price" required />
+                    @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label">Категорія</label>
+                    <select asp-for="CategoryIdStr" asp-items="Model.CategorySelectList" class="form-control" required>
+                        <option value="">Оберіть категорію</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="buttonWrapper">
+                    <div class="buttonTable">
+                        <button type="submit" class="btn btn-success">Оновити продукт</button>
+                    </div>
+                    <div class="buttonCencelTable">
+                        <button type="reset" class="btn alert">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    document.getElementById("upload-button").addEventListener("click", function () {
+        document.getElementById("photos").click();
+    });
+
+    document.getElementById("photos").addEventListener("change", function () {
+        const previewsContainer = document.getElementById("photo-previews");
+        const fileNames = document.getElementById("file-names");
+        const defaultImage = document.getElementById("default-image");
+
+        let fileNamesText = '';
+        const files = this.files;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert(`Файл "${file.name}" має недопустимий формат. Дозволено лише JPG, PNG, GIF.`);
+                continue;
+            }
+
+            fileNamesText += file.name + (i < files.length - 1 ? ', ' : '');
+
+            const imgPreview = document.createElement("img");
+            imgPreview.style.maxWidth = "100px";
+            imgPreview.style.marginRight = "10px";
+            imgPreview.style.marginBottom = "10px";
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            const removeButton = document.createElement("button");
+            removeButton.className = "btn btn-danger btn-sm remove-photo";
+            removeButton.textContent = "Видалити";
+            removeButton.dataset.url = URL.createObjectURL(file); // Store file URL to data attribute
+            removeButton.onclick = function () {
+                const photoUrl = this.dataset.url;
+                // Send a delete request for the photo
+                fetch(`/Admin/DeletePhoto?photoUrl=${encodeURIComponent(photoUrl)}`, {
+                    method: 'POST'
+                })
+                    .then(response => response.text())
+                    .then(result => {
+                        if (result === "Success") {
+                            this.parentElement.remove();
+                            updateDefaultImage();
+                        } else {
+                            alert("Помилка при видаленні фото.");
+                        }
+                    })
+                    .catch(() => {
+                        alert("Помилка при зв'язуванні з сервером.");
+                    });
+            };
+
+            const previewDiv = document.createElement("div");
+            previewDiv.className = "photo-preview";
+            previewDiv.appendChild(imgPreview);
+            previewDiv.appendChild(removeButton);
+            previewsContainer.appendChild(previewDiv);
+        }
+
+        fileNames.textContent = fileNamesText || "Шлях до файлів";
+        updateDefaultImage();
+    });
+
+    const observer = new MutationObserver(() => {
+        updateDefaultImage();
+    });
+
+    observer.observe(document.getElementById("photo-previews"), { childList: true });
+
+   
+
+    document.querySelectorAll('.remove-photo').forEach(button => {
+        button.addEventListener('click', function () {
+            const photoElement = this.closest('.photo-preview');
+            const photoUrl = this.dataset.url; // URL of the photo to delete
+
+            // Видаляємо фото з DOM
+            if (photoElement) {
+                photoElement.remove();
+
+                // Оновити зображення за замовчуванням, якщо немає більше фото
+                updateDefaultImage();
+            }
+
+            // Видалити файл локально
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/Admin/DeletePhoto", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert('Файл успішно видалено');
+                } else {
+                    alert('Помилка при видаленні фото');
+                }
+            };
+            xhr.send("photoUrl=" + encodeURIComponent(photoUrl));
+        });
+    });
+
+    function updateDefaultImage() {
+        const previewsContainer = document.getElementById("photo-previews");
+        const defaultImage = document.getElementById("default-image");
+        defaultImage.style.display = previewsContainer.children.length === 0 ? "block" : "none";
+    }
+
+   
+</script>
+
+
+<style>
+    body, html {
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .mainAddProductContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 20px;
+    }
+
+    .nameLabel {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .nameTable {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .tablesWrapper {
+        display: flex;
+        width: 100%;
+        gap: 20px;
+    }
+
+
+    .leftTable {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+
+    .rightTable {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+
+    .form-control {
+        width: 100%;
+        border: 3px solid #4caf50;
+        border-radius: 20px;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+
+    .btn {
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        cursor: pointer;
+        display: inline-block;
+        transition: background-color 0.3s, color 0.3s;
+        width: 200px;
+        height: 50px;
+        border: 3px solid #4caf50;
+        background-color: white;
+        color: #4caf50;
+    }
+
+
+    .btn.alert:hover {
+        background-color: red;
+        color: white;
+    }
+
+
+    .btn.btn-success:hover {
+        background-color: #4caf50;
+        color: white;
+    }
+
+
+    .btn.alert {
+        background-color: white;
+        color: #4caf50;
+        border: 3px solid #4caf50;
+    }
+
+
+    .btn.btn-success {
+        width: 200px;
+        height: 50px;
+        background-color: white;
+        color: #4caf50;
+    }
+
+
+    .buttonWrapper {
+        display: flex;
+        gap: 20px;
+
+    }
+
+
+
+    #upload-button {
+        background-color: #4caf50;
+        color: white;
+        font-weight: bold;
+        padding: 12px 20px;
+        border-radius: 20px;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #upload-button:hover {
+        background-color: #45a049;
+    }
+
+
+
+
+    .photoPreviews {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .photoPreviews img {
+        max-width: 100px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    #default-image {
+        max-width: 200px;
+        margin-bottom: 10px;
+    }
+
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .orStyle {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #4caf50;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .orStyle::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        border-top: 1px solid #ccc;
+        z-index: -1;
+    }
+
+    .orStyle:before {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>

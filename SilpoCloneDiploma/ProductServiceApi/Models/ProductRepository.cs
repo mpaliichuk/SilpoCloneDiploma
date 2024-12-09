@@ -120,7 +120,8 @@ namespace ProductServiceApi.Models
         {
             try
             {
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.Title == title);
+                var product = await _context.Products
+     .FirstOrDefaultAsync(p => p.Title.ToLower() == title.ToLower());
 
                 if (product == null)
                 {

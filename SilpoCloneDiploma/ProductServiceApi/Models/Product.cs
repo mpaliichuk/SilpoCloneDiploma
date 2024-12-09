@@ -25,6 +25,15 @@ namespace ProductServiceApi.Models
         [StringLength(500, ErrorMessage = "General information length cannot exceed 500 characters")]
         public string? GeneralInformation { get; set; }
 
+
+        public double? Weight { get; set; }
+
+        [StringLength(500, ErrorMessage = "Trade Mark information length cannot exceed 500 characters")]
+        public string? TradeMark { get; set; }
+
+        [StringLength(500, ErrorMessage = "Country Of Manufacture information length cannot exceed 500 characters")]
+        public string? CountryOfManufacture {  get; set; }
+
         [JsonPropertyName("imageUrls")]
         public List<string> ImageUrls { get; set; } = new List<string>();
 

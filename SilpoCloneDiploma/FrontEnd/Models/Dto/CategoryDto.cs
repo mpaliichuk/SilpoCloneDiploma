@@ -9,7 +9,7 @@ namespace FrontEnd.Models.Dto
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string Name { get; set; }
-
+        public string? IconPath { get; set; }
         public int? ParentCategoryId { get; set; }
 
     }

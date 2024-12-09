@@ -11,7 +11,19 @@
       ],
       "UpstreamPathTemplate": "/gateway/Product",
       "UpstreamHttpMethod": [ "POST", "GET" ]
-    }, //good
+    },
+    {
+      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Product/{id}",
+      "UpstreamHttpMethod": [ "POST", "GET","PUT" ]
+    },
     {
       "DownstreamPathTemplate": "/api/product/GetProductByNameAsync/{title}",
       "DownstreamScheme": "http",
@@ -22,7 +34,7 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/SearchProducts/{title}",
-      "UpstreamHttpMethod": [ "GET" ] //bad
+      "UpstreamHttpMethod": [ "GET" ] 
     },
     {
       "DownstreamPathTemplate": "/api/Product/random-discounted",

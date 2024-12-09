@@ -41,6 +41,7 @@ namespace ProductServiceApi.Controllers
             {
                 Id = c.Id,
                 Name = c.Name,
+                IconPath = c.IconPath,
                 ParentCategoryId = c.ParentCategoryId
             });
             return Ok(categoryDtos);
@@ -67,6 +68,7 @@ namespace ProductServiceApi.Controllers
             {
                 Id = category.Id,
                 Name = category.Name,
+                IconPath = category.IconPath,
                 ParentCategoryId = category.ParentCategoryId,
                 ParentCategoryName = ""
             };
@@ -106,6 +108,7 @@ namespace ProductServiceApi.Controllers
             {
                 Id = c.Id,
                 Name = c.Name,
+                IconPath = c.IconPath,
                 ParentCategoryId = c.ParentCategoryId,
                 Count = products.Count(p => p.CategoryId == c.Id),
             });
@@ -158,6 +161,7 @@ namespace ProductServiceApi.Controllers
             var category = new Category
             {
                 Name = categoryDto.Name,
+                IconPath = categoryDto.IconPath,
                 ParentCategoryId = categoryDto.ParentCategoryId
             };
             
@@ -198,6 +202,7 @@ namespace ProductServiceApi.Controllers
             }
 
             existingCategory.Name = categoryDto.Name;
+            existingCategory.IconPath = categoryDto.IconPath;
             existingCategory.ParentCategoryId = categoryDto.ParentCategoryId;
 
             await _service.UpdateCategoryAsync(existingCategory);

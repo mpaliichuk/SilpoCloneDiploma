@@ -7,6 +7,8 @@ using FrontEnd.Controllers;
 using FrontEnd.Services;
 using FrontEnd.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Hosting;
 
 public class AdminController : Controller
 {
@@ -44,26 +46,14 @@ public class AdminController : Controller
         return View(model);
     }
 
-    //get product by name
+    
 
     [HttpGet]
-    public async Task<IActionResult> SearchProducts(string searchTitle)
+    public IActionResult NoResults()
     {
-        if (string.IsNullOrEmpty(searchTitle))
-        {
-            return View(); 
-        }
-
-        var product = await _productCategoryRatingService.GetProductByName(searchTitle);
-
-        if (product == null)
-        {
-            ViewBag.Message = "No product found with that name.";
-            return View(product);
-        }
-
-        return View(product); 
+        return View();
     }
+
 
     /// <summary>
     /// Display a form to add a new attribute
@@ -172,7 +162,7 @@ public class AdminController : Controller
     /// </summary>
 
     [HttpPost]
-    public async Task<IActionResult> AddProduct(ProductDto productDto, ICollection<IFormFile> imageFiles)
+    public async Task<IActionResult> AddProduct([FromForm] IFormFileCollection imageFiles, [FromForm] ProductDto productDto)
     {
         if (!productDto.CategoryIdStr.HasValue)
         {
@@ -228,6 +218,9 @@ public class AdminController : Controller
                 ProductComposition = productDto.ProductComposition,
                 GeneralInformation = productDto.GeneralInformation,
                 ImageUrls = imageUrls,
+                Weight = productDto.Weight,
+                TradeMark = productDto.TradeMark,
+                CountryOfManufacture = productDto.CountryOfManufacture,
                 Availability = productDto.Availability,
                 Count = productDto.Count,
                 Discount = productDto.Discount,
@@ -237,20 +230,21 @@ public class AdminController : Controller
 
             var createdProduct = await _productCategoryRatingService.CreateProductAsync(product);
 
-            if (createdProduct != null)
+            if (createdProduct == null)
             {
-                TempData["SuccessMessage"] = "Продукт успішно додано!";
-                return RedirectToAction("AddProduct");
-            }
-            else
-            {
+                _logger.LogError("Помилка при створенні продукту.");
                 TempData["ErrorMessage"] = "Сталася помилка при додаванні продукту.";
-                return RedirectToAction("ProductList");
+                return RedirectToAction("ListOfProducts");
             }
+
+            TempData["SuccessMessage"] = "Продукт успішно додано!";
+            return RedirectToAction("AddProduct");
         }
 
         return View(productDto);
     }
+
+
 
 
 
@@ -349,21 +343,44 @@ public class AdminController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> ListOfProducts(int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> ListOfProducts(string searchTitle, int pageNumber = 1, int pageSize = 10)
     {
+        if (!string.IsNullOrEmpty(searchTitle))
+        {
+            var product = await _productCategoryRatingService.GetProductByName(searchTitle);
+
+            if (product == null)
+            {
+                ViewBag.Message = "No product found with the specified name.";
+            }
+            else
+            {
+                var listOfPr = new List<ProductDto> { product };
+                var model = new ProductListViewModel
+                {
+                    Products = listOfPr,
+                    CurrentPage = 1,
+                    TotalPages = 1
+                };
+
+                return View(model); 
+            }
+        }
+
         var products = await _productCategoryRatingService.GetProductsWithoutCategoryAsync(pageNumber, pageSize);
         var totalProducts = await _productCategoryRatingService.GetProductsCountAsync();
         var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
 
-        var model = new ProductListViewModel
+        var modelForAll = new ProductListViewModel
         {
             Products = products,
             CurrentPage = pageNumber,
             TotalPages = totalPages
         };
 
-        return View(model);
+        return View(modelForAll);
     }
+
 
 
     [HttpPost]
@@ -371,6 +388,150 @@ public class AdminController : Controller
     {
         return View(model);
     }
+
+
+    /// <summary>
+    /// Display form to edit an existing product
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> EditProduct(int id)
+    {
+        var product = await _productCategoryRatingService.GetProductByIdAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        var categories = await _productCategoryRatingService.GetCategoriesAsync();
+        var categorySelectList = categories.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Name
+        }).ToList();
+
+        var model = new ProductDto
+        {
+            Id = product.Id,
+            Title = product.Title,
+            ProductComposition = product.ProductComposition,
+            GeneralInformation = product.GeneralInformation,
+            ImageUrls = product.ImageUrls,
+            Weight = product.Weight,
+            TradeMark = product.TradeMark,
+            CountryOfManufacture = product.CountryOfManufacture,
+            Availability = product.Availability,
+            Count = product.Count,
+            Discount = product.Discount,
+            Price = product.Price,
+            CategoryId = product.CategoryId, // Ensure that the CategoryId is correctly associated
+            CategorySelectList = categorySelectList // The SelectList for the dropdown
+        };
+
+        return View(model); // Pass the model to the view
+    }
+
+
+    /// <summary>
+    /// Handle the update of an existing product
+    /// </summary>
+    [HttpPost]
+    public async Task<IActionResult> EditProduct(ProductDto productDto, ICollection<IFormFile> imageFiles)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(productDto);
+        }
+
+        if (productDto.CategoryIdStr == null)
+        {
+            ModelState.AddModelError("CategoryId", "Категорія повинна бути вибрана.");
+        }
+
+        var imageUrls = new List<string>();
+        if (imageFiles != null && imageFiles.Count > 0)
+        {
+            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadImg");
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            foreach (var file in imageFiles)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                imageUrls.Add($"/uploadImg/{fileName}");
+            }
+        }
+
+        var product = new ProductDto
+        {
+            Id = productDto.Id,
+            Title = productDto.Title,
+            ProductComposition = productDto.ProductComposition,
+            GeneralInformation = productDto.GeneralInformation,
+            ImageUrls = imageUrls.Any() ? imageUrls : productDto.ImageUrls,
+            Weight = productDto.Weight,
+            TradeMark = productDto.TradeMark,
+            CountryOfManufacture = productDto.CountryOfManufacture,
+            Availability = productDto.Availability,
+            Count = productDto.Count,
+            Discount = productDto.Discount,
+            Price = productDto.Price,
+            CategoryId = (int)productDto.CategoryIdStr
+        };
+
+        var updatedProduct = await _productCategoryRatingService.UpdateProductAsync(product.Id, product);
+
+        if (updatedProduct != null)
+        {
+            TempData["SuccessMessage"] = "Продукт успішно оновлений!";
+            return RedirectToAction("ListOfProducts");
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Сталася помилка при оновленні продукту.";
+        }
+
+        return View(productDto);
+    }
+
+
+    public async Task<IActionResult> DeletePhoto(string photoUrl)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(photoUrl))
+            {
+                return BadRequest("Photo URL cannot be null or empty.");
+            }
+
+            // Assuming the photoUrl is the file path or URL stored on the server.
+            var photoPath = Path.Combine("uploadImg", photoUrl);
+
+            if (System.IO.File.Exists(photoPath))
+            {
+                System.IO.File.Delete(photoPath);
+                return Ok("Success");
+            }
+            else
+            {
+                return NotFound("File not found.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "Internal server error.");
+        }
+    }
+
 
 
 

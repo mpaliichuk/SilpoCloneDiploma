@@ -256,7 +256,7 @@ namespace FrontEnd.Services
         {
             try
             {
-                var url = $"/gateway/SearchProducts?title={Uri.EscapeDataString(title)}";
+                var url = $"/gateway/SearchProducts/{Uri.EscapeDataString(title)}";
 
                 var response = await _httpClient.GetAsync(url);
 

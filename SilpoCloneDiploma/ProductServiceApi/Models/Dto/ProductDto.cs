@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 
@@ -25,6 +25,14 @@ namespace ProductServiceApi.Dtos
             [StringLength(500)]
             public string? GeneralInformation { get; set; }
 
+             public double? Weight { get; set; }
+
+            [StringLength(500)]
+             public string? TradeMark { get; set; }
+
+            [StringLength(500)]
+             public string? CountryOfManufacture { get; set; }
+    
             [JsonPropertyName("imageUrls")]
             public List<string> ImageUrls { get; set; } = new List<string>();
 

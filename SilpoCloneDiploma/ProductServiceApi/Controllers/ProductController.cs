@@ -47,6 +47,9 @@ namespace ProductServiceApi.Controllers
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
+                Weight = p.Weight,
+                TradeMark = p.TradeMark,
+                CountryOfManufacture = p.CountryOfManufacture,
                 Count = p.Count,
                 Discount = p.Discount,
                 Price = p.Price,
@@ -94,6 +97,9 @@ namespace ProductServiceApi.Controllers
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
+                Weight = p.Weight,
+                TradeMark = p.TradeMark,
+                CountryOfManufacture = p.CountryOfManufacture,
                 Count = p.Count,
                 Discount = p.Discount,
                 Price = p.Price,
@@ -127,6 +133,9 @@ namespace ProductServiceApi.Controllers
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
+                Weight = p.Weight,
+                TradeMark = p.TradeMark,
+                CountryOfManufacture = p.CountryOfManufacture,
                 Count = p.Count,
                 Discount = p.Discount,
                 Price = p.Price,
@@ -159,11 +168,14 @@ namespace ProductServiceApi.Controllers
                 GeneralInformation = p.GeneralInformation,
                 ImageUrls = p.ImageUrls,
                 Availability = (Dtos.Availability)p.Availability,
+                Weight = p.Weight,
+                TradeMark = p.TradeMark,
+                CountryOfManufacture = p.CountryOfManufacture,
                 Count = p.Count,
                 Discount = p.Discount,
                 Price = p.Price,
                 CategoryId = p.CategoryId
-            });
+            }); 
 
             return Ok(productDtos);
         }
@@ -200,6 +212,9 @@ namespace ProductServiceApi.Controllers
                 GeneralInformation = product.GeneralInformation,
                 ImageUrls = product.ImageUrls,
                 Availability = (Dtos.Availability)product.Availability,
+                Weight = product.Weight,
+                TradeMark = product.TradeMark,
+                CountryOfManufacture = product.CountryOfManufacture,
                 Count = product.Count,
                 Discount = product.Discount,
                 Price = product.Price,
@@ -215,7 +230,7 @@ namespace ProductServiceApi.Controllers
         /// Get a product by name.
         /// </summary>
         /// <param name="title">The name of the product.</param>
-        [HttpGet("name/{title}")]
+        [HttpGet("GetProductByNameAsync/{title}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
@@ -230,11 +245,16 @@ namespace ProductServiceApi.Controllers
 
             var productDto = new ProductDto
             {
+               
+
                 Title = product.Title,
                 ProductComposition = product.ProductComposition,
                 GeneralInformation = product.GeneralInformation,
                 ImageUrls = product.ImageUrls,
                 Availability = (Dtos.Availability)product.Availability,
+                Weight = product.Weight,
+                TradeMark = product.TradeMark,
+                CountryOfManufacture = product.CountryOfManufacture,
                 Count = product.Count,
                 Discount = product.Discount,
                 Price = product.Price,
@@ -266,6 +286,9 @@ namespace ProductServiceApi.Controllers
                     GeneralInformation = p.GeneralInformation,
                     ImageUrls = p.ImageUrls,
                     Availability = (Dtos.Availability)p.Availability,
+                    Weight = p.Weight,
+                    TradeMark = p.TradeMark,
+                    CountryOfManufacture = p.CountryOfManufacture,
                     Count = p.Count,
                     Discount = p.Discount,
                     Price = p.Price,
@@ -304,6 +327,9 @@ namespace ProductServiceApi.Controllers
                     GeneralInformation = p.GeneralInformation,
                     ImageUrls = p.ImageUrls,
                     Availability = (Dtos.Availability)p.Availability,
+                    Weight = p.Weight,
+                    TradeMark = p.TradeMark,
+                    CountryOfManufacture = p.CountryOfManufacture,
                     Count = p.Count,
                     Discount = p.Discount,
                     Price = p.Price,
@@ -345,13 +371,20 @@ namespace ProductServiceApi.Controllers
                     GeneralInformation = productDto.GeneralInformation,
                     ImageUrls = productDto.ImageUrls,
                     Availability = (Models.Availability)productDto.Availability,
+                    Weight = productDto.Weight,
+                    TradeMark = productDto.TradeMark,
+                    CountryOfManufacture = productDto.CountryOfManufacture,
                     Count = productDto.Count,
                     Discount = productDto.Discount,
                     Price = productDto.Price,
                     CategoryId = productDto.CategoryId
                 };
+                try { await _service.AddProductAsync(product); }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while adding the product: {ex.Message}");
+                }
 
-                await _service.AddProductAsync(product);
                 _logger.LogInformation("Product added successfully: {@Product}", product);
 
                 var addedProductDto = new ProductDto
@@ -361,6 +394,9 @@ namespace ProductServiceApi.Controllers
                     GeneralInformation = product.GeneralInformation,
                     ImageUrls = product.ImageUrls,
                     Availability = (Dtos.Availability)product.Availability,
+                    Weight = product.Weight,
+                    TradeMark = product.TradeMark,
+                    CountryOfManufacture = product.CountryOfManufacture,
                     Count = product.Count,
                     Discount = product.Discount,
                     Price = product.Price,
@@ -409,6 +445,9 @@ namespace ProductServiceApi.Controllers
                 existingProduct.GeneralInformation = productDto.GeneralInformation;
                 existingProduct.ImageUrls = productDto.ImageUrls;
                 existingProduct.Availability = (Models.Availability)productDto.Availability;
+                existingProduct.Weight = productDto.Weight;
+                existingProduct.TradeMark = productDto.TradeMark;
+                existingProduct.CountryOfManufacture = productDto.CountryOfManufacture;
                 existingProduct.Count = productDto.Count;
                 existingProduct.Discount = productDto.Discount;
                 existingProduct.Price = productDto.Price;
@@ -416,7 +455,7 @@ namespace ProductServiceApi.Controllers
 
                 await _service.UpdateProductAsync(existingProduct);
                 _logger.LogInformation("Product updated successfully: {@Product}", existingProduct);
-                return NoContent();
+                return Ok(productDto);
             }
             catch (Exception ex)
             {
