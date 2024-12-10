@@ -74,7 +74,6 @@ async function CategoryByParentId(parentId) {
         });
         if (response.ok) {
             const getCategories = await response.json();
-            console.log(getCategories);
             if (getCategories.length > 0)
                 generateSubCategoryMarkup(getCategories);
         }
@@ -128,7 +127,6 @@ async function GetProducts(categoryId, firstIn = null) {
 
     let url = `http://localhost:5152/gateway/GetSortedFilteredPage/${currentPage + getsOnPage}/${pageSize}/${categoryId}/${sort}`;
     var productsOnPage = [];
-    console.log(filter);
     try {
         if (filter.Countries.length < 1 && filter.Brands.length < 1 && filter.MinPrice == null && filter.maxPrice == null) {
             const response = await fetch("http://localhost:5152/gateway/GetSortedPage/" + (currentPage + getsOnPage) + "/" + pageSize + "/" + categoryId + "/" + sort, {
@@ -140,7 +138,6 @@ async function GetProducts(categoryId, firstIn = null) {
 
             if (response.ok) {
                 productsOnPage = await response.json();
-                console.log(productsOnPage);
                 if (firstIn) setPageSize(productsOnPage.totalCount);
             }   
         } else {
@@ -155,7 +152,6 @@ async function GetProducts(categoryId, firstIn = null) {
 
             if (response.ok) {
                 productsOnPage = await response.json();
-                console.log(productsOnPage);
                 if (firstIn) setPageSize(productsOnPage.totalCount);
             } 
 
@@ -885,7 +881,6 @@ function FilterParams() {
             newFilter.appendChild(filterText);
             newFilter.appendChild(filterDelete);
             selectedFiltersList.appendChild(newFilter);
-            console.log(selectedFiltersArray);
             checkFiltersVisibility();
         }
     }

@@ -4,43 +4,7 @@ var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
 var dropdownItems = document.getElementsByClassName('dropdown-item');
 var panel = document.getElementById('categoryPanel');
 const socialIcons = document.querySelectorAll('.socialIcons');
-var categories = {
-    1: { name: '', icon: '/icons/CategoryIcons/SmallFruitIcon.png', parentCategoryId: null },
-    2: { name: '', link: '/icons/CategoryIcons/SeasonalFruits.png', parentCategoryId: 0 },
-    3: { name: '', link: '/icons/CategoryIcons/Smoothies.png', parentCategoryId: 0 },
-    4: { name: '', link: '/icons/CategoryIcons/FruitSnacks.png', parentCategoryId: 0 },
-    5: { name: '', link: '/icons/CategoryIcons/Berries.png', parentCategoryId: 0 },
-    6: { name: '', link: '/icons/CategoryIcons/Nuts.png', parentCategoryId: 0 },
-
-    7: { name: '', icon: '/icons/CategoryIcons/SmallHealthyFoodIcon.png', parentCategoryId: null },
-    8: { name: '', link: '/icons/CategoryIcons/Lactose-free.png', parentCategoryId: 0 },
-    9: { name: '', link: '/icons/CategoryIcons/Vegan.png', parentCategoryId: 0 },
-    10: { name: '', link: '/icons/CategoryIcons/Organic.png', parentCategoryId: 0 },
-    11: { name: '', link: '/icons/CategoryIcons/Gluten-free.png', parentCategoryId: 0 },
-    12: { name: '', link: '/icons/CategoryIcons/NoAddedSugar.png', parentCategoryId: 0 },
-
-    13: { name: '', icon: '/icons/CategoryIcons/SmallVegetablesIcon.png', parentCategoryId: null },
-    14: { name: '', link: '/icons/CategoryIcons/SeasonalVegetables.png', parentCategoryId: 0 },
-    15: { name: '', link: '/icons/CategoryIcons/GreensAndSalads.png', parentCategoryId: 0 },
-    16: { name: '', link: '/icons/CategoryIcons/Pickles.png', parentCategoryId: 0 },
-    17: { name: '', link: '/icons/CategoryIcons/Mushrooms.png', parentCategoryId: 0 },
-
-    18: { name: 'Бакалія та консерви', icon: '/icons/CategoryIcons/SmallGroceryIcon.png', parentCategoryId: null },
-    19: { name: 'Риба', icon: '/icons/CategoryIcons/SmallFishIcon.png', parentCategoryId: null },
-    20: { name: 'Соуси та спеції', icon: '/icons/CategoryIcons/SmallSaucesIcon.png', parentCategoryId: null },
-    21: { name: 'Мʼясо', icon: '/icons/CategoryIcons/SmallMeatIcon.png', parentCategoryId: null },
-    22: { name: 'Солодощі', icon: '/icons/CategoryIcons/SmallSweetsIcon.png', parentCategoryId: null },
-    23: { name: 'Снеки', icon: '/icons/CategoryIcons/SmallSnacksIcon.png', parentCategoryId: null },
-    24: { name: 'Заморожені продукти', icon: '/icons/CategoryIcons/SmallFrozenFoodIcon.png', parentCategoryId: null },
-    25: { name: 'Вода та напої', icon: '/icons/CategoryIcons/SmallWaterIcon.png', parentCategoryId: null },
-    26: { name: 'Тютюнові вироби', icon: '/icons/CategoryIcons/SmallTobaccoIcon.png', parentCategoryId: null },
-    27: { name: 'Алкогольні напої', icon: '/icons/CategoryIcons/SmallAlcoholIcon.png', parentCategoryId: null },
-    28: { name: 'Гігієна та краса', icon: '/icons/CategoryIcons/SmallHygieneIcon.png', parentCategoryId: null },
-    29: { name: 'Кава та чай', icon: '/icons/CategoryIcons/SmallCoffeeTeaIcon.png', parentCategoryId: null },
-    30: { name: 'Товари для дому', icon: '/icons/CategoryIcons/SmallHomeGoodsIcon.png', parentCategoryId: null },
-    31: { name: 'Товари для дітей', icon: '/icons/CategoryIcons/SmallChildrensGoodsIcon.png', parentCategoryId: null },
-    32: { name: 'Молочні продукти', icon: '/icons/CategoryIcons/SmallDairyProductsIcon.png', parentCategoryId: null },
-};
+var categories = {};
 
 document.addEventListener("DOMContentLoaded", function () {
     GetCart();
@@ -63,8 +27,11 @@ async function GetCategories() {
         }
 
         categoriesRespons.forEach(item => {
-            categories[item.id].name = item.name;
-            categories[item.id].parentCategoryId = item.parentCategoryId;
+            categories[item.id] = {
+                name: item.name,
+                parentCategoryId: item.parentCategoryId,
+                iconPath: item.iconPath
+            };
         });
 
     } catch (error) {
@@ -85,7 +52,6 @@ async function GetCart() {
         });
         if (response.ok) {
             var user = await response.json();
-            console.log(user);
         }
 
     } catch (error) {
@@ -105,7 +71,6 @@ async function FindProduct(title) {
         });
         if (response.ok) {
             responseItem = await response.json();
-            console.log(responseItem);
             var productId = responseItem.id;
             window.location = "/Goodmeal/ProductPage/" + productId;;
         }
@@ -193,13 +158,12 @@ function generateCategoryPanel(categoryId) {
     const categoryItems = Array.isArray(categories) ? categories : Object.values(categories);
     categoryItems.forEach((item, index) => {
         if (item.parentCategoryId == categoryId)
-            generateCategoryCard(item.link, item.name, index + 1);    
+            generateCategoryCard(item.iconPath, item.name, index + 1); 
     });
     generateCategoryCard('/icons/CategoryIcons/AllProducts.png', 'Всі продукти', categoryId); 
 }
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 function generateCategoryCard(iconSrc, categoryText, id) {
-    console.log(id);
     const categoryDivCard = document.createElement('a');
     categoryDivCard.href = `/Goodmeal/Category/${id}`;
 
@@ -250,7 +214,7 @@ function createCategoryItem(href, id) {
 
     const img = document.createElement('img');
     img.classList.add('miniCategoryIcon');
-    img.src = categories[id].icon;
+    img.src = categories[id].iconPath;
 
     const textNode = document.createTextNode(categories[id].name);
 
@@ -640,7 +604,6 @@ registerButton.addEventListener("click", async function () {
         });
 
         const result = await response.json();
-        console.log("Register Response:", result);
 
         if (response.ok) {
             alert("Registration successful! Please log in.");
@@ -694,7 +657,6 @@ loginButton.addEventListener("click", async function () {
         });
 
         const result = await response.json();
-        console.log("Login Response:", result);
 
         if (response.ok) {
             overlayPopUp.style.display = 'none';

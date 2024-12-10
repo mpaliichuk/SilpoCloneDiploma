@@ -39,7 +39,6 @@ async function GetProducts() {
         console.error('Error:', error);
         throw error;
     }
-    console.log(productsByDiscount);
     for (var i = 0; i < productsByDiscount.length; i++) {
         const productCard = createProductCard({
             productIconSrc: productsByDiscount[i].imageUrls[0],
