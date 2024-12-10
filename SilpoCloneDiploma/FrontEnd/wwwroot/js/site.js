@@ -860,3 +860,35 @@ function showPopup() {
 function closePopup() {
     document.getElementById('orderPopup').style.display = 'none';
 }
+
+async function submitOrder() {
+    // Change orderData with real Data now it's dummy values
+    const orderData = {
+        customerId: 123, // Replace with the actual customer ID
+        orderDate: new Date().toISOString(),
+        orderItems: [
+            { productId: 1, quantity: 2, price: 50 },
+            { productId: 2, quantity: 1, price: 100 },
+        ],
+    };
+
+    try {
+        const response = await fetch('http://localhost:5087/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+        });
+        if (response.ok) {
+            const createdOrder = await response.json();
+            alert(`Order submitted successfully! Order ID: ${createdOrder.id}`);
+        } else {
+            const error = await response.json();
+            alert(`Error submitting order: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the order.');
+    }
+}

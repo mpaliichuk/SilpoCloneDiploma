@@ -21,6 +21,17 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "OrderService", Version = "v1" });
 });
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +52,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Use the CORS middleware
+app.UseCors("AllowAll");
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -55,7 +69,6 @@ void ApplyMigrations()
         if (db.Database.GetPendingMigrations().Any())
         {
             db.Database.Migrate();
-
         }
     }
 }
