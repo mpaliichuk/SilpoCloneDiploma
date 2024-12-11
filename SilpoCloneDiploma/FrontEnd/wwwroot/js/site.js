@@ -53,7 +53,7 @@ async function GetCart() {
         });
         if (response.ok) {
             var data = await response.json();
-            if (localStorage.getItem("userId") != 0) {
+            if (localStorage.getItem("userId") != 0 && data.result != null) {
                 if (data.result.cartHeader.userId == localStorage.getItem("userId"))
                     userCart = 1;
             }
@@ -487,24 +487,24 @@ function userOrAdmin() {
     const basketDiv = document.getElementById("basketDiv");
     const basketText = document.getElementById("basketText");
     const basketIcon = document.getElementById("basketIcon");
+    if (basketText && basketIcon) {
+        if (localStorage.getItem("userRole") === "Admin") {
+            basketText.textContent = "Адмін панель";
+            basketIcon.src = "/icons/Admin.png";
 
-    if (localStorage.getItem("userRole") === "Admin") {
-        basketText.textContent = "Адмін панель";
-        basketIcon.src = "/icons/Admin.png";
+            basketDiv.addEventListener('click', function () {
+                window.location.href = "/Admin/Index";
+            });
 
-        basketDiv.addEventListener('click', function () {
-            window.location.href = "/Admin/Index";
-        });
-
-        basketDiv.classList.add("adminDivClass");
-        basketDiv.classList.remove("basketDivClass");
-
-    } else {
-        basketText.textContent = "Кошик";
-        basketIcon.src = "/icons/Cart.png";
-        basketDiv.addEventListener('click', handleBasketClick);
-        basketDiv.classList.add("basketDivClass");
-        basketDiv.classList.remove("adminDivClass");
+            basketDiv.classList.add("adminDivClass");
+            basketDiv.classList.remove("basketDivClass");
+        } else {
+            basketText.textContent = "Кошик";
+            basketIcon.src = "/icons/Cart.png";
+            basketDiv.addEventListener('click', handleBasketClick);
+            basketDiv.classList.add("basketDivClass");
+            basketDiv.classList.remove("adminDivClass");
+        }
     }
 }
 

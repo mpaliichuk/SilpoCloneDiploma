@@ -141,7 +141,7 @@ namespace ProductServiceApi.Models
             try
             {
                 var product = await _context.Products
-     .FirstOrDefaultAsync(p => p.Title.ToLower() == title.ToLower());
+                    .FirstOrDefaultAsync(p => p.Title.ToLower().Contains(title.ToLower()));
 
                 if (product == null)
                 {
