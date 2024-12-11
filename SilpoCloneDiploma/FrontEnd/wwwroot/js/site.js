@@ -5,10 +5,11 @@ var dropdownItems = document.getElementsByClassName('dropdown-item');
 var panel = document.getElementById('categoryPanel');
 const socialIcons = document.querySelectorAll('.socialIcons');
 var categories = {};
+var userCart = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     GetCart();
-    userOrAdmin(false);
+    userOrAdmin();
 });
 
 async function GetCategories() {
@@ -51,7 +52,12 @@ async function GetCart() {
             }
         });
         if (response.ok) {
-            var user = await response.json();
+            var data = await response.json();
+            if (localStorage.getItem("userId") != 0) {
+                if (data.result.cartHeader.userId == localStorage.getItem("userId"))
+                    userCart = 1;
+            }
+            console.log("Enter");
         }
 
     } catch (error) {
@@ -477,7 +483,7 @@ document.getElementById('cancel').addEventListener('click', function () {
     closeCartPopUpEvent();
 });
 
-function userOrAdmin(newUser) {
+function userOrAdmin() {
     const basketDiv = document.getElementById("basketDiv");
     const basketText = document.getElementById("basketText");
     const basketIcon = document.getElementById("basketIcon");
@@ -503,18 +509,24 @@ function userOrAdmin(newUser) {
 }
 
 function handleBasketClick() {
-    GetRecommendedProducts();
-    dropdownMenu?.classList.remove('show');
-    panel?.classList.remove('show');
-    setTimeout(() => {
-        emptyCartPopUp?.classList.add('show');
-    }, 10);
-    overlayPopUp.style.zIndex = 9998;
-    emptyCartPopUp.style.display = "flex";
-    overlayPopUp.style.display = 'block';
+    GetCart();
+    if (userCart == null) {
+        GetRecommendedProducts();
+        dropdownMenu?.classList.remove('show');
+        panel?.classList.remove('show');
+        setTimeout(() => {
+            emptyCartPopUp?.classList.add('show');
+        }, 10);
+        overlayPopUp.style.zIndex = 9998;
+        emptyCartPopUp.style.display = "flex";
+        overlayPopUp.style.display = 'block';
 
-    document.body.classList.add('no-scroll');
-    emptyCartPopUp.focus();
+        document.body.classList.add('no-scroll');
+        emptyCartPopUp.focus();
+    }
+    else {
+        window.location = ("/Goodmeal/User/ShoppingCart");
+    }
 }
 
 
@@ -581,7 +593,9 @@ showLoginLink.addEventListener("click", function () {
     document.getElementById("loginPopup").style.display = "flex";
 });
 
-registerButton.addEventListener("click", async function () {
+registerButton.addEventListener("click", () => Register());
+async function Register()
+{
     const name = document.getElementById("registerName").value;
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
@@ -606,7 +620,8 @@ registerButton.addEventListener("click", async function () {
         const result = await response.json();
 
         if (response.ok) {
-            alert("Registration successful! Please log in.");
+            alert("Реєстрація успішна! Виконується автоматичний вхід...");
+            Login(data.email, data.password);
             overlayPopUp.style.display = 'none';
             closeRegisterPopup();
         } else {
@@ -628,16 +643,17 @@ registerButton.addEventListener("click", async function () {
         document.getElementById("registerMessage").textContent = "Network error during registration.";
         document.getElementById("registerMessage").style.display = "block";
     }
-});
+}
 
 function clearRegisterErrors() {
     document.getElementById("registerMessage").textContent = "";
     document.getElementById("registerMessage").style.display = "none";
 }
 
-loginButton.addEventListener("click", async function () {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+loginButton.addEventListener("click", () => Login());
+async function Login(email, password) {
+    email = email || document.getElementById("loginEmail").value;
+    password = password || document.getElementById("loginPassword").value;
 
     const data = {
         email: email,
@@ -663,11 +679,10 @@ loginButton.addEventListener("click", async function () {
             localStorage.setItem("userName", result.user.name);
             localStorage.setItem("userId", result.user.id);
             localStorage.setItem("userRole", result.user.role);
-            /*localStorage.setItem("userRole", "Admin");*/
 
             closeLoginPopup();
             overlayPopUp.style.display = 'none';
-            alert("Вхід здійснено успішно!");
+            alert("Вхід успішний!");
 
             const profileSpan = document.getElementById("accountName");
             if (profileSpan) {
@@ -683,7 +698,7 @@ loginButton.addEventListener("click", async function () {
         loginErrorDiv.textContent = "Помилка мережі при вході.";
         loginErrorDiv.style.display = "block";
     }
-});
+}
 
 function displayLoginError(message) {
     loginErrorDiv.textContent = message;

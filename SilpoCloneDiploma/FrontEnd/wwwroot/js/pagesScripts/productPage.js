@@ -775,8 +775,14 @@ addToCartBtn.addEventListener('click', function () {
     if (count) {
         let currentCount = parseInt(count.innerHTML, 10);
         if (currentCount > 0) {
-            AddProductInCart(addToCartBtn.getAttribute('product-id'), count.innerHTML, /*userId*/ 1);
-            count.innerHTML = '0';
+            var userId = localStorage.getItem("userId");
+            if (userId != 0) {
+                AddProductInCart(addToCartBtn.getAttribute('product-id'), count.innerHTML, userId);
+                count.innerHTML = '0';
+            }
+            else {
+                alert("Спершу потрібно увійти ~(`Y_Y`)~!");
+            }
         }
         else {
             alert("Спершу виберіть кількість товар (`U_U`)!");

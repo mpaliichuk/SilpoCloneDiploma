@@ -5,15 +5,15 @@
     margin-left: 3%;
     margin-top: 1.5%;
     align-items: center;
-    gap: 16px;
+    gap: 13px;
     width: auto;
-    height: 25px;
+    height: auto;
 }
 
 .breadcrumbLink {
     text-decoration: none;
     color: inherit;
-
+    width: auto;
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 400;
@@ -28,6 +28,7 @@
 }
 
 #productRouteName {
+    width: auto;
     cursor: default;
     color: #1E1E1E;
 }
