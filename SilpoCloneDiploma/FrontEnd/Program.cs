@@ -1,3 +1,4 @@
+using FrontEnd.Contracts;
 using FrontEnd.Services;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
@@ -20,6 +21,8 @@ if (builder.Environment.IsDevelopment())
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         });
+
+
 }
 else
 {
@@ -28,6 +31,11 @@ else
         client.BaseAddress = new Uri("https://localhost:5296");
     });
 }
+
+builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5000");
+});
 
 // Register ProductCategoryRatingService
 builder.Services.AddScoped<ProductCategoryRatingService>();
