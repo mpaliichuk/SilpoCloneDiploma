@@ -9,7 +9,9 @@ using FrontEnd.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
+//[Authorize(Roles = "Administrator")]
 public class AdminController : Controller
 {
     private readonly ILogger<HomeController> _logger;

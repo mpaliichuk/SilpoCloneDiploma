@@ -1,5 +1,6 @@
 using FrontEnd.Services;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,10 @@ else
 
 // Register ProductCategoryRatingService
 builder.Services.AddScoped<ProductCategoryRatingService>();
-
+//Culture
+var cultureInfo = new CultureInfo("uk-UA");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -70,7 +70,7 @@
                             <td>@product.Weight</td>
                             <td>@product.TradeMark</td>
                             <td>@product.CountryOfManufacture</td>
-                            <td>@product.Price.ToString("C")</td>
+                            <td style="white-space: nowrap;">@product.Price.ToString("C")</td> не видаляй
                             <td>
                                 @if (product.CategoryId.HasValue)
                                 {
@@ -171,6 +171,9 @@
         border-spacing: 0;
         margin-bottom: 20px;
         table-layout: fixed;
+        table-layout: auto;
+        width: 100%;
+    
     }
 
         .table tbody tr:nth-child(odd) {
