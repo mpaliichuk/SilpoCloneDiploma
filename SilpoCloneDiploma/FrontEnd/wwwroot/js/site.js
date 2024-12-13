@@ -4,54 +4,19 @@ var dropdownMenu = document.querySelector('.dropdown-menu-fullscreen');
 var dropdownItems = document.getElementsByClassName('dropdown-item');
 var panel = document.getElementById('categoryPanel');
 const socialIcons = document.querySelectorAll('.socialIcons');
-var categories = {
-    1: { name: '', icon: '/icons/CategoryIcons/SmallFruitIcon.png', parentCategoryId: null },
-    2: { name: '', link: '/icons/CategoryIcons/SeasonalFruits.png', parentCategoryId: 0 },
-    3: { name: '', link: '/icons/CategoryIcons/Smoothies.png', parentCategoryId: 0 },
-    4: { name: '', link: '/icons/CategoryIcons/FruitSnacks.png', parentCategoryId: 0 },
-    5: { name: '', link: '/icons/CategoryIcons/Berries.png', parentCategoryId: 0 },
-    6: { name: '', link: '/icons/CategoryIcons/Nuts.png', parentCategoryId: 0 },
-
-    7: { name: '', icon: '/icons/CategoryIcons/SmallHealthyFoodIcon.png', parentCategoryId: null },
-    8: { name: '', link: '/icons/CategoryIcons/Lactose-free.png', parentCategoryId: 0 },
-    9: { name: '', link: '/icons/CategoryIcons/Vegan.png', parentCategoryId: 0 },
-    10: { name: '', link: '/icons/CategoryIcons/Organic.png', parentCategoryId: 0 },
-    11: { name: '', link: '/icons/CategoryIcons/Gluten-free.png', parentCategoryId: 0 },
-    12: { name: '', link: '/icons/CategoryIcons/NoAddedSugar.png', parentCategoryId: 0 },
-
-    13: { name: '', icon: '/icons/CategoryIcons/SmallVegetablesIcon.png', parentCategoryId: null },
-    14: { name: '', link: '/icons/CategoryIcons/SeasonalVegetables.png', parentCategoryId: 0 },
-    15: { name: '', link: '/icons/CategoryIcons/GreensAndSalads.png', parentCategoryId: 0 },
-    16: { name: '', link: '/icons/CategoryIcons/Pickles.png', parentCategoryId: 0 },
-    17: { name: '', link: '/icons/CategoryIcons/Mushrooms.png', parentCategoryId: 0 },
-
-    18: { name: 'Бакалія та консерви', icon: '/icons/CategoryIcons/SmallGroceryIcon.png', parentCategoryId: null },
-    19: { name: 'Риба', icon: '/icons/CategoryIcons/SmallFishIcon.png', parentCategoryId: null },
-    20: { name: 'Соуси та спеції', icon: '/icons/CategoryIcons/SmallSaucesIcon.png', parentCategoryId: null },
-    21: { name: 'Мʼясо', icon: '/icons/CategoryIcons/SmallMeatIcon.png', parentCategoryId: null },
-    22: { name: 'Солодощі', icon: '/icons/CategoryIcons/SmallSweetsIcon.png', parentCategoryId: null },
-    23: { name: 'Снеки', icon: '/icons/CategoryIcons/SmallSnacksIcon.png', parentCategoryId: null },
-    24: { name: 'Заморожені продукти', icon: '/icons/CategoryIcons/SmallFrozenFoodIcon.png', parentCategoryId: null },
-    25: { name: 'Вода та напої', icon: '/icons/CategoryIcons/SmallWaterIcon.png', parentCategoryId: null },
-    26: { name: 'Тютюнові вироби', icon: '/icons/CategoryIcons/SmallTobaccoIcon.png', parentCategoryId: null },
-    27: { name: 'Алкогольні напої', icon: '/icons/CategoryIcons/SmallAlcoholIcon.png', parentCategoryId: null },
-    28: { name: 'Гігієна та краса', icon: '/icons/CategoryIcons/SmallHygieneIcon.png', parentCategoryId: null },
-    29: { name: 'Кава та чай', icon: '/icons/CategoryIcons/SmallCoffeeTeaIcon.png', parentCategoryId: null },
-    30: { name: 'Товари для дому', icon: '/icons/CategoryIcons/SmallHomeGoodsIcon.png', parentCategoryId: null },
-    31: { name: 'Товари для дітей', icon: '/icons/CategoryIcons/SmallChildrensGoodsIcon.png', parentCategoryId: null },
-    32: { name: 'Молочні продукти', icon: '/icons/CategoryIcons/SmallDairyProductsIcon.png', parentCategoryId: null },
-};
+var categories = {};
+var userCart = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     GetCart();
-    userOrAdmin(false);
+    userOrAdmin();
 });
 
 async function GetCategories() {
     var categoriesRespons = [];
 
     try {
-        const response = await fetch("http://localhost:5152/gateway/AllCategories", {
+        const response = await fetch("http://localhost:5152/gateway/Category", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -63,8 +28,11 @@ async function GetCategories() {
         }
 
         categoriesRespons.forEach(item => {
-            categories[item.id].name = item.name;
-            categories[item.id].parentCategoryId = item.parentCategoryId;
+            categories[item.id] = {
+                name: item.name,
+                parentCategoryId: item.parentCategoryId,
+                iconPath: item.iconPath
+            };
         });
 
     } catch (error) {
@@ -84,8 +52,12 @@ async function GetCart() {
             }
         });
         if (response.ok) {
-            var user = await response.json();
-            console.log(user);
+            var data = await response.json();
+            if (localStorage.getItem("userId") != 0 && data.result != null) {
+                if (data.result.cartHeader.userId == localStorage.getItem("userId"))
+                    userCart = 1;
+            }
+            console.log("Enter");
         }
 
     } catch (error) {
@@ -105,7 +77,6 @@ async function FindProduct(title) {
         });
         if (response.ok) {
             responseItem = await response.json();
-            console.log(responseItem);
             var productId = responseItem.id;
             window.location = "/Goodmeal/ProductPage/" + productId;;
         }
@@ -193,13 +164,12 @@ function generateCategoryPanel(categoryId) {
     const categoryItems = Array.isArray(categories) ? categories : Object.values(categories);
     categoryItems.forEach((item, index) => {
         if (item.parentCategoryId == categoryId)
-            generateCategoryCard(item.link, item.name, index + 1);    
+            generateCategoryCard(item.iconPath, item.name, index + 1); 
     });
     generateCategoryCard('/icons/CategoryIcons/AllProducts.png', 'Всі продукти', categoryId); 
 }
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 function generateCategoryCard(iconSrc, categoryText, id) {
-    console.log(id);
     const categoryDivCard = document.createElement('a');
     categoryDivCard.href = `/Goodmeal/Category/${id}`;
 
@@ -250,7 +220,7 @@ function createCategoryItem(href, id) {
 
     const img = document.createElement('img');
     img.classList.add('miniCategoryIcon');
-    img.src = categories[id].icon;
+    img.src = categories[id].iconPath;
 
     const textNode = document.createTextNode(categories[id].name);
 
@@ -513,44 +483,50 @@ document.getElementById('cancel').addEventListener('click', function () {
     closeCartPopUpEvent();
 });
 
-function userOrAdmin(newUser) {
+function userOrAdmin() {
     const basketDiv = document.getElementById("basketDiv");
     const basketText = document.getElementById("basketText");
     const basketIcon = document.getElementById("basketIcon");
+    if (basketText && basketIcon) {
+        if (localStorage.getItem("userRole") === "Admin") {
+            basketText.textContent = "Адмін панель";
+            basketIcon.src = "/icons/Admin.png";
 
-    if (localStorage.getItem("userRole") === "Admin") {
-        basketText.textContent = "Адмін панель";
-        basketIcon.src = "/icons/Admin.png";
+            basketDiv.addEventListener('click', function () {
+                window.location.href = "/Admin/Index";
+            });
 
-        basketDiv.addEventListener('click', function () {
-            window.location.href = "/Admin/Index";
-        });
-
-        basketDiv.classList.add("adminDivClass");
-        basketDiv.classList.remove("basketDivClass");
-
-    } else {
-        basketText.textContent = "Кошик";
-        basketIcon.src = "/icons/Cart.png";
-        basketDiv.addEventListener('click', handleBasketClick);
-        basketDiv.classList.add("basketDivClass");
-        basketDiv.classList.remove("adminDivClass");
+            basketDiv.classList.add("adminDivClass");
+            basketDiv.classList.remove("basketDivClass");
+        } else {
+            basketText.textContent = "Кошик";
+            basketIcon.src = "/icons/Cart.png";
+            basketDiv.addEventListener('click', handleBasketClick);
+            basketDiv.classList.add("basketDivClass");
+            basketDiv.classList.remove("adminDivClass");
+        }
     }
 }
 
 function handleBasketClick() {
-    GetRecommendedProducts();
-    dropdownMenu?.classList.remove('show');
-    panel?.classList.remove('show');
-    setTimeout(() => {
-        emptyCartPopUp?.classList.add('show');
-    }, 10);
-    overlayPopUp.style.zIndex = 9998;
-    emptyCartPopUp.style.display = "flex";
-    overlayPopUp.style.display = 'block';
+    GetCart();
+    if (userCart == null) {
+        GetRecommendedProducts();
+        dropdownMenu?.classList.remove('show');
+        panel?.classList.remove('show');
+        setTimeout(() => {
+            emptyCartPopUp?.classList.add('show');
+        }, 10);
+        overlayPopUp.style.zIndex = 9998;
+        emptyCartPopUp.style.display = "flex";
+        overlayPopUp.style.display = 'block';
 
-    document.body.classList.add('no-scroll');
-    emptyCartPopUp.focus();
+        document.body.classList.add('no-scroll');
+        emptyCartPopUp.focus();
+    }
+    else {
+        window.location = ("/Goodmeal/User/ShoppingCart");
+    }
 }
 
 
@@ -617,7 +593,9 @@ showLoginLink.addEventListener("click", function () {
     document.getElementById("loginPopup").style.display = "flex";
 });
 
-registerButton.addEventListener("click", async function () {
+registerButton.addEventListener("click", () => Register());
+async function Register()
+{
     const name = document.getElementById("registerName").value;
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
@@ -640,10 +618,10 @@ registerButton.addEventListener("click", async function () {
         });
 
         const result = await response.json();
-        console.log("Register Response:", result);
 
         if (response.ok) {
-            alert("Registration successful! Please log in.");
+            alert("Реєстрація успішна! Виконується автоматичний вхід...");
+            Login(data.email, data.password);
             overlayPopUp.style.display = 'none';
             closeRegisterPopup();
         } else {
@@ -665,16 +643,17 @@ registerButton.addEventListener("click", async function () {
         document.getElementById("registerMessage").textContent = "Network error during registration.";
         document.getElementById("registerMessage").style.display = "block";
     }
-});
+}
 
 function clearRegisterErrors() {
     document.getElementById("registerMessage").textContent = "";
     document.getElementById("registerMessage").style.display = "none";
 }
 
-loginButton.addEventListener("click", async function () {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+loginButton.addEventListener("click", () => Login());
+async function Login(email, password) {
+    email = email || document.getElementById("loginEmail").value;
+    password = password || document.getElementById("loginPassword").value;
 
     const data = {
         email: email,
@@ -694,23 +673,22 @@ loginButton.addEventListener("click", async function () {
         });
 
         const result = await response.json();
-        console.log("Login Response:", result);
 
         if (response.ok) {
             overlayPopUp.style.display = 'none';
             localStorage.setItem("userName", result.user.name);
             localStorage.setItem("userId", result.user.id);
-            /*localStorage.setItem("userRole", result.user.role);*/
-            localStorage.setItem("userRole", "Admin");
+            localStorage.setItem("userRole", result.user.role);
 
             closeLoginPopup();
             overlayPopUp.style.display = 'none';
-            alert("Вхід здійснено успішно!");
+            alert("Вхід успішний!");
 
             const profileSpan = document.getElementById("accountName");
             if (profileSpan) {
                 profileSpan.textContent = `${result.user.name}(Вийти)` || "Акаунт";
             }
+            window.location.reload();
         } else {
             loginErrorDiv.textContent = result.message || "Помилка входу. Перевірте емейл та пароль.";
             loginErrorDiv.style.display = "block";
@@ -720,8 +698,7 @@ loginButton.addEventListener("click", async function () {
         loginErrorDiv.textContent = "Помилка мережі при вході.";
         loginErrorDiv.style.display = "block";
     }
-    window.location.reload();
-});
+}
 
 function displayLoginError(message) {
     loginErrorDiv.textContent = message;
@@ -859,4 +836,36 @@ function showPopup() {
 
 function closePopup() {
     document.getElementById('orderPopup').style.display = 'none';
+}
+
+async function submitOrder() {
+    // Change orderData with real Data now it's dummy values
+    const orderData = {
+        customerId: 123, // Replace with the actual customer ID
+        orderDate: new Date().toISOString(),
+        orderItems: [
+            { productId: 1, quantity: 2, price: 50 },
+            { productId: 2, quantity: 1, price: 100 },
+        ],
+    };
+
+    try {
+        const response = await fetch('http://localhost:5087/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+        });
+        if (response.ok) {
+            const createdOrder = await response.json();
+            alert(`Order submitted successfully! Order ID: ${createdOrder.id}`);
+        } else {
+            const error = await response.json();
+            alert(`Error submitting order: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the order.');
+    }
 }

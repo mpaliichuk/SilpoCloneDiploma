@@ -1,9 +1,9 @@
-﻿namespace ShopingCartServiceApi.Models.Dto
-{
-    public class CartHeaderDto
+﻿    namespace ShopingCartServiceApi.Models.Dto
     {
-        public int CartHeaderId { get; set; }
-        public string? UserId { get; set; }
-        public double TotalPrice { get; set; }
+        public class CartHeaderDto
+        {
+            public int CartHeaderId { get; set; }
+            public string? UserId { get; set; }
+            public double TotalPrice { get; set; }
+        }
     }
-}

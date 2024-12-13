@@ -72,7 +72,8 @@
 
     .cart-items {
         width: 100%;
-        height: 300px;
+        max-height: 500px;
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 28px;
@@ -94,11 +95,13 @@
     }
 
     .item-name {
-        width: 203px;
+        width: auto;
+        max-width: 203px;
         font-size: 16px;
         font-family: 'Noto Sans', sans-serif;
         font-weight: 600;
         color: #1E1E1E;
+        word-wrap: break-word;
     }
 
     .item-quantity {
@@ -115,7 +118,6 @@
         text-align: right;
         white-space: nowrap;
     }
-
 
     .item-price {
         font-weight: 400;
@@ -147,10 +149,9 @@
         font-weight: 500;
     }
 
-    .quantity-button * {
-        color: inherit;
-    }
-
+        .quantity-button * {
+            color: inherit;
+        }
 
     .quantity-text {
         font-size: 16px;
@@ -186,7 +187,6 @@
         align-items: center;
         padding: 8px;
         gap: 10px;
-
         width: 91px;
         height: 26px;
         background: transparent;
@@ -217,7 +217,6 @@
         justify-content: space-between;
         align-items: center;
         display: inline-flex;
-
     }
 
     .Promo {
@@ -254,23 +253,6 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        padding: 8px;
-        gap: 10px;
-        width: 32px;
-        height: 32px;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
-
-        justify-content: center;
-        background-color: #fff;
-        border-radius: 50%;
-    }
-
-    .Vector {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
         justify-content: center;
         padding: 8px;
         gap: 10px;
@@ -279,16 +261,15 @@
         flex: none;
         order: 0;
         flex-grow: 0;
-
         background-color: transparent;
     }
 
-    .Vector::before {
-        content: "+";
-        font-size: 24px;
-        color: #fff;
-        font-family: Noto Sans;
-    }
+        .Vector::before {
+            content: "+";
+            font-size: 24px;
+            color: #fff;
+            font-family: Noto Sans;
+        }
 
     .ActionText {
         color: #FFFEFE;
@@ -336,9 +317,9 @@
         word-wrap: break-word;
     }
 
-    .DetailValue.total {
-        font-size: 20px;
-    }
+        .DetailValue.total {
+            font-size: 20px;
+        }
 
     .AdditionalInfo {
         align-self: stretch;
@@ -407,34 +388,8 @@
 
     .content {
         display: flex;
-        gap: 28px;
-    }
-
-    .cart-container {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .certificate {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .cart-header,
-    .cart-items,
-    .info-row,
-    .comments-and-promo {
-        margin-bottom: 20px;
-    }
-
-    .content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-between;
+        align-items: flex-start;
         gap: 28px;
         min-height: 100vh;
         padding: 20px;
@@ -457,111 +412,22 @@
     }
 </style>
 
-
 <div class="content">
     <div class="cart-container">
         <div class="cart-header">
             <div class="cart-title">Кошик</div>
         </div>
-        <div class="cart-items">
-            <div class="free-delivery-message">
-                <div class="free-delivery-text">Безкоштовна доставка на суму від <span class="free-delivery-bold">1299
-                        грн</span></div>
-            </div>
-            <div class="cart-clear" id="clear-cart-button">
-                <div class="cart-clear-text">Очистити кошик</div>
-                <div class="cart-icon">
-                    <img src="~/icons/solar_cart-3-outline.png"></img>
-                </div>
-            </div>
-            <div class="cart-item" data-id="item-1">
-                <img class="item-image" src="https://via.placeholder.com/50x50" alt="Лимон" />
-                <div class="item-name">Лимон</div>
-                <div class="item-quantity">
-                    <div class="quantity-unit">100 г</div>
-                    <div class="item-price">189,00 грн</div>
-                    <div class="quantity-control">
-                        <div class="quantity-button" onclick="incrementQuantity('item-1')">+</div>
-                        <div class="quantity-text">0.1 кг</div>
-                        <div class="quantity-button" onclick="decrementQuantity('item-1')">-</div>
-                    </div>
-                    <div class="item-total">35,00 грн</div>
-                    <div class="remove-item">
-                        <div class="remove-icon" onclick="removeItem('item-1')">X</div>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-item" data-id="item-2">
-                <img class="item-image" src="https://via.placeholder.com/50x50" alt="Ожина фасована" />
-                <div class="item-name">Ожина фасована</div>
-                <div class="item-quantity">
-                    <div class="quantity-unit">100 г</div>
-                    <div class="item-price">189,00 грн</div>
-                    <div class="quantity-control">
-                        <div class="quantity-button" onclick="incrementQuantity('item-2')">+</div>
-                        <div class="quantity-text">0.1 кг</div>
-                        <div class="quantity-button" onclick="decrementQuantity('item-2')">-</div>
-                    </div>
-                    <div class="item-total">35,00 грн</div>
-                    <div class="remove-item">
-                        <div class="remove-icon" onclick="removeItem('item-2')">X</div>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-item" data-id="item-3">
-                <img class="item-image" src="https://via.placeholder.com/50x50" alt="Папайя" />
-                <div class="item-name">Папайя</div>
-                <div class="item-quantity">
-                    <div class="quantity-unit">100 г</div>
-                    <div class="item-price">189,00 грн</div>
-                    <div class="quantity-control">
-                        <div class="quantity-button" onclick="incrementQuantity('item-3')">+</div>
-                        <div class="quantity-text">0.1 кг</div>
-                        <div class="quantity-button" onclick="decrementQuantity('item-3')">-</div>
-                    </div>
-                    <div class="item-total">35,00 грн</div>
-                    <div class="remove-item">
-                        <div class="remove-icon" onclick="removeItem('item-3')">X</div>
-                    </div>
-                </div>
+        <div class="free-delivery-message">
+            <div class="free-delivery-text">Безкоштовна доставка на суму від <span class="free-delivery-bold">1299 грн</span></div>
+        </div>
+        <div class="cart-clear" id="clear-cart-button">
+            <div class="cart-clear-text">Очистити кошик</div>
+            <div class="cart-icon">
+                <img src="~/icons/solar_cart-3-outline.png" alt="Clear Cart" />
             </div>
         </div>
-        <div class="selectorDiv"></div>
-        <div id="mainProductsDiv">
-            <span id="mainProductsTagText">Рекомендовані товари</span>
-            <div id="subProductsDiv">
-                <div class="cardDiv">
-                    <div class="productIconDiv">
-                        <img class="discountIcon" src="~/icons/Discount.png" />
-                        <img class="productIcon" src="~/icons/ProductIcon.png" />
-                    </div>
-                    <div class="productInfoDiv">
-                        <div class="productNameDiv">
-                            <div class="productName">Сьомга Norven</div>
-                            <div class="productFullName">Сьомга Norven слабосолена в/у, 120г</div>
-                        </div>
-                        <div class="priceDiv">
-                            <div class="subPriceDiv"><b>256 </b><span>грн</span></div>
-                            <div class="crossTextDiv">
-                                <span>315 грн</span>
-                            </div>
-                        </div>
-                        <div class="productControlDiv">
-                            <div class="productCountDiv">
-                                <button class="productCountButton plus"><img class="no-select no-drag"
-                                        src="~/icons/PlusMiniIcon.png" /></button>
-                                <div class="productCount">0</div>
-                                <button class="productCountButton minus"><img class="no-select no-drag"
-                                        src="~/icons/MinusMiniIcon.png" /></button>
-                            </div>
-
-                            <button class="productBuyDiv">
-                                <img class="productCartIcon" src="~/icons/Cart.png" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be dynamically inserted here -->
         </div>
     </div>
     <div class="Frame427318630">
@@ -600,8 +466,8 @@
                 <div class="InfoContent">
                     <div class="InfoTitle">Коментар до замовлення</div>
                     <textarea class="InfoComment"
-                        placeholder="Тут ви можете залишити свої побажання щодо окремих товарів, усього замовлення, пакування тощо."
-                        rows="4"></textarea>
+                              placeholder="Тут ви можете залишити свої побажання щодо окремих товарів, усього замовлення, пакування тощо."
+                              rows="4"></textarea>
                 </div>
                 <div class="PromoNext">
                     <div class="NextText">Далі</div>
@@ -611,43 +477,71 @@
     </div>
 </div>
 <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || { cartHeader: {}, cartDetails: [] };
 
-    let cartItems = {
-        'item-1': {
-            name: 'Лимон',
-            weight: 0.1,
-            pricePerKg: 189.00
-        },
-        'item-2': {
-            name: 'Ожина фасована',
-            weight: 0.1,
-            pricePerKg: 189.00
-        },
-        'item-3': {
-            name: 'Папайя',
-            weight: 0.1,
-            pricePerKg: 189.00
+    document.getElementById('clear-cart-button').addEventListener('click', clearCart);
+
+    async function clearCart() {
+        try {
+            const response = await fetch(`http://localhost:5152/gateway/RemoveCart/${localStorage.userId}`, {
+                method: 'POST'
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.isSuccess) {
+                document.querySelectorAll('.cart-item').forEach(item => item.remove());
+                cart = { cartHeader: {}, cartDetails: [] };
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCertificateDetails();
+            } else {
+                console.error('Error clearing cart:', data.message);
+            }
+        } catch (error) {
+            console.error('Error clearing cart:', error);
         }
-    };
+    }
 
-    document.getElementById('clear-cart-button').addEventListener('click', function () {
-        const cartItemsDisplay = document.querySelectorAll('.cart-item');
-        cartItemsDisplay.forEach(item => item.remove());
-        cartItems = {};
-        updateCertificateDetails();
-    });
+    async function removeItem(itemId) {
+        try {
+            const response = await fetch(`http://localhost:5152/gateway/RemoveCartDetails/${itemId}`, {
+                method: 'POST'
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.isSuccess) {
+                const itemIndex = cart.cartDetails.findIndex(detail => detail.cartDetailsId == itemId);
+                if (itemIndex > -1) {
+                    cart.cartDetails.splice(itemIndex, 1);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    document.querySelector(`.cart-item[data-id="${itemId}"]`).remove();
+                    updateCertificateDetails();
+                }
+            } else {
+                console.error('Error removing cart item:', data.message);
+            }
+        } catch (error) {
+            console.error('Error removing cart item:', error);
+        }
+    }
 
     function updateCartItemDisplay(itemId) {
-        const item = cartItems[itemId];
-        const quantityText = document.querySelector(`.cart-item[data-id="${itemId}"] .quantity-text`);
-        const itemTotal = document.querySelector(`.cart-item[data-id="${itemId}"] .item-total`);
-        const quantityUnit = document.querySelector(`.cart-item[data-id="${itemId}"] .quantity-unit`);
+        const item = cart.cartDetails.find(detail => detail.cartDetailsId == itemId);
+        if (!item) return;
 
-        quantityText.textContent = `${item.weight.toFixed(1)} кг`;
-        itemTotal.textContent = `${(item.weight * item.pricePerKg).toFixed(2)} грн`;
+        const cartItemElement = document.querySelector(`.cart-item[data-id="${itemId}"]`);
+        if (!cartItemElement) return;
 
-        const weightInGrams = (item.weight * 1000).toFixed(0);
-        quantityUnit.textContent = `${weightInGrams} г`;
+        const quantityText = cartItemElement.querySelector('.quantity-text');
+        const itemTotal = cartItemElement.querySelector('.item-total');
+        const quantityUnit = cartItemElement.querySelector('.quantity-unit');
+
+        quantityText.textContent = `${item.totalWeight.toFixed(1)} кг`;
+        itemTotal.textContent = `${(item.totalWeight * item.pricePerKg).toFixed(2)} грн`;
+        quantityUnit.textContent = `${(item.totalWeight * 1000).toFixed(0)} г`;
 
         updateCertificateDetails();
     }
@@ -656,10 +550,10 @@
         let totalWeight = 0;
         let totalPrice = 0;
 
-        for (let itemId in cartItems) {
-            totalWeight += cartItems[itemId].weight;
-            totalPrice += cartItems[itemId].weight * cartItems[itemId].pricePerKg;
-        }
+        cart.cartDetails.forEach(item => {
+            totalWeight += item.totalWeight;
+            totalPrice += item.totalWeight * item.pricePerKg;
+        });
 
         document.getElementById('totalWeight').textContent = `${totalWeight.toFixed(2)} кг`;
         document.getElementById('totalPrice').textContent = `${totalPrice.toFixed(2)} грн`;
@@ -670,27 +564,119 @@
         }
     }
 
+    async function upsertCartItemInDb(cartHeaderId, cartDetailsId, productId, count) {
+        try {
+            const response = await fetch(`http://localhost:5152/gateway/AddToCart`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cartHeader: {
+                        cartHeaderId: cartHeaderId,
+                        userId: localStorage.userId
+                    },
+                    cartDetails: [
+                        {
+                            cartDetailsId: cartDetailsId,
+                            cartHeaderId: cartHeaderId,
+                            productId: productId,
+                            count: count
+                        }
+                    ]
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (!data.isSuccess) {
+                console.error('Error upserting cart item:', data.message);
+            }
+        } catch (error) {
+            console.error('Error upserting cart item:', error);
+        }
+    }
+
     function incrementQuantity(itemId) {
-        if (cartItems[itemId].weight < 10) {
-            cartItems[itemId].weight = (cartItems[itemId].weight + 0.1).toFixed(1);
-            cartItems[itemId].weight = parseFloat(cartItems[itemId].weight);
+        const item = cart.cartDetails.find(detail => detail.cartDetailsId == itemId);
+        if (item && item.count < 100) {
+            item.count += 1;
+            item.totalWeight = item.product.weight * item.count;
             updateCartItemDisplay(itemId);
+            upsertCartItemInDb(cart.cartHeader.cartHeaderId, item.cartDetailsId, item.productId, 1);
         }
     }
 
     function decrementQuantity(itemId) {
-        if (cartItems[itemId].weight > 0.1) {
-            cartItems[itemId].weight = (cartItems[itemId].weight - 0.1).toFixed(1);
-            cartItems[itemId].weight = parseFloat(cartItems[itemId].weight);
+        const item = cart.cartDetails.find(detail => detail.cartDetailsId == itemId);
+        if (item && item.count > 1) {
+            item.count -= 1;
+            item.totalWeight = item.product.weight * item.count;
             updateCartItemDisplay(itemId);
+            upsertCartItemInDb(cart.cartHeader.cartHeaderId, item.cartDetailsId, item.productId, -1);
         }
     }
 
-    function removeItem(itemId) {
-        delete cartItems[itemId];
-        document.querySelector(`.cart-item[data-id="${itemId}"]`).remove();
-        updateCertificateDetails();
+    async function fetchCartItems() {
+        try {
+            const response = await fetch(`http://localhost:5152/gateway/GetUserCart/${localStorage.userId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.isSuccess) {
+                cart = {
+                    cartHeader: data.result.cartHeader,
+                    cartDetails: data.result.cartDetails.map(detail => ({
+                        ...detail,
+                        name: detail.product.title,
+                        totalWeight: detail.product.weight * detail.count,
+                        pricePerKg: detail.product.price,
+                        imageUrl: detail.product.imageUrls[0]
+                    }))
+                };
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCartItems();
+                updateCertificateDetails();
+            } else {
+                console.error('Error fetching cart items:', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+        }
     }
 
-    updateCertificateDetails();
+    function renderCartItems() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        cartItemsContainer.innerHTML = '';
+
+        for (let item of cart.cartDetails) {
+            const cartItemElement = document.createElement('div');
+            cartItemElement.className = 'cart-item';
+            cartItemElement.dataset.id = item.cartDetailsId;
+            cartItemElement.innerHTML = `
+                <img class="item-image" src="${item.imageUrl}" alt="${item.name}" />
+                <div class="item-name">${item.name}</div>
+                <div class="item-quantity">
+                    <div class="quantity-unit">${(item.totalWeight * 1000).toFixed(0)} г</div>
+                    <div class="item-price">${item.pricePerKg.toFixed(2)} грн</div>
+                    <div class="quantity-control">
+                        <div class="quantity-button" onclick="incrementQuantity('${item.cartDetailsId}')">+</div>
+                        <div class="quantity-text">${item.totalWeight.toFixed(1)} кг</div>
+                        <div class="quantity-button" onclick="decrementQuantity('${item.cartDetailsId}')">-</div>
+                    </div>
+                    <div class="item-total">${(item.totalWeight * item.pricePerKg).toFixed(2)} грн</div>
+                    <div class="remove-item">
+                        <div class="remove-icon" onclick="removeItem('${item.cartDetailsId}')">X</div>
+                    </div>
+                </div>
+            `;
+            cartItemsContainer.appendChild(cartItemElement);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchCartItems);
+    
+
 </script>

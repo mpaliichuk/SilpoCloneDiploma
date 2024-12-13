@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using ProductServiceApi.Contracts;
 using ProductServiceApi.Models;
+using ProductServiceApi.Models.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,25 @@ namespace ProductServiceApi.Models
             }
         }
 
+        public async Task<IEnumerable<Product>> GetAllProductsByCategoryAsync(int categoryId)
+        {
+            try
+            {
+                var allCategoryIds = await GetAllChildCategoryIdsAsync(categoryId);
+
+                allCategoryIds.Add(categoryId);
+                var query = _context.Products
+                    .Include(p => p.Category)
+                    .Where(p => allCategoryIds.Contains(p.CategoryId)).ToList();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving all products");
+                throw new Exception("Error occurred while retrieving all products", ex);
+            }
+        }
+
         public async Task<Product> GetProductByIdAsync(int id)
         {
             try
@@ -121,7 +141,7 @@ namespace ProductServiceApi.Models
             try
             {
                 var product = await _context.Products
-     .FirstOrDefaultAsync(p => p.Title.ToLower() == title.ToLower());
+                    .FirstOrDefaultAsync(p => p.Title.ToLower().Contains(title.ToLower()));
 
                 if (product == null)
                 {
@@ -178,6 +198,102 @@ namespace ProductServiceApi.Models
         //        throw new Exception($"Error occurred while retrieving products page {pageNumber} with size {pageSize}", ex);
         //    }
         //}
+
+        public async Task<(IEnumerable<Product>, int)> GetFilteredAndSortedProductsAsync(int pageNumber, int pageSize, int? categoryId, string sortName, ProductFilterDto filter)
+        {
+            try
+            {
+                var query = _context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Ratings)
+                    .AsQueryable();
+
+                if (categoryId.HasValue && categoryId > 0)
+                {
+                    var allCategoryIds = await GetAllChildCategoryIdsAsync(categoryId.Value);
+                    allCategoryIds.Add(categoryId.Value);
+                    query = query.Where(p => allCategoryIds.Contains(p.CategoryId));
+                } 
+
+                if (filter.Countries != null && filter.Countries.Any())
+                {
+                    query = query.Where(p => filter.Countries.Contains(p.CountryOfManufacture));
+                }
+
+                if (filter.Brands != null && filter.Brands.Any())
+                {
+                    query = query.Where(p => filter.Brands.Contains(p.TradeMark));
+                }
+
+                if (filter.MinPrice.HasValue || filter.MaxPrice.HasValue)
+                {
+                    query = query.Where(p =>
+                        (filter.MinPrice.HasValue ?
+                            (p.Discount.HasValue && p.Discount > 0
+                                ? Math.Round((decimal)p.Price * (decimal)(1 - p.Discount.Value / 100), 2)
+                                : (decimal)p.Price) >= filter.MinPrice.Value : true) &&
+                        (filter.MaxPrice.HasValue ?
+                            (p.Discount.HasValue && p.Discount > 0
+                                ? Math.Round((decimal)p.Price * (decimal)(1 - p.Discount.Value / 100), 2)
+                                : (decimal)p.Price) <= filter.MaxPrice.Value : true)
+                    );
+                }
+
+                switch (sortName?.ToLower())
+                {
+                    case "popular":
+                        query = query.OrderByDescending(p => p.Count);
+                        break;
+                    case "promotions":
+                        query = query.OrderByDescending(p => p.Discount > 0);
+                        break;
+                    case "rating":
+                        query = query.OrderByDescending(p => p.Ratings.Any() ? p.Ratings.Average(r => r.Value) : 0);
+                        break;
+                    case "alphabetically":
+                        query = query.OrderBy(p => p.Title);
+                        break;
+                    case "reversealphabetically":
+                        query = query.OrderByDescending(p => p.Title);
+                        break;
+                    case "cheap":
+                        query = query.OrderBy(p => p.Discount.HasValue && p.Discount > 0
+                            ? Math.Round(p.Price * (1 - p.Discount.Value / 100), 2)
+                            : p.Price);
+                        break;
+                    case "expensive":
+                        query = query.OrderByDescending(p => p.Discount.HasValue && p.Discount > 0
+                            ? Math.Round(p.Price * (1 - p.Discount.Value / 100), 2)
+                            : p.Price);
+                        break;
+                    default:
+                        break;
+                }
+
+                var totalCount = await query.CountAsync();
+
+                if (totalCount == 0)
+                {
+                    return (Enumerable.Empty<Product>(), 0);
+                }
+
+                var skipCount = (pageNumber - 1) * pageSize;
+                var products = await query
+                    .Skip(skipCount)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                _logger.LogInformation("Retrieved {Count} filtered and sorted products on page {PageNumber} with applied filters",
+                    products.Count, pageNumber);
+
+                return (products, totalCount);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving filtered and sorted products");
+                throw new Exception("Error occurred while retrieving filtered and sorted products", ex);
+            }
+        }
 
         public async Task<(IEnumerable<Product>, int)> GetSortedProductsByPageAsync(int pageNumber, int pageSize, int categoryId, string sortName)
         {

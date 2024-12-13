@@ -41,8 +41,14 @@ namespace ShopingCartServiceApi.Controllers
                 foreach (var cartDetails in cart.CartDetails)
                 {
                     cartDetails.Product = products.FirstOrDefault(x => x.Id == cartDetails.ProductId);
+                    if(cartDetails.Product == null)
+                    {
+                        continue;
+                    }
                     cart.CartHeader.TotalPrice += cartDetails.Product.Price * cartDetails.Count;
                 }
+                cart.CartDetails = cart.CartDetails.Where(x => x.Product != null).ToList();
+
 
                 response.Result = cart;
             }
@@ -51,6 +57,7 @@ namespace ShopingCartServiceApi.Controllers
                 response.Message = ex.Message;
                 response.IsSuccess = false;
             }
+            response.IsSuccess = true;            
 
             return response;
         }

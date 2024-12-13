@@ -39,7 +39,6 @@ async function GetProducts() {
         console.error('Error:', error);
         throw error;
     }
-    console.log(productsByDiscount);
     for (var i = 0; i < productsByDiscount.length; i++) {
         const productCard = createProductCard({
             productIconSrc: productsByDiscount[i].imageUrls[0],
@@ -310,7 +309,7 @@ function cardFunctionality() {
 
 async function addCertificatesToCart(certificates) {
     var certificateDTO = {
-        cartHeader: { userId: certificates[0].userId.toString() },
+        cartHeader: { userId: certificates[0].userId },
         cartDetails: []
     };
     certificates.forEach(item => {
@@ -336,37 +335,33 @@ async function addCertificatesToCart(certificates) {
 
 certificateButtons.forEach(certificate => {
     certificate.addEventListener('click', function (event) {
-        event.target.classList.toggle('selectedCertificate');
-        var items = JSON.parse(localStorage.getItem('certificates'));
-        if (event.target.classList.contains('selectedCertificate')){
-            if (!Array.isArray(items)) {
-                items = [];
+        if (localStorage.getItem("userId") != 0) {
+            event.target.classList.toggle('selectedCertificate');
+            var items = JSON.parse(localStorage.getItem('certificates'));
+            if (event.target.classList.contains('selectedCertificate')) {
+                if (!Array.isArray(items)) {
+                    items = [];
+                }
+                items.push({ productId: event.target.id, productCount: 1, userId: localStorage.getItem("userId") });
+                localStorage.setItem('certificates', JSON.stringify(items));
+                alert('Сертифікат на суму ' + event.target.id + 'грн було збережено (´ ω `♡)');
             }
-            /*items.push({ productId: productId, productCount: 1, userId: userId });*/
-            items.push({ productId: event.target.id, productCount: 1, userId: 1 });
-            localStorage.setItem('certificates', JSON.stringify(items));
-            alert('Сертифікат на суму ' + event.target.id + 'грн було збережено (´ ω `♡)');
+            else {
+                items = items.filter(element => element.productId !== event.target.id);
+                localStorage.setItem('certificates', JSON.stringify(items));
+                alert('Сертифікат на суму ' + event.target.id + 'грн було видалено зі збережених (>_<)');
+            }
         }
-        else {
-            items = items.filter(element => element.productId !== event.target.id);
-            localStorage.setItem('certificates', JSON.stringify(items));
-            alert('Сертифікат на суму ' + event.target.id + 'грн було видалено зі збережених (>_<)');
-        }
+        else
+            alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
     });
 });
 
 certificateBuy.forEach(item => {
     item.addEventListener('click', async function (event) {
         let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
-        /*let message = '';*/
         if (certificates.length > 0) {
-            //certificates.forEach(certificate => {
-            //    message += `Сертифікат на суму ${certificate.productId} грн ${certificate.userId} було додано в кошик (*^ω^) \n`;
-            //});
-            //if (message) {
-            //    alert(message);
-            //}
-            if (userId != 0) {
+            if (localStorage.getItem("userId") != 0) {
                 addCertificatesToCart(certificates);
                 await certificateButtons.forEach(certificateButton => {
                     certificateButton.classList.remove('selectedCertificate');

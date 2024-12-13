@@ -16,7 +16,9 @@ namespace ShopingCartServiceApi.Models.Dto
 
         public double Price { get; set; }
 
-        public bool? Sale { get; set; }
+        public double? Discount{ get; set; }
+
+        public double Weight { get; set; }
 
         public int Count { get; set; }
 

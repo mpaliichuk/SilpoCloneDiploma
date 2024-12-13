@@ -73,6 +73,42 @@
       "UpstreamHttpMethod": [ "GET" ] //good
     },
     {
+      "DownstreamPathTemplate": "/api/Product/sortedPage/{pageNumber}/size/{pageSize}/category/{categoryId}/sortBy/{sortName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetSortedPage/{pageNumber}/{pageSize}/{categoryId}/{sortName}",
+      "UpstreamHttpMethod": [ "GET" ] //НЕ ВИДАЛЯТИ!!!!!!!!!!!
+    },
+    {
+      "DownstreamPathTemplate": "/api/Product/sortedFilteredPage/{pageNumber}/size/{pageSize}/category/{categoryId}/sortBy/{sortName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetSortedFilteredPage/{pageNumber}/{pageSize}/{categoryId}/{sortName}",
+      "UpstreamHttpMethod": [ "POST" ] //НЕ ВИДАЛЯТИ!!!!!!!!!!!
+    },
+    {
+      "DownstreamPathTemplate": "/api/Product/GetFilters/{categoryId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5296
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/GetFilters/{categoryId}",
+      "UpstreamHttpMethod": [ "GET" ] //НЕ ВИДАЛЯТИ!!!!!!!!!!!
+    },
+    {
       "DownstreamPathTemplate": "/api/Product/page/{pageNumber}/size/{pageSize}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -154,10 +190,10 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/Category/{id}",
-      "UpstreamHttpMethod": [ "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "PUT", "DELETE", "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamPathTemplate": "/api/Category/getByParent/{parentId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -215,6 +251,30 @@
       ],
       "UpstreamPathTemplate": "/gateway/GetUserCart/{userId}",
       "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/cart/remove-cart/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5129
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/RemoveCart/{userId}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/cart/remove-details/{cartDetailsId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5129
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/RemoveCartDetails/{cartDetailsId}",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ]
 }

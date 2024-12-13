@@ -1,3 +1,4 @@
+using FrontEnd.Contracts;
 using FrontEnd.Services;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
@@ -20,6 +21,8 @@ if (builder.Environment.IsDevelopment())
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         });
+
+
 }
 else
 {
@@ -29,12 +32,19 @@ else
     });
 }
 
+builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5000");
+});
+
 // Register ProductCategoryRatingService
 builder.Services.AddScoped<ProductCategoryRatingService>();
+
 //Culture
 var cultureInfo = new CultureInfo("uk-UA");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
