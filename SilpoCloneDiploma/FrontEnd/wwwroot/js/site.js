@@ -6,6 +6,8 @@ var panel = document.getElementById('categoryPanel');
 const socialIcons = document.querySelectorAll('.socialIcons');
 var categories = {};
 var userCart = null;
+const toastLiveExample = document.getElementById('liveToast');
+
 
 document.addEventListener("DOMContentLoaded", function () {
     GetCart();
@@ -246,7 +248,7 @@ searchIcon.addEventListener("click", function (event) {
 });
 
 function find(title) {
-    if (title.length > 3) {
+    if (title.length > 2) {
         FindProduct(title);
     }  
 }
@@ -290,7 +292,6 @@ function closeCartPopUpEvent() {
     document.body.classList.remove('no-scroll');
     document.getElementById("subRecommendedProducts").innerHTML = "";
 }
-
 
 //Cart popUp //////////////////////////////////////////////////////////////////////////////////////////////////
 const emptyCartPopUp = document.getElementById('emptyCartPopUp');
@@ -548,7 +549,9 @@ profileButton.addEventListener("click", function () {
         localStorage.removeItem("userName");
         localStorage.setItem("userId", 0);
         localStorage.removeItem("userRole");
-        alert("Користувач вийшов з акаунта!");
+        document.querySelector(".toast-body").innerHTML = "Вихід здійснено успішно";
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
         const profileSpan = document.querySelector("#headerDiv2 span");
         if (profileSpan) {
             profileSpan.textContent = "Увійти";
@@ -620,10 +623,12 @@ async function Register()
         const result = await response.json();
 
         if (response.ok) {
-            alert("Реєстрація успішна! Виконується автоматичний вхід...");
             Login(data.email, data.password);
             overlayPopUp.style.display = 'none';
             closeRegisterPopup();
+            document.querySelector(".toast-body").innerHTML = "Реєстрація успішна! Виконується автоматичний вхід...";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         } else {
             clearRegisterErrors();
 
@@ -682,7 +687,9 @@ async function Login(email, password) {
 
             closeLoginPopup();
             overlayPopUp.style.display = 'none';
-            alert("Вхід успішний!");
+            document.querySelector(".toast-body").innerHTML = "Вхід успішний!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
 
             const profileSpan = document.getElementById("accountName");
             if (profileSpan) {
@@ -859,13 +866,19 @@ async function submitOrder() {
         });
         if (response.ok) {
             const createdOrder = await response.json();
-            alert(`Order submitted successfully! Order ID: ${createdOrder.id}`);
+            document.querySelector(".toast-body").innerHTML = `Замовлення успішно оформлено! Номер замовлення: ${createdOrder.id}`;
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         } else {
             const error = await response.json();
-            alert(`Error submitting order: ${error.message}`);
+            document.querySelector(".toast-body").innerHTML = `Помилка при оформленні замовлення: ${error.message}`;
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while submitting the order.');
+        document.querySelector(".toast-body").innerHTML = 'Сталася помилка під час оформлення замовлення.';
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
     }
 }
