@@ -846,39 +846,125 @@ function closePopup() {
 }
 
 async function submitOrder() {
-    // Change orderData with real Data now it's dummy values
-    const orderData = {
-        customerId: 123, // Replace with the actual customer ID
-        orderDate: new Date().toISOString(),
-        orderItems: [
-            { productId: 1, quantity: 2, price: 50 },
-            { productId: 2, quantity: 1, price: 100 },
-        ],
-    };
-
     try {
-        const response = await fetch('http://localhost:5087/api/orders', {
+        function stringToInt(str) {
+            return [...str]
+                .map(char => char.charCodeAt(0))
+                .reduce((acc, charCode) => (acc * 31 + charCode) % 2147483647, 0);
+        }
+
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            document.querySelector(".toast-body").innerHTML = "Користувач не увійшов у систему!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            return;
+        }
+
+        const customerId = stringToInt(userId);
+        if (isNaN(customerId)) {
+            document.querySelector(".toast-body").innerHTML = "Некоректно згенеровано customerId. Будь ласка, зверніться до підтримки.";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            return;
+        }
+
+        const cartResponse = await fetch(`http://localhost:5129/api/cart/get-cart/${userId}`);
+        if (!cartResponse.ok) {
+            const error = await cartResponse.json();
+            document.querySelector(".toast-body").innerHTML = `Не вдалося отримати корзину: ${error.message || 'Невідома помилка'}`;
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            throw new Error(`Failed to fetch cart: ${error.message || 'Unknown error'}`);
+        }
+
+        const cartData = await cartResponse.json();
+        if (!cartData.isSuccess || !cartData.result) {
+            document.querySelector(".toast-body").innerHTML = `Не вдалося отримати корзину: ${cartData.message || 'Невідома помилка'}`;
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            throw new Error(`Failed to retrieve cart: ${cartData.message || 'Unknown error'}`);
+        }
+
+        const cart = typeof cartData.result === 'string' ? JSON.parse(cartData.result) : cartData.result;
+        if (!cart.cartDetails || cart.cartDetails.length === 0) {
+            document.querySelector(".toast-body").innerHTML = "Ваша корзина порожня. Будь ласка, додайте товари до корзини перед оформленням замовлення.";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            return;
+        }
+
+        const orderItems = cart.cartDetails.map(detail => ({
+            id: 0,
+            orderId: 0,
+            productId: detail.productId,
+            quantity: detail.count,
+            price: detail.product.price,
+        }));
+
+        if (orderItems.length === 0) {
+            document.querySelector(".toast-body").innerHTML = "Ваша корзина порожня. Будь ласка, додайте товари перед оформленням замовлення.";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            return;
+        }
+
+        const totalPrice = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        const orderData = {
+            id: 0,
+            customerId: customerId,
+            orderDate: new Date().toISOString(),
+            orderItems,
+            totalPrice,
+        };
+
+        const orderResponse = await fetch('http://localhost:5087/api/orders', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(orderData),
         });
-        if (response.ok) {
-            const createdOrder = await response.json();
-            document.querySelector(".toast-body").innerHTML = `Замовлення успішно оформлено! Номер замовлення: ${createdOrder.id}`;
+
+        if (!orderResponse.ok) {
+            const error = await orderResponse.json();
+            document.querySelector(".toast-body").innerHTML = `Не вдалося подати замовлення. Помилка: ${JSON.stringify(error.errors || error)}`;
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+            throw new Error(`Failed to submit order: ${error.message || 'Unknown error'}`);
+        }
+
+        const createdOrder = await orderResponse.json();
+        document.querySelector(".toast-body").innerHTML = `Замовлення успішно подано! ID замовлення: ${createdOrder.id}`;
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+
+        const removeCartResponse = await fetch(`http://localhost:5129/api/cart/remove-cart/${userId}`, {
+            method: 'DELETE',
+        });
+
+        if (!removeCartResponse.ok) {
+            const error = await removeCartResponse.json();
+            document.querySelector(".toast-body").innerHTML = `Не вдалося очистити корзину: ${error.message || 'Невідома помилка'}`;
             const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
             toastBootstrap.show();
         } else {
-            const error = await response.json();
-            document.querySelector(".toast-body").innerHTML = `Помилка при оформленні замовлення: ${error.message}`;
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-            toastBootstrap.show();
+            const removeCartResult = await removeCartResponse.json();
+            if (removeCartResult.isSuccess) {
+                document.querySelector(".toast-body").innerHTML = "Ваше замовлення успішно оформлене!";
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
+            } else {
+                document.querySelector(".toast-body").innerHTML = `Не вдалося очистити корзину: ${removeCartResult.message}`;
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
+            }
         }
     } catch (error) {
-        console.error('Error:', error);
-        document.querySelector(".toast-body").innerHTML = 'Сталася помилка під час оформлення замовлення.';
+        document.querySelector(".toast-body").innerHTML = `Ваша корзина порожня. Будь ласка, додайте товари перед оформленням замовлення.`;
         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
         toastBootstrap.show();
     }
 }
+

@@ -41,7 +41,7 @@ namespace ShopingCartServiceApi.Controllers
                 foreach (var cartDetails in cart.CartDetails)
                 {
                     cartDetails.Product = products.FirstOrDefault(x => x.Id == cartDetails.ProductId);
-                    if(cartDetails.Product == null)
+                    if (cartDetails.Product == null)
                     {
                         continue;
                     }
@@ -57,7 +57,7 @@ namespace ShopingCartServiceApi.Controllers
                 response.Message = ex.Message;
                 response.IsSuccess = false;
             }
-            response.IsSuccess = true;            
+            response.IsSuccess = true;
 
             return response;
         }
@@ -69,7 +69,7 @@ namespace ShopingCartServiceApi.Controllers
             try
             {
                 var cartHeader = await _context.CartHeaders.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == cartDto.CartHeader.UserId);
-                if(cartHeader == null)
+                if (cartHeader == null)
                 {
                     CartHeader carHeaderFromDto = maper.Map<CartHeader>(cartDto.CartHeader);
                     _context.CartHeaders.Add(carHeaderFromDto);
@@ -114,13 +114,13 @@ namespace ShopingCartServiceApi.Controllers
         }
 
         [HttpPost("remove-details/{cartDetailsId}")]
-        public async Task<ResponseDto> RemoveDetails (int cartDetailsId)
+        public async Task<ResponseDto> RemoveDetails(int cartDetailsId)
         {
             var response = new ResponseDto();
             try
             {
                 var cartDetails = await _context.CartDetails.FirstOrDefaultAsync(x => x.CartDetailsId == cartDetailsId);
-                if(cartDetails == null)
+                if (cartDetails == null)
                 {
                     response.IsSuccess = false;
                     response.Message = "Invalid CartDetailsId";
@@ -139,7 +139,8 @@ namespace ShopingCartServiceApi.Controllers
             return response;
         }
 
-        [HttpPost("remove-cart/{userId}")]
+
+        [HttpDelete("remove-cart/{userId}")]
         public async Task<ResponseDto> RemoveCart(string userId)
         {
             var response = new ResponseDto();
@@ -166,5 +167,7 @@ namespace ShopingCartServiceApi.Controllers
             }
             return response;
         }
+
+
     }
 }
