@@ -12,6 +12,18 @@ const toastLiveExample = document.getElementById('liveToast');
 document.addEventListener("DOMContentLoaded", function () {
     GetCart();
     userOrAdmin();
+    const savedName = localStorage.getItem("userName");
+    if (savedName || savedName == "") {
+        const profileSpan = document.getElementById("accountName");
+        if (profileSpan) {
+            if (savedName != "") {
+                profileSpan.textContent = savedName + "(Вийти)";
+            }
+            else {
+                profileSpan.textContent = "Вийти";
+            }
+        }
+    }
 });
 
 async function GetCategories() {
@@ -55,9 +67,13 @@ async function GetCart() {
         });
         if (response.ok) {
             var data = await response.json();
-            if (localStorage.getItem("userId") != 0 && data.result != null) {
-                if (data.result.cartHeader.userId == localStorage.getItem("userId"))
-                    userCart = 1;
+            if (data.result != null) {
+                if (localStorage.getItem("userId") != 0 && data.result.cartDetails.length != 0) {
+                    if (data.result.cartHeader.userId == localStorage.getItem("userId"))
+                        userCart = 1;
+                    else
+                        userCart = null;
+                }
             }
             console.log("Enter");
         }
@@ -509,8 +525,8 @@ function userOrAdmin() {
     }
 }
 
-function handleBasketClick() {
-    GetCart();
+async function handleBasketClick() {
+    await GetCart();
     if (userCart == null) {
         GetRecommendedProducts();
         dropdownMenu?.classList.remove('show');
@@ -538,7 +554,7 @@ const showRegisterLink = document.getElementById("showRegister");
 const showLoginLink = document.getElementById("showLogin");
 
 profileButton.addEventListener("click", function () {
-    if (!localStorage.getItem("userName")) {
+    if (!localStorage.getItem("userRole")) {
         dropdownMenu.classList.remove('show');
         panel.classList.remove('show');
         overlayPopUp.style.zIndex = 9998;
@@ -693,7 +709,11 @@ async function Login(email, password) {
 
             const profileSpan = document.getElementById("accountName");
             if (profileSpan) {
-                profileSpan.textContent = `${result.user.name}(Вийти)` || "Акаунт";
+                if (result.user.name != "") {
+                    profileSpan.textContent = `${result.user.name}(Вийти)` || "Акаунт";
+                }
+                else
+                    profileSpan.textContent = `Вийти` || "Акаунт";
             }
             window.location.reload();
         } else {
@@ -711,16 +731,6 @@ function displayLoginError(message) {
     loginErrorDiv.textContent = message;
     loginErrorDiv.style.display = "block";
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    const savedName = localStorage.getItem("userName");
-    if (savedName) {
-        const profileSpan = document.getElementById("accountName");
-        if (profileSpan) {
-            profileSpan.textContent = savedName + "(Вийти)";
-        }
-    }
-});
 
 function closeRegisterPopup() {
     document.getElementById("registerPopup").style.display = "none";
