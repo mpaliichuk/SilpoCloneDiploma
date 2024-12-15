@@ -1118,3 +1118,16 @@ body.no-scroll {
 .no-drag {
     -webkit-user-drag: none;
 }
+
+.toast-z-index {
+    z-index: 9999;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.alertIcon {
+    width: 35px;
+    height: 30px;
+}

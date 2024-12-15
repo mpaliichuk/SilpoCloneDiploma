@@ -72,7 +72,9 @@ async function AddProductInCart(productId, productCount, userId) {
             })
         });
         if (response.ok) {
-            alert("Товар додано в кошик!");
+            document.querySelector(".toast-body").innerHTML = "Товар додано в кошик!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         }
     } catch (error) {
         console.error('Error:', error);
@@ -238,11 +240,15 @@ function cardFunctionality() {
                         count.innerHTML = '0';
                     }
                     else {
-                        alert("Спершу потрібно увійти ~(`Y_Y`)~!");
+                        document.querySelector(".toast-body").innerHTML = "Спершу потрібно увійти в акаунт ~(`Y_Y`)~!";
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                        toastBootstrap.show();
                     }
                 }
                 else {
-                    alert("Спершу виберіть кількість товар (`U_U`)!");
+                    document.querySelector(".toast-body").innerHTML = "Спершу виберіть кількість товар (`U_U`)!";
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                    toastBootstrap.show();
                 }
             }
         });
@@ -325,7 +331,9 @@ async function addCertificatesToCart(certificates) {
             body: JSON.stringify(certificateDTO)
         });
         if (response.ok) {
-            alert("Сертифікати додано в кошик!");
+            document.querySelector(".toast-body").innerHTML = "Сертифікати додано в кошик!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         }
     } catch (error) {
         console.error('Error:', error);
@@ -344,16 +352,23 @@ certificateButtons.forEach(certificate => {
                 }
                 items.push({ productId: event.target.id, productCount: 1, userId: localStorage.getItem("userId") });
                 localStorage.setItem('certificates', JSON.stringify(items));
-                alert('Сертифікат на суму ' + event.target.id + 'грн було збережено (´ ω `♡)');
+                document.querySelector(".toast-body").innerHTML = 'Сертифікат на суму ' + event.target.id + 'грн було збережено';
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
             }
             else {
                 items = items.filter(element => element.productId !== event.target.id);
                 localStorage.setItem('certificates', JSON.stringify(items));
-                alert('Сертифікат на суму ' + event.target.id + 'грн було видалено зі збережених (>_<)');
+                document.querySelector(".toast-body").innerHTML = 'Сертифікат на суму ' + event.target.id + 'грн було видалено зі збережених (>_<)';
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
             }
         }
-        else
-            alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+        else {
+            document.querySelector(".toast-body").innerHTML = "Спершу потрібно увійти в акаунт ~(`Y_Y`)~";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+        }
     });
 });
 
@@ -370,11 +385,15 @@ certificateBuy.forEach(item => {
                 localStorage.setItem('certificates', JSON.stringify(certificates));
             }
             else {
-                alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+                document.querySelector(".toast-body").innerHTML = "Спершу потрібно увійти в акаунт ~(`Y_Y`)~";
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
             }
         }
         else {
-            alert("Спершу виберіть сертифікати для покупки (*μ_μ)!");
+            document.querySelector(".toast-body").innerHTML = "Спершу виберіть сертифікати для покупки (*μ_μ)!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         }
     });
 });

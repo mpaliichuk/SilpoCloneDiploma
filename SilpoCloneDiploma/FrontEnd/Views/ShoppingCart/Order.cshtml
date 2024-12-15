@@ -4,12 +4,10 @@
 <link rel="stylesheet" href="~/css/pagesStyles/mainPage.css" asp-append-version="true" />
 <style>
     .container {
-        width: 873px;
-        height: 724px;
+        width: 100%;
+        height: auto;
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
+        justify-content: center;
         gap: 40px;
         margin: 0;
     }
@@ -21,9 +19,8 @@
 
     .orderLabel {
         position: absolute;
-        width: 871px;
         height: 64px;
-        left: 0px;
+        left: 290px;
         top: 45px;
 
         font-family: 'Noto Sans';
@@ -37,14 +34,14 @@
         order: 0;
         flex-grow: 0;
         z-index: 0;
-        margin-top: 3%;
+        margin-top: 5%;
         margin-left: 12%;
 
     }
 
     .RadioButton {
-        width: 24px;
-        height: 24px;
+        width: auto;
+        height: auto;
         padding: 5px;
         border-radius: 16px;
         border: 2px #CBCBCB solid;
@@ -93,7 +90,7 @@
 
     .custom-time-input {
         display: none;
-        width: 100px;
+        width: auto;
         padding: 4px;
         border-radius: 5px;
         border: 1px solid #CBCBCB;
@@ -108,9 +105,9 @@
 
     /* Add width to CertificateDetails if needed */
     .CertificateDetails {
-        width: 50%;
+        width: auto;
         /* Adjust width as per your requirement */
-        height: 536px;
+        height: auto;
         padding: 28px;
         border-radius: 36px;
         border: 3px #FF5722 solid;
@@ -131,7 +128,7 @@
     }
 
     .DetailLabel {
-        width: 240px;
+        width: auto;
         color: #1E1E1E;
         font-size: 16px;
         font-family: Noto Sans;
@@ -154,7 +151,7 @@
 
     .AdditionalInfo {
         align-self: stretch;
-        height: 313px;
+        height: auto;
         padding-top: 40px;
         flex-direction: column;
         justify-content: flex-start;
@@ -165,7 +162,7 @@
 
     .InfoContent {
         align-self: stretch;
-        height: 199px;
+        height: auto;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
@@ -175,7 +172,7 @@
 
     .InfoTitle {
         align-self: stretch;
-        height: 22px;
+        height: auto;
         color: #1E1E1E;
         font-size: 16px;
         font-family: Noto Sans;
@@ -196,18 +193,19 @@
     }
 
     .PromoNext {
-        align-self: stretch;
+        width: auto;
+        height: auto;
         padding: 12px;
         background: #FF5722;
         border-radius: 36px;
         border: 2px #FFFEFE solid;
-        justify-content: space-between;
         align-items: center;
-        display: inline-flex;
+        display: flex;
+        cursor: pointer;
     }
 
     .NextText {
-        width: 310px;
+        width: auto;
         height: 22px;
         text-align: center;
         color: #FFFEFE;
@@ -215,6 +213,7 @@
         font-family: Noto Sans;
         font-weight: 600;
         word-wrap: break-word;
+        cursor: pointer;
     }
 
     .popup {
@@ -227,8 +226,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 551px;
-        height: 660.64px;
+        width: auto;
+        height: auto;
         background: #FFFEFE;
         border-radius: 40px;
         z-index: 1000;
@@ -240,8 +239,8 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        width: 24px;
-        height: 24px;
+        width: auto;
+        height: auto;
         cursor: pointer;
         position: absolute;
         top: 20px;
@@ -264,8 +263,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 471px;
-        height: 46px;
+        width: 260px;
+        height: 50px;
         background: #FF5722;
         border-radius: 36px;
         cursor: pointer;
@@ -298,10 +297,10 @@
 <div class="content">
     <div class="orderLabel">Оформлення замовлення</div>
     <div class="Frame427318672"
-        style="width: 1100px; margin-top: 10%; margin-left: 5%; height: 724px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex;">
+        style="width: 100%; margin-top: 15%; margin-left: 5%; height: auto; flex-direction: column; justify-content: center; align-items: center; gap: 40px; display: inline-flex;">
 
         <div class="Frame427318651"
-            style="align-self: stretch; height: 270px; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 20px; display: flex">
+            style=" align-self: center; height: auto; width: 75%; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 20px; display: flex">
             <div class="Frame427318647"
                 style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
                 <div
@@ -321,7 +320,7 @@
                     </div>
                 </div>
                 <div class="TablerPencil"
-                    style="width: 40px; height: 40px; padding: 8px; background: #FF5722; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: flex; cursor: pointer;"
+                    style="width: 100; height: auto; padding: 8px; background: #FF5722; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: flex; cursor: pointer;"
                     onclick="editText()">
                     <img src="~/icons/tabler_pencil.png" alt="Edit Icon">
                 </div>
@@ -329,17 +328,17 @@
             <div class="Frame427318648"
                 style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 16px; display: inline-flex">
                 <input type="text" class="Promo" placeholder="Під’їзд"
-                    style="flex: 1 1 0; height: 43px; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid;">
+                    style="flex: 1 1 0; height: auto; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid;">
                 <input type="text" class="Promo" placeholder="Поверх"
-                    style="flex: 1 1 0; height: 43px; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid;">
+                    style="flex: 1 1 0; height: auto; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid;">
                 <input type="text" class="Promo" placeholder="Квартира"
-                    style="flex: 1 1 0; height: 43px; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid;">
+                    style="flex: 1 1 0; height: auto; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid;">
             </div>
             <div class="Frame427318648"
                 style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 16px; display: inline-flex">
                 <input id="courierComment" type="text" class="Promo" placeholder="Коментар для кур’єра"
                     oninput="updateCharacterCount()" maxlength="200"
-                    style="flex: 1 1 0; height: 43px; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid; color: #757575; font-size: 14px; font-family: Noto Sans; font-weight: 500;">
+                    style="flex: 1 1 0; height: auto; padding: 12px 20px; background: #FFFEFE; border-radius: 8px; border: 1px #CBCBCB solid; color: #757575; font-size: 14px; font-family: Noto Sans; font-weight: 500;">
             </div>
             <div class="Frame427318652"
                 style="padding-top: 4px; justify-content: flex-end; align-items: center; display: flex">
@@ -350,7 +349,7 @@
             </div>
         </div>
         <div class="Frame427318660"
-            style="align-self: stretch; height: 155px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
+            style=" align-self: center; height: auto; width: 75%; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: flex">
             <div class="Frame427318647"
                 style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
                 <div
@@ -390,21 +389,21 @@
             </div>
         </div>
         <div class="Frame427318647"
-            style="align-self: stretch; padding-top: 10px;  padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+            style="align-self: center; height: auto; width: 75%; padding-top: 10px; padding-bottom: 10px; padding-left: 28px; background: #4CAF50; border-radius: 36px; justify-content: flex-start; gap: 10px; display: inline-flex">
             <div
                 style="color: #FFFEFE; font-size: 18px; padding-bottom: 5px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
                 Оплата</div>
         </div>
         <div class="Frame427318670"
-            style="justify-content: flex-start; align-items: flex-start; gap: 132px; padding-left: 10px; display: inline-flex; margin-bottom: 35px">
+            style="align-self: center; height: auto; width: 75%; justify-content: center; align-items: flex-start; gap: 132px; padding-left: 10px; display: inline-flex; margin-bottom: 35px">
             <div class="Frame427318669"
-                style="width: 315px; flex-direction: column; padding-bottom:15px; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+                style="width: auto; flex-direction: column; padding-bottom:15px; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
                 <div
-                    style="width: 203px; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
+                    style="width: auto; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
                     Онлайн
                 </div>
                 <div class="Frame427318665"
-                    style="align-self: stretch; height: 104px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+                    style="align-self: stretch; height: auto; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
                     <div class="Frame427318662"
                         style="align-self: stretch; padding-left: 20px; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex"
                         onclick="selectOption(this)">
@@ -412,9 +411,9 @@
                             <div class="Ellipse4"></div>
                         </div>
                         <div class="Frame427318661"
-                            style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                            style="width: auto; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
                             <div class="ApplePay"
-                                style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                                style="width: auto; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
                                 Apple Pay
                             </div>
                         </div>
@@ -426,9 +425,9 @@
                             <div class="Ellipse4"></div>
                         </div>
                         <div class="Frame427318661"
-                            style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                            style="width: auto; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
                             <div class="GooglePay"
-                                style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                                style="width: auto; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
                                 Google Pay
                             </div>
                         </div>
@@ -440,9 +439,9 @@
                             <div class="Ellipse4"></div>
                         </div>
                         <div class="Frame427318661"
-                            style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                            style="width: auto; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
                             <div
-                                style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                                style="width: auto; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
                                 Оплата карткою
                             </div>
                         </div>
@@ -450,9 +449,9 @@
                 </div>
             </div>
             <div class="Frame427318668"
-                style="width: 315px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+                style="width: auto; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
                 <div
-                    style="width: 203px; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
+                    style="width: auto; color: #1E1E1E; font-size: 16px; font-family: Noto Sans; font-weight: 700; word-wrap: break-word">
                     При отриманні
                 </div>
                 <div class="Frame427318667"
@@ -462,23 +461,35 @@
                         <div class="Ellipse4"></div>
                     </div>
                     <div class="Frame427318661"
-                        style="width: 259px; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+                        style="width: auto; align-self: stretch; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
                         <div
-                            style="width: 205px; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
+                            style="width: auto; color: #1E1E1E; font-size: 14px; font-family: Noto Sans; font-weight: 600; word-wrap: break-word">
                             Карткою кур’єру
                         </div>
                     </div>
 
                 </div>
-                <div class="PromoNext" onclick="showPopup(); submitOrder();">
-                    <div class="NextText">Оформити замовлення</div>
+            </div>
+        </div>
+        <!-- Alert -->
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3 toast-z-index">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="~/icons/SmallAlertIcon.png" class="rounded me-2 alertIcon" alt="...">
+                    <strong class="me-auto">GoodMeal</strong>
+                    <small>now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
                 </div>
             </div>
-
+        </div>
+        <div class="PromoNext">
+            <div class="NextText" onclick="showPopup(); submitOrder();">Оформити замовлення</div>
         </div>
     </div>
 </div>
-</div>
+
 <div class="popup" id="orderPopup">
     <div class="cancel" onclick="closePopup()">
         <img src="~/icons/ConfirmOrderCancelIcon.png" alt="Location Icon">
@@ -495,8 +506,7 @@
         </a>
     </div>
 </div>
-<script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-</script>

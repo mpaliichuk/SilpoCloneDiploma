@@ -196,7 +196,9 @@ async function AddProductInCart(productId, productCount, userId) {
             })
         });
         if (response.ok) {
-            alert("Товар додано в кошик!");
+            document.querySelector(".toast-body").innerHTML = "Товар додано в кошик!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
         }
     } catch (error) {
         console.error('Error:', error);
@@ -405,11 +407,15 @@ function cardFunctionality() {
                         count.innerHTML = '0';
                     }
                     else {
-                        alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+                        document.querySelector(".toast-body").innerHTML = "Спершу потрібно увійти в акаунт ~(`Y_Y`)~";
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                        toastBootstrap.show();
                     }
                 }
                 else {
-                    alert("Спершу виберіть кількість товар (`U_U`)!");
+                    document.querySelector(".toast-body").innerHTML = "Спершу виберіть кількість товар (`U_U`)!";
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                    toastBootstrap.show();
                 }
             }
         });
@@ -614,8 +620,11 @@ ratingBtn.addEventListener('click', function () {
     var userId = localStorage.getItem("userId")
     if (selectedRating != 0 && localStorage.getItem("userId") != 0)
         SetRating(selectedRating, `${userId}`, productId);
-    else
-        alert("Спершу потрібно увійти в акаунт ~(`Y_Y`)~");
+    else {
+        document.querySelector(".toast-body").innerHTML = "Спершу потрібно увійти в акаунт ~(`Y_Y`)~";
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    }
     closeRatingPopUpEvent();
 });
 
@@ -781,11 +790,16 @@ addToCartBtn.addEventListener('click', function () {
                 count.innerHTML = '0';
             }
             else {
-                alert("Спершу потрібно увійти ~(`Y_Y`)~!");
+                document.querySelector(".toast-body").innerHTML = "Спершу потрібно увійти в акаунт ~(`Y_Y`)~";
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
             }
         }
         else {
-            alert("Спершу виберіть кількість товар (`U_U`)!");
+            document.querySelector(".toast-body").innerHTML = "Спершу виберіть кількість товар (`U_U`)!";
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+
         }
     }
 });
