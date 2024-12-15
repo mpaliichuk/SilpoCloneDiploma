@@ -75,7 +75,7 @@
         display: flex;
         flex-direction: column;
         gap: 28px;
-        
+
     }
 
     .cart-item {
@@ -150,9 +150,9 @@
         font-weight: 500;
     }
 
-        .quantity-button * {
-            color: inherit;
-        }
+    .quantity-button * {
+        color: inherit;
+    }
 
     .quantity-text {
         font-size: 16px;
@@ -265,12 +265,12 @@
         background-color: transparent;
     }
 
-        .Vector::before {
-            content: "+";
-            font-size: 24px;
-            color: #fff;
-            font-family: Noto Sans;
-        }
+    .Vector::before {
+        content: "+";
+        font-size: 24px;
+        color: #fff;
+        font-family: Noto Sans;
+    }
 
     .ActionText {
         color: #FFFEFE;
@@ -318,9 +318,9 @@
         word-wrap: break-word;
     }
 
-        .DetailValue.total {
-            font-size: 20px;
-        }
+    .DetailValue.total {
+        font-size: 20px;
+    }
 
     .AdditionalInfo {
         align-self: stretch;
@@ -374,6 +374,7 @@
         justify-content: space-between;
         align-items: center;
         display: inline-flex;
+        cursor: pointer;
     }
 
     .NextText {
@@ -422,7 +423,8 @@
             <div class="cart-title">Кошик</div>
         </div>
         <div class="free-delivery-message">
-            <div class="free-delivery-text">Безкоштовна доставка на суму від <span class="free-delivery-bold">1299 грн</span></div>
+            <div class="free-delivery-text">Безкоштовна доставка на суму від <span class="free-delivery-bold">1299
+                    грн</span></div>
         </div>
         <div class="cart-clear" id="clear-cart-button">
             <div class="cart-clear-text">Очистити кошик</div>
@@ -470,10 +472,10 @@
                 <div class="InfoContent">
                     <div class="InfoTitle">Коментар до замовлення</div>
                     <textarea class="InfoComment"
-                              placeholder="Тут ви можете залишити свої побажання щодо окремих товарів, усього замовлення, пакування тощо."
-                              rows="4"></textarea>
+                        placeholder="Тут ви можете залишити свої побажання щодо окремих товарів, усього замовлення, пакування тощо."
+                        rows="4"></textarea>
                 </div>
-                <div class="PromoNext">
+                <div class="PromoNext" onclick="goToOrder()">
                     <div class="NextText">Далі</div>
                 </div>
             </div>
@@ -681,6 +683,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', fetchCartItems);
-    
+
 
 </script>
