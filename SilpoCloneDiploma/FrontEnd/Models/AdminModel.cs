@@ -9,7 +9,7 @@ namespace FrontEnd.Models
 
         [Required(ErrorMessage = "Ім'я є обов'язковим.")]
         [StringLength(50, ErrorMessage = "Ім'я не може перевищувати 50 символів.")]
-        public string Name { get; set; }
+        public string Name { get; set; } 
 
         [Required(ErrorMessage = "Прізвище є обов'язковим.")]
         [StringLength(50, ErrorMessage = "Прізвище не може перевищувати 50 символів.")]
@@ -17,7 +17,7 @@ namespace FrontEnd.Models
 
         [Required(ErrorMessage = "Email є обов'язковим.")]
         [EmailAddress(ErrorMessage = "Невірний формат Email.")]
-        public string Email { get; set; }
+        public string Email { get; set; } 
 
         [Required(ErrorMessage = "Номер телефону є обов'язковим.")]
         [Phone(ErrorMessage = "Невірний формат номера телефону.")]

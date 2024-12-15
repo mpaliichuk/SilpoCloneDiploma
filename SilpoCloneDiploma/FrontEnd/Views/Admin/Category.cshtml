@@ -3,363 +3,306 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@if (TempData["SuccessMessage"] != null)
+
+@if (TempData["SuccessMessage"] != null || TempData["ErrorMessage"] != null)
 {
-    <div id="success-message" class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const messageModalBody = document.getElementById("messageModalBody");
+            const messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+            const message = @Html.Raw(Json.Serialize(TempData["SuccessMessage"] ?? TempData["ErrorMessage"]));
+            const isSuccess = @(TempData["SuccessMessage"] != null ? "true" : "false");
+
+            messageModalBody.textContent = message;
+            const modalHeader = document.querySelector("#messageModal .modal-header");
+
+            if (isSuccess === "true") {
+                modalHeader.classList.remove("bg-danger");
+                modalHeader.classList.add("bg-success", "text-white");
+            } else {
+                modalHeader.classList.remove("bg-success");
+                modalHeader.classList.add("bg-danger", "text-white");
+            }
+
+            messageModal.show();
+        });
+    </script>
 }
 
 <div class="categoryContainer">
-    <div class="leftPanel">
-        <h3 style="color:#4caf50">Список категорій</h3>
-
-        <div class="search-container">
+    <div class="search-add-container d-flex align-items-center mb-3">
+        <div class="search-container flex-grow-1 me-3">
             <input type="text"
-                id="search-input"
-                class="form-control"
+                   id="search-input"
+                   class="form-control"
                    style="border-color:#4caf50"
-                placeholder="Пошук за назвою категорії"
-                oninput="searchCategories()">
+                   placeholder="Пошук за назвою категорії"
+                   oninput="searchCategories()">
         </div>
 
-       <table id="category-table" class="categoryTable">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Icon Path</th>
-            <th>Category Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var category in Model)
-        {
-            <tr>
-                <td>@category.Id</td>
-                <td>@category.Name</td>
-                <td>@category.IconPath</td>
-                <td>@(category.ParentCategoryId ?? 0)</td>
-                <td>
-                    <button class="editBtn" onclick="editCategory(@category.Id, '@category.Name', @category.ParentCategoryId)">Редагувати</button>
-                    <button class="deleteBtn" onclick="deleteCategory(@category.Id)">Видалити</button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+        <form id="category-form-inline" asp-action="Category" asp-controller="Admin" method="post" class="d-flex align-items-center">
+            <input type="hidden" id="category-id" name="Id" />
+            <input type="text" id="category-name" name="Name" class="form-control me-2" placeholder="Назва категорії" minlength="2" required />
+            <input type="text" id="category-iconPath" name="IconPath" class="form-control me-2" placeholder="Шлях до іконки" />
+            <input type="number" id="parent-category-id" name="ParentCategoryId" class="form-control me-2" placeholder="ID батьківської категорії" />
+            <button type="submit" class="btn" id="save-btn">Додати</button>
+        </form>
     </div>
 
-    <div class="rightPanel">
-        <h3 id="form-title" style="color:#4caf50">Додати нову категорію</h3>
-        <form id="category-form" asp-action="Category" asp-controller="Admin" method="post">
-            <input type="hidden" id="category-id" name="Id" />
-            <div class="form-group">
-                <label for="category-name">Назва категорії</label>
-                <input type="text" id="category-name" name="Name" class="form-control" required />
+    <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;"></div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Шлях до іконки</th>
+                <th>ID батьківської</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody id="category-list">
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@category.Id</td>
+                    <td>@category.Name</td>
+                    <td>@category.IconPath</td>
+                    <td>@(category.ParentCategoryId.HasValue ? category.ParentCategoryId.ToString() : "Немає")</td>
+                    <td>
+                        <button class="editBtn" onclick="editCategory(@category.Id, '@category.Name', @category.ParentCategoryId, '@category.IconPath')">Редагувати</button>
+                        <button class="deleteBtn" onclick="deleteCategory(@category.Id)">Видалити</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for Messages -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Повідомлення</h5>
+          
             </div>
-            <div class="form-group">
-                <label for="category-iconPath">Шлях до іконки</label>
-                <input type="text" id="category-iconPath" name="iconPath" class="form-control" />
+            <div class="modal-body" id="messageModalBody">
+                
             </div>
-            <div class="form-group">
-                <label for="parent-category-id">ID батьківської категорії (необов'язково)</label>
-                <input type="number" id="parent-category-id" name="ParentCategoryId" class="form-control" />
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Delete Confirmation -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deleteConfirmLabel">УВАГА! Будуть видалені Усі продукти, які є в цій категорії.</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
             </div>
-            <div>
-            <button type="submit" class="btn btn-success " id="save-btn">Зберегти</button>
-            <button type="button" class="btn btn-secondary" onclick="resetForm()" id="clear-btn">Очистити</button>
+            <div class="modal-body">
+                <strong> Ви дійсно хочете видалити цю категорію? </strong>
             </div>
-        </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Видалити</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-
     let allCategories = @Html.Raw(Json.Serialize(Model));
     let filteredCategories = [...allCategories];
+    let categoryToDeleteId = null;
 
-   function updateCategoryList(categories) {
-    const tbody = document.querySelector("#category-table tbody");
-    tbody.innerHTML = "";
+    function updateCategoryList(categories) {
+        const list = document.getElementById("category-list");
+        list.innerHTML = "";
 
-    if (categories.length === 0) {
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-        cell.colSpan = 4;
-        cell.textContent = "Немає категорій, що відповідають пошуковому запиту.";
-        cell.style.textAlign = "center";
-        row.appendChild(cell);
-        tbody.appendChild(row);
-    } else {
-        categories.forEach(category => {
+        if (categories.length === 0) {
             const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${category.id}</td>
-                <td>${category.name}</td>
-                <td>${category.iconPath}</td>
-                <td>${category.parentCategoryId || "Немає"}</td>
-                <td>
-                    <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId})">Редагувати</button>
-                    <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
+            const cell = document.createElement("td");
+            cell.colSpan = 5;
+            cell.className = "text-center";
+            cell.textContent = "Немає категорій, що відповідають пошуковому запиту.";
+            row.appendChild(cell);
+            list.appendChild(row);
+        } else {
+            categories.forEach(category => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${category.id}</td>
+                    <td>${category.name}</td>
+                    <td>${category.iconPath}</td>
+                    <td>${category.parentCategoryId || "Немає"}</td>
+                    <td>
+                        <button class="editBtn" onclick="editCategory(${category.id}, '${category.name}', ${category.parentCategoryId}, '${category.iconPath}')">Редагувати</button>
+                        <button class="deleteBtn" onclick="deleteCategory(${category.id})">Видалити</button>
+                    </td>
+                `;
+                list.appendChild(row);
+            });
+        }
     }
-}
-
 
     function searchCategories() {
         const searchTerm = document.getElementById("search-input").value.toLowerCase();
-
-        if (searchTerm === "") {
-            filteredCategories = [...allCategories];
-        } else {
-            filteredCategories = allCategories.filter(category => category.name.toLowerCase().includes(searchTerm));
-        }
-
+        filteredCategories = allCategories.filter(category => category.name.toLowerCase().includes(searchTerm));
         updateCategoryList(filteredCategories);
     }
 
-    function editCategory(id, name, parentId) {
+    function editCategory(id, name, parentId, iconPath) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         document.getElementById("category-id").value = id;
         document.getElementById("category-name").value = name;
         document.getElementById("category-iconPath").value = iconPath;
         document.getElementById("parent-category-id").value = parentId || "";
-        document.getElementById("form-title").textContent = "Редагувати категорію";
         document.getElementById("save-btn").textContent = "Зберегти зміни";
     }
 
-    async function deleteCategory(id) {
-        const isConfirmed = confirm("Ви дійсно хочете видалити цю категорію? (УВАГА !!! будуть видалені і продукти які є в цій категорії)");
-        if (!isConfirmed) {
-            return;
-        }
+        function deleteCategory(id) {
+        categoryToDeleteId = id;
+        const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+        modal.show();
+    }
+
+          document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
+        const modalElement = document.getElementById('deleteConfirmModal');
+        const modal = bootstrap.Modal.getInstance(modalElement); 
 
         try {
-            const response = await fetch(`http://localhost:5152/gateway/Category/${id}`, {
-                method: 'DELETE',
-            });
+            const response = await fetch(`http://localhost:5152/gateway/Category/${categoryToDeleteId}`, { method: 'DELETE' });
 
-            if (response.status === 204) { 
-                alert("Категорія успішно видалена");
-                location.reload(); 
-            } else if (response.status === 404) {
-                alert("Категорія не знайдена");
-            } else if (response.status === 500) {
-                alert("Виникла внутрішня помилка сервера");
+            if (response.status === 204) {
+                allCategories = allCategories.filter(category => category.id !== categoryToDeleteId);
+                searchCategories(); 
+                showToast("Категорія успішно видалена", "success");
             } else {
-                const error = await response.json();
-                alert(`Помилка: ${error.message}`);
+                showToast("Помилка при видаленні категорії.", "danger");
             }
         } catch (error) {
-            alert(`Сталася помилка: ${error.message}`);
+            showToast(`Сталася помилка: ${error.message}`, "danger");
+        } finally {
+            modal.hide(); 
         }
+    });
+
+
+
+        function showModalMessage(message, isSuccess = true) {
+        const modal = new bootstrap.Modal(document.getElementById('messageModal'));
+        const modalBody = document.getElementById('messageModalBody');
+        const modalHeader = document.querySelector("#messageModal .modal-header");
+
+        modalBody.textContent = message;
+
+        if (isSuccess) {
+            modalHeader.classList.remove("bg-danger");
+            modalHeader.classList.add("bg-success", "text-white");
+        } else {
+            modalHeader.classList.remove("bg-success");
+            modalHeader.classList.add("bg-danger", "text-white");
+        }
+
+        modal.show();
     }
 
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
+        const modalElement = document.getElementById('deleteConfirmModal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
 
+        try {
+            const response = await fetch(`http://localhost:5152/gateway/Category/${categoryToDeleteId}`, { method: 'DELETE' });
 
+            if (response.ok) { 
+                allCategories = allCategories.filter(category => category.id !== categoryToDeleteId);
+                searchCategories();
+                showModalMessage("Категорія успішно видалена", true);
+            } else {
+                showModalMessage("Помилка при видаленні категорії.", false);
+            }
+        } catch (error) {
+            showModalMessage(`Сталася помилка: ${error.message}`, false);
+        } finally {
+            modal.hide();
+        }
+    });
 
-
-
-    function resetForm() {
-        document.getElementById("category-id").value = "";
-        document.getElementById("category-name").value = "";
-        document.getElementById("category-iconPath").value = "";
-        document.getElementById("parent-category-id").value = "";
-        document.getElementById("form-title").textContent = "Додати нову категорію";
-        document.getElementById("save-btn").textContent = "Зберегти";
-    }
 
     document.addEventListener("DOMContentLoaded", function () {
         updateCategoryList(filteredCategories);
     });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        var successMessage = document.getElementById("success-message");
-        if (successMessage) {
-            
-            successMessage.style.display = "block";
-
-            setTimeout(function () {
-                successMessage.style.display = "none";
-            }, 3000);
-        }
-    });
 </script>
 
 <style>
-.categoryContainer {
-    display: flex;
-    
-    padding: 20px;
-}
+    button {
+        font-weight: bold;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
 
-.leftPanel {
-    flex: 3;
-    border-right: 1px solid #ddd;
-    padding-right: 20px;
-}
+    .editBtn, .deleteBtn {
+        margin-left: 10px;
+    }
 
-.rightPanel {
-    flex: 1;
-    padding-left: 20px;
-}
+    button#save-btn {
+        color: #4caf50;
+        background-color: white;
+        border: 2px solid #4caf50;
+    }
 
-.categoryList {
-    list-style-type: none;
-    padding: 0;
-}
+        button#save-btn:hover {
+            background-color: #4caf50;
+            color: #ffffff;
+        }
 
-.categoryList li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-}
+    .editBtn {
+        color: #4caf50;
+        background-color: white;
+        border: 2px solid #4caf50;
+    }
 
-.form-group {
-    margin-bottom: 15px;
-}
+        .editBtn:hover {
+            background-color: #007bff;
+            color: #ffffff;
+            border: 2px solid #007bff;
+        }
 
-.form-control {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 2px solid #4caf50; 
-    font-weight: bold; 
-    font-size: 16px; 
-    border-radius: 5px; 
-    max-width: 500px;
-}
+    .deleteBtn {
+        color: #4caf50;
+        background-color: white;
+        border: 2px solid #4caf50;
+    }
 
-.form-control:focus {
-    outline: none;
-    box-shadow: 0 0 5px #4caf50; 
-}
+        .deleteBtn:hover {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: 2px solid #dc3545;
+        }
 
-button {
-    font-weight: bold;
-    border: 2px solid transparent;
-    border-radius: 5px; 
-    padding: 10px 15px; 
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s; 
-}
+    button#clear-btn {
+        color: #4caf50;
+        background-color: white;
+        border: 2px solid #4caf50;
+    }
 
-.editBtn, .deleteBtn {
-    margin-left: 10px;
-}
+        button#clear-btn:hover {
+            background-color: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
 
-button#save-btn {
-    color: #4caf50;
-    background-color:white;
-    border: 2px solid #4caf50; 
+    .modal-header.bg-success {
+        background-color: #28a745 !important;
+    }
 
-}
-
-button#save-btn:hover {
-    background-color: #4caf50;
-    color: #ffffff;
-}
-
-.editBtn {
-   color: #4caf50;
-    background-color:white;
-    border: 2px solid #4caf50;  
-}
-
-.editBtn:hover {
-    background-color: #007bff;
-    color: #ffffff;
-    border: 2px solid #007bff;
-}
-
-.deleteBtn {
-   color: #4caf50;
-    background-color:white;
-    border: 2px solid #4caf50; 
-}
-
-.deleteBtn:hover {
-    background-color: #dc3545;
-    color: #ffffff;
-    border: 2px solid #dc3545;
-}
-
-button#clear-btn {
-     color: #4caf50;
-    background-color:white;
-    border: 2px solid #4caf50; 
-}
-
-button#clear-btn:hover {
-    background-color: #6c757d; 
-    color: white; 
-    border-color: #6c757d; 
-}
-
-
-.search-container {
-    margin-bottom: 15px;
-}
-
-.categoryTable {
-    width: 100%;
-    border-collapse: collapse; 
-}
-
-.categoryTable th, 
-.categoryTable td {
-    padding: 10px 20px; 
-    text-align: left; 
-    border-bottom: 1px solid #4caf50; 
-}
-
-.categoryTable th {
-    background-color: #4caf50; 
-    color:white;
-    font-weight: bold; 
-    font-size: 16px;
-}
-
-.categoryTable tbody tr:hover {
-    background-color: #f9f9f9; 
-}
-
-.categoryTable td:last-child {
-    text-align: center; 
-}
-
-.categoryTable th, 
-.categoryTable td {
-    white-space: nowrap; 
-}
-
-#success-message {
-    display: none; 
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    padding: 15px;
-    background-color: #28a745; 
-    color: white;
-    border-radius: 20px;
-    font-size: 16px;
-    opacity: 0.7;
-}
-
-.rightPanel form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; 
-}
-
-
+        .modal-header.bg-danger {
+            background-color: #dc3545 !important;
+        }
 </style>

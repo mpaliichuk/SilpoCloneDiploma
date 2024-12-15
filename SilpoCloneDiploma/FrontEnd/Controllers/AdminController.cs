@@ -57,16 +57,6 @@ public class AdminController : Controller
     }
 
 
-    /// <summary>
-    /// Display a form to add a new attribute
-    /// </summary>
-    [HttpGet]
-    public IActionResult AddAttribute()
-    {
-        var model = new AttributeModel();
-        return View(model);
-    }
-
     [HttpPost]
     public IActionResult AddAttribute(AttributeModel model)
     {
@@ -111,6 +101,8 @@ public class AdminController : Controller
         if (categoryDto.Id == null)
         {
             await _productCategoryRatingService.CreateCategoryAsync(categoryDto);
+            TempData["SuccessMessage"] = "Категорія успішно додана!";
+          
         }
         else
         {
@@ -256,11 +248,7 @@ public class AdminController : Controller
         return View();
     }
 
-    // Display list of attributes
-    public IActionResult ListOfAttributes()
-    {
-        return View();
-    }
+  
 
     // Display order page
     public IActionResult Order()
@@ -519,7 +507,8 @@ public class AdminController : Controller
 
             if (System.IO.File.Exists(photoPath))
             {
-                System.IO.File.Delete(photoPath);
+                // Asynchronously delete the file to avoid blocking the main thread.
+                await Task.Run(() => System.IO.File.Delete(photoPath));
                 return Ok("Success");
             }
             else
@@ -529,22 +518,9 @@ public class AdminController : Controller
         }
         catch (Exception ex)
         {
-            // Log the exception (not shown here for brevity)
+            // Log the exception (this can be done using a logging library or framework)
+            _logger.LogError(ex, "An error occurred while deleting the photo with URL: {PhotoUrl}", photoUrl);
             return StatusCode(500, "Internal server error.");
         }
-    }
-
-
-
-
-    // Display exit page
-    public IActionResult Exit()
-    {
-        return View();
-    }
-
-
-   
-
-
+    } 
 }
