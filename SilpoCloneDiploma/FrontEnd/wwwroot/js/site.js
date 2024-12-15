@@ -968,3 +968,6 @@ async function submitOrder() {
     }
 }
 
+function goToOrder() {
+    window.location = ("/Goodmeal/User/Order");
+}
