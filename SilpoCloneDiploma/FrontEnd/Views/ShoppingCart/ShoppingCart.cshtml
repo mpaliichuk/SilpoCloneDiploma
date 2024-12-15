@@ -474,7 +474,7 @@
                               rows="4"></textarea>
                 </div>
                 <div class="PromoNext">
-                    <div class="NextText">Далі</div>
+                    <div class="NextText" onclick="goToOrderPage()">Далі</div>
                 </div>
             </div>
         </div>
@@ -484,7 +484,9 @@
     let cart = JSON.parse(localStorage.getItem('cart')) || { cartHeader: {}, cartDetails: [] };
 
     document.getElementById('clear-cart-button').addEventListener('click', clearCart);
-
+    function goToOrderPage() {
+        window.location.href = '/Goodmeal/User/Order';
+    }
     async function clearCart() {
         try {
             const response = await fetch(`http://localhost:5152/gateway/RemoveCart/${localStorage.userId}`, {
